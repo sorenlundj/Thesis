@@ -33,13 +33,16 @@
 \newcommand{\tsf}[1]{\textsf{#1}}
 \newcommand{\tsl}[1]{\textsl{#1}}
 \newcommand{\ttt}[1]{\texttt{#1}}
+\newcommand{\smallSep}{0.3cm}
+\newcommand{\midSep}{0.6cm}
+\newcommand{\bigSep}{1.2cm}
 \newcommand{\fitToPage}[1]{\resizebox{\columnwidth}{!}{#1}}
 
 %http://detexify.kirelabs.org/classify.html
 
 %Auto label sections either by section[label]{name}, or just section{label=name}
-%\let\orisectionmark\sectionmark
-%\renewcommand\sectionmark[1]{\label{sec:#1}\orisectionmark{sec:#1}}
+\let\orisectionmark\sectionmark
+\renewcommand\sectionmark[1]{\label{sec:#1}\orisectionmark{sec:#1}}
 
 \renewcommand{\headrulewidth}{0pt}
 \title{Master's Thesis Project Description}
@@ -47,13 +50,18 @@
 \begin{document}
 \maketitle
 \section*{Introduction}
-The Maritime Connectivity Platform \cite{mcp} (MCP) is, as the name suggests a platform that connects maritime services. A particular way of utilizing this is that a user of the MCP is able to develop his or her own software, and distribute it across the world. Such digital maritime components, however needs to be thoroughly tested, which often is not adequately done through simple unit testing.
-\section*{Description of Project}
-I want to test maritime software using QuickCheck. The idea behind this is to create models which describe the properties that the tests need to reflect. This means that in stead of testing that a certain value combined with a certain function yields a certain output over and over again, the model should reflect what needs to happen with an arbitrary input- and function-combination. 
+The Maritime Connectivity Platform \cite{mcp} (MCP) is, as the name suggests a platform that connects maritime services, functioning as a common infrastructure by offering safe and reliable information exchange between various maritime actors. A particular way of utilizing this is that a user of the MCP is able to develop his or her own software, and distribute it across the world. Such digital maritime components, however needs to be thoroughly tested, which often is not adequately done through simple unit testing. Thus, software components, distributed through the MCP need a thorough test-suite, for which the obvious solution is to implement model-based testing.
+\section*{Description of the Project}
+I want to test maritime software using QuickCheck. The idea behind this is to create models which describe the properties that the tests need to reflect. This means that in stead of testing that a certain value combined with a certain function yields a certain output over and over again, the model should reflect what needs to happen with an arbitrary input- and function-combination. \\[\smallSep]
+Once an accurate model created further testing can be streamlined, as a simple test can affirm an entire aspect of the tested software, in stead of just \tit{one} particular example.\\[\smallSep]
+The goal of the project is to create a test suite for the MCP, which performs better than a unit-based test suite. In the long run, such a test suite has the capacity to increase reliability, and ultimately make way for better distributed software components in the Maritime Connectivity Platform. 
 \section*{Learning Goals}
 \begin{itemize}
-	\item Utilizing QuickCheck
-	\item Parsing specifications in order to generate relevant tests
+	\item Utilizing QuickCheck.
+	\item Parsing specifications in order to generate relevant tests.
+	\item Interpreting specifications in order to generate relevant tests.
+	\item Writing correct, efficient, and maintainable programs with separations of concerns.
+	\item Property-based testing of functions and stateful APIs.
 \end{itemize}
 
 \begin{thebibliography}{2}

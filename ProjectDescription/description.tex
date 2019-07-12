@@ -45,23 +45,25 @@
 \renewcommand\sectionmark[1]{\label{sec:#1}\orisectionmark{sec:#1}}
 
 \renewcommand{\headrulewidth}{0pt}
-\title{Master's Thesis Project Description}
-\author{Søren Lund Jensen $|$ pws412}
+\title{Using Property-Based Testing to Test MCP Instance-Specifications\\Master's Thesis Project Description}
+\author{Søren Lund Hess-Petersen $|$ pws412}
 \begin{document}
 \maketitle
 \section*{Introduction}
-The Maritime Connectivity Platform \cite{mcp} (MCP) is, as the name suggests a platform that connects maritime services, functioning as a common infrastructure by offering safe and reliable information exchange between various maritime actors. A particular way of utilizing this is that a user of the MCP is able to develop his or her own software, and distribute it across the world. Such digital maritime components, however needs to be thoroughly tested, which often is not adequately done through simple unit testing. Thus, software components, distributed through the MCP need a thorough test-suite, for which the obvious solution is to implement model-based testing.
+The Maritime Connectivity Platform \cite{mcp} (MCP) is, as the name suggests a platform that connects maritime services, functioning as a common infrastructure by offering safe and reliable information exchange between various maritime actors. A particular way of utilizing this is that a user of the MCP is able to develop his or her own software, and distribute it across the world. Such digital maritime components, however needs to be thoroughly tested, which often is not adequately done through simple unit testing. Thus, software components, distributed through the MCP need a thorough test-suite, for which the obvious solution is to implement model-based testing.\\[\smallSep]
+The MCP has provided specifications, which describe rules that software needs to adhere to. These specifications will be used to create the model, that will verify the software. The specifications are provided in \ttt{xml}-format, and are, as of now, not used in any formal degree. Ideally, the provided specifications should be used to automatically generate models, which can be used to verify that a certain piece of software adheres to the specification. 
 \section*{Description of the Project}
-I want to test maritime software using QuickCheck. The idea behind this is to create models which describe the properties that the tests need to reflect. This means that in stead of testing that a certain value combined with a certain function yields a certain output over and over again, the model should reflect what needs to happen with an arbitrary input- and function-combination. \\[\smallSep]
-Once an accurate model created further testing can be streamlined, as a simple test can affirm an entire aspect of the tested software, in stead of just \tit{one} particular example.\\[\smallSep]
-The goal of the project is to create a test suite for the MCP, which performs better than a unit-based test suite. In the long run, such a test suite has the capacity to increase reliability, and ultimately make way for better distributed software components in the Maritime Connectivity Platform. 
+In this project, QuickCheck \cite{quickcheck} will be utilized in order to verify that instances fulfils the requirements set by specifications in the MCP.\\[\smallSep]
+QuickCheck is a library, which allows for model-based testing of software. Originally, QuickCheck was written in Haskell, but has since been extended to more than 50 programming languages. The idea behind this method is, as the term \tit{model}-based testing suggests, to create models which describe the properties that the test-cases need to reflect. This means that in stead of conducting unit-tests, the model should reflect what needs to happen with an arbitrary input- and function-combination, and ideally catch every special case that either has not been accounted for in the model or in the analysed software.
+\\[\smallSep]
+Once an accurate model is created further testing can be streamlined, as a simple test can affirm an entire aspect of the tested software, in stead of just \tit{one} particular example.\\[\smallSep]
+The goal of the project is to create an automatic test suite for the MCP, which performs better than a unit-based test suite. In the long run, such a test suite has the capacity to increase reliability, efficiency and ultimately make way for better distributed, and more uniformly created software components in the Maritime Connectivity Platform. 
 \section*{Learning Goals}
 \begin{itemize}
-	\item Utilizing QuickCheck.
-	\item Parsing specifications in order to generate relevant tests.
-	\item Interpreting specifications in order to generate relevant tests.
-	\item Writing correct, efficient, and maintainable programs with separations of concerns.
-	\item Property-based testing of functions and stateful APIs.
+	\item Utilizing QuickCheck in creating viable models, that describe the specifications, provided in MCP.
+	\item Interpreting MCP specifications in order to generate relevant tests.
+	\item Parsing MCP specifications in order to generate relevant models.
+	\item Applying property-based testing of functions and specifications in a maritime environment.
 \end{itemize}
 
 \begin{thebibliography}{2}
@@ -73,5 +75,8 @@ The goal of the project is to create a test suite for the MCP, which performs be
 		Thomas Arts, John Hughes, Ulf Norell, and Hans Svensson,
 		\url{https://ieeexplore.ieee.org/abstract/document/7107466},
 		April 2019.
+	\bibitem{quickcheck}
+		QuickCheck,
+	\url{http://hackage.haskell.org/package/QuickCheck}
 \end{thebibliography}
 \end{document}

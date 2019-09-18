@@ -10,6 +10,7 @@
 \usepackage{moreverb}
 \usepackage{ulem}
 \usepackage{pdfpages}
+\usepackage{listings}
 
 \newcommand{\tbf}[1]{\textbf{#1}}
 \newcommand{\tit}[1]{\textit{#1}}
@@ -48,6 +49,149 @@
 
 \section{Analysis}
 
+\section{Parser Grammars}
+
+\subsection{ServiceSpecificationScema}
+\begin{lstlisting}[mathescape=true]
+ServiceSpecificationSchema ::= specifications
+
+specifications ::= spec specifications
+     | $\epsilon$
+     
+spec ::= name
+     | status
+     | id
+     | version
+     | description
+     | keywords
+     | isSpatialExclusive
+     | authorInfos
+     | requirements
+     | serviceDataModel
+     | serviceInterfaces
+     
+authorInfos ::= authorInfo authorInfos
+     | $\epsilon$
+
+authorInfo ::= spec specifications
+
+requirements ::= requirement requirements
+     | $\epsilon$
+
+requirement ::= spec specifications
+
+serviceDataModel ::= definitionAsXSD
+
+definitionAsXSD ::= $\epsilon$
+
+serviceInterfaces ::= serviceInterface serviceInterfaces
+     | $\epsilon$
+
+serviceInterface ::= spec
+     | dataExchangePattern
+     | operations
+
+operations ::= operation operations
+     | $\epsilon$
+
+operation ::= spec
+     | returnValueType
+     | parameterTypes
+
+returnValueType ::= typeReference
+
+parameterType ::= typeReference
+
+\end{lstlisting}
+
+\subsection{ServiceDesignSchema}
+\begin{lstlisting}[mathescape=true]
+ServiceDesignSchema ::= specifications
+
+specifications ::= spec specifications
+     | $\epsilon$
+     
+spec ::= name
+     | status
+     | id
+     | version
+     | description
+     | offersTransport
+     | designServiceSpecifications
+     | designedBy
+     | servicePhysicalModel
+     
+offersTransport ::= offersTransport offersTransport
+     | name
+     | description
+     | protocol
+     | $\epsilon$
+
+designsServiceSpecifications ::= designsServiceSpecifications designsServiceSpecifications
+     | id
+     | version
+     | $\epsilon$
+
+designedBy ::= id
+     | name
+     | description
+     | contactInfo
+     | isCommercial
+
+servicePhysicalDatamodel ::= name
+     | description
+     | modelType
+     | model
+\end{lstlisting}
+
+\subsection{ServiceInstanceSchema}
+\begin{lstlisting}[mathescape=true]
+serviceInstanceSchema :: specifications
+
+specifications ::= spec specifications
+     | $\epsilon$
+
+spec ::= name
+     | id
+     | version
+     | status
+     | description
+     | keywords
+     | URL
+     | requiresAutiorization
+     | implementsServiceDesign
+     | offersServiceLevel
+     | coversAreas
+     | producedBy
+     | providedBy
+
+implementsServiceDesign ::= id
+     | version
+
+offersServiceLevel ::= availability
+     | name
+     | description
+
+coversAreas ::= coversArea coversAreas
+     | $\epsilon$
+
+coversArea ::= name
+     | description
+     | geometryAsWKT
+
+producedBy ::= id
+     | name
+     | description
+     | contactInfo
+     | isCommercial
+     
+providedBy ::= id
+     | name
+     | description
+     | contactInfo
+     | isCommercial
+     
+\end{lstlisting}
 \section{Implementation}
 
 \section{Results}

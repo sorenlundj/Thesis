@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.9.12)  11 SEP 2019 12:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.9.12)  15 SEP 2019 21:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -445,35 +445,60 @@ File: pppdftex.def 2013/08/25 v0.4v Pdfpages driver for pdfTeX (AM)
 \c@AM@survey=\count108
 \AM@templatesizebox=\box32
 )
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count109
+\lst@gtempboxa=\box33
+\lst@token=\toks26
+\lst@length=\count110
+\lst@currlwidth=\dimen120
+\lst@column=\count111
+\lst@pos=\count112
+\lst@lostspace=\dimen121
+\lst@width=\dimen122
+\lst@newlines=\count113
+\lst@lineno=\count114
+\lst@maxwidth=\dimen123
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+\c@lstnumber=\count115
+\lst@skipnumbers=\count116
+\lst@framebox=\box34
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2014/03/04 1.5c listings configuration
+))
+Package: listings 2014/03/04 1.5c (Carsten Heinz)
+
 (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 37.
-LaTeX Font Info:    ... okay on input line 37.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 38.
+LaTeX Font Info:    ... okay on input line 38.
 
 (/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count109
-\scratchdimen=\dimen120
-\scratchbox=\box33
-\nofMPsegments=\count110
-\nofMParguments=\count111
-\everyMPshowfont=\toks26
-\MPscratchCnt=\count112
-\MPscratchDim=\dimen121
-\MPnumerator=\count113
-\makeMPintoPDFobject=\count114
-\everyMPtoPDFconversion=\toks27
+\scratchcounter=\count117
+\scratchdimen=\dimen124
+\scratchbox=\box35
+\nofMPsegments=\count118
+\nofMParguments=\count119
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count120
+\MPscratchDim=\dimen125
+\MPnumerator=\count121
+\makeMPintoPDFobject=\count122
+\everyMPtoPDFconversion=\toks28
 ) (/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -518,42 +543,43 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\AtBeginShipoutBox=\box34
+\AtBeginShipoutBox=\box36
+\c@lstlisting=\count123
 
 <img/frontPage/FP.pdf, id=1, 597.50829pt x 845.0471pt>
 File: img/frontPage/FP.pdf Graphic file (type pdf)
 
 <use img/frontPage/FP.pdf>
-Package pdftex.def Info: img/frontPage/FP.pdf used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf used on input line 40.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: img/frontPage/FP.pdf Graphic file (type pdf)
  <use img/frontPage/FP.pdf>
-Package pdftex.def Info: img/frontPage/FP.pdf used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf used on input line 40.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 
 <img/frontPage/FP.pdf, id=4, page=1, 597.50829pt x 845.0471pt>
 File: img/frontPage/FP.pdf Graphic file (type pdf)
 
 <use img/frontPage/FP.pdf, page 1>
-Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 40.
 (pdftex.def)             Requested size: 597.50682pt x 845.04504pt.
 File: img/frontPage/FP.pdf Graphic file (type pdf)
  <use img/frontPage/FP.pdf, page 1>
-Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 40.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: img/frontPage/FP.pdf Graphic file (type pdf)
 
 <use img/frontPage/FP.pdf, page 1>
-Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 40.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: img/frontPage/FP.pdf Graphic file (type pdf)
  <use img/frontPage/FP.pdf, page 1>
-Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 40.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
 File: img/frontPage/FP.pdf Graphic file (type pdf)
 
 <use img/frontPage/FP.pdf, page 1>
-Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 39.
+Package pdftex.def Info: img/frontPage/FP.pdf, page1 used on input line 40.
 (pdftex.def)             Requested size: 597.53416pt x 845.08372pt.
  [1
 
@@ -563,25 +589,52 @@ map/pdftex.map}>] (./report.toc)
 \openout3 = `report.toc'.
 
  [2]
-[3] (./report.aux) ) 
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 59.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 59.
+LaTeX Font Info:    Try loading font information for U+msa on input line 59.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 59.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [3]
+Overfull \hbox (195.0055pt too wide) in paragraph at lines 130--131
+[][][][][][][][][] 
+ []
+
+[4] [5] [6] (./report.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 4476 strings out of 493117
- 59234 string characters out of 6135433
- 133013 words of memory out of 5000000
- 7859 multiletter control sequences out of 15000+600000
- 4659 words of font info for 18 fonts, out of 8000000 for 9000
+ 6122 strings out of 493117
+ 81112 string characters out of 6135433
+ 169896 words of memory out of 5000000
+ 9477 multiletter control sequences out of 15000+600000
+ 6963 words of font info for 28 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 39i,18n,45p,239b,429s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmbx10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucr
-r8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb
-></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on report.pdf (3 pages, 106245 bytes).
+ 39i,18n,45p,239b,1552s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
+/usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
+sr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></us
+r/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/
+texlive/2014/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive
+/2014/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
+Output written on report.pdf (6 pages, 139036 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 86 PDF objects out of 1000 (max. 8388607)
+ 59 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,0 +1,1 @@
+stack exec runhaskell -- -W Main.hs ../serviceSpecifications/E2 - NW-NM REST Service Technical Design.xml.xml

@@ -1,10 +1,9 @@
 module Main
        (main)
 where
-import SpecAst
 import SpecParser
   
-import Data.List(intercalate)
+--import Data.List(intercalate)
 import System.Environment(getArgs)
 
 main :: IO ()

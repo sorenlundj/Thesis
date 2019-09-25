@@ -6,26 +6,27 @@ import SpecAst
 import Data.Char (isPrint)
 import Text.ParserCombinators.Parsec
 
+-- ------------------------------------------------------------------------- --
+-- Constants                                                                 --
+-- ------------------------------------------------------------------------- --
+
+-- TODO: Erase if not relevant
 
 -- ------------------------------------------------------------------------- --
 -- Auxiliary functions                                                       --
 -- ------------------------------------------------------------------------- --
 
 -- Reads more than zero Chars
-readString :: String -> Parser String
-readString str = remSpace $ string str
+readStr :: String -> Parser String
+readStr str = remSpace $ string str
 
 -- Reads more than zero Ints
 readInt :: Parser Int
 readInt = remSpace $ read <$> many1 digit
 
--- Reads the remainder of the current line, along with newline
-readArbitraryStringNewline :: Parser String
-readArbitraryStringNewline = remSpace $ manyTill (satisfy isPrint) (lookAhead (readString "\n"))
-
--- Reads the remainder of the current word, along with a space
-readArbitraryStringSpace :: Parser String
-readArbitraryStringSpace = remSpace $ manyTill (satisfy isPrint) (lookAhead (readString " "))
+-- Reads until the input string is matched
+readArbStr :: String -> Parser String 
+readArbStr str = remSpace $ manyTill (satisfy isPrint) (lookAhead (readStr str))
 
 -- Non-reads a char
 readNoneOf :: String -> Parser Char
@@ -38,19 +39,55 @@ remSpace p = do
                spaces
                return a
 
+startTag :: Parser String
+startTag = do
+             _     <- readStr $ "<"
+             sName <- readArbStr $ ">"
+             _     <- readStr $ ">"
+             return sName                
+
 -- ------------------------------------------------------------------------- --
 -- Parse functions                                                           --
 -- ------------------------------------------------------------------------- --
--- Wrapper function
-parseAll :: Parser SpecList
-parseAll = do
-             spaces
-             cmds <- parseSpecs
-             spaces
-             eof
-             return cmds
 
+-- Top-level parse function
+parseSpecList :: Parser SpecList
+parseSpecList = do
+                  spaces
+                  cmds <- parseSubSpec
+                  spaces
+                  eof
+                  return [cmds]
 
+-- Parses arbitrary Specifications
+parseSpec :: Parser Spec
+parseSpec = do
+              sName <- startTag
+              sBody <- readArbStr $ "</" -- TODO: SKIPS TO END OF SPEC !!NOT IDEAL!!
+-- TODO: Parse SubSpec here
+              _     <- readStr $ "</" ++ sName ++ ">"
+              return $ Spec sName []
+
+-- Parses arbitrary SubSpecifications
+parseSubSpec :: Parser Spec
+parseSubSpec = do
+                 sName <- startTag
+                 sBody <- parseSpecBody
+                 _     <- readStr $ "</" ++ sName ++ ">"
+                 return $ SubSpec sName sBody
+
+-- ------------------------------------------------------------------------- --
+-- Precedence functions                                                      --
+-- ------------------------------------------------------------------------- --
+
+precSBody :: Parser Spec
+precSBody = undefined
+
+precSubSpec :: Parser Spec
+precSubSpec = undefined
+
+precSpec :: Parser Spec
+precSpec = undefined
 
 -- ------------------------------------------------------------------------- --
 -- Wrapper functions                                                         --
@@ -58,7 +95,7 @@ parseAll = do
 
 -- Parses a string
 parseString :: String -> Either ErrMsg SpecList
-parseString input = case parse parseAll "" input of
+parseString input = case parse parseSpecList "" input of
                       Left err  -> Left $ show err
                       Right val -> Right val
 

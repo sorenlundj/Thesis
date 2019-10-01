@@ -71,8 +71,9 @@ parseSpec = do
 -- Parses arbitrary SubSpecifications
 parseSubSpec :: Parser Spec
 parseSubSpec = do
+                 -- lookAhead efter "</"
                  sName <- startTag
-                 sBody <- parseSpecBody
+                 sBody <- readArbStr $ "</"
                  _     <- readStr $ "</" ++ sName ++ ">"
                  return $ SubSpec sName sBody
 

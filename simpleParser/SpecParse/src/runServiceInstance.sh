@@ -1,1 +1,0 @@
-stack exec runhaskell -- -W Main.hs ../serviceSpecifications/E2 - NW-NM DMA Service Instance.xml

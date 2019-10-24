@@ -69,7 +69,7 @@
 \thesistype{MSc thesis}
 
 \thesiscomment{} % You can leave this blank
-\title{Using Property-Based testing to test MCP Instance-Specifications}
+\title{Using Model-Based testing to test MCP Instance-Specifications}
 \subtitle{~} % If you want one
 \author{Søren Lund Hess-Petersen - pws412}
 \supervisor{Michael Kirkedal Thomsen\\<m.kirkedal@di.ku.dk>}
@@ -82,17 +82,18 @@
 \pagenumbering{roman}
 \setcounter{page}{3}
 
-% English Abstract
 \cleardoublepage
 \pagestyle{plain}
 
+% English Abstract
 \begin{abstract}
 \end{abstract}
+
 % Danish abstract
 \begin{resume}
 \end{resume}
 
-\include{include/preface/Preface}
+\include{include/etc/preface/Preface}
 
 \cleardoublepage
 \chapterstyle{combined}
@@ -108,7 +109,7 @@
 % Make a bachground.tex and include with \input{background}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% INTRODUCTION
+%%% Introduction
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \include{include/chapters/Introduction}
@@ -118,6 +119,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \include{include/chapters/Background}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Analysis
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{include/chapters/Analysis}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Work
@@ -156,7 +163,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% RESEARCH PAPERS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{include/etc/references/References}
+
+
 \appendix
+
+\include{include/etc/appendix/Appendix}
 
 % Each paper is defined as a new section of an appendix chapter. This means that they automatically are added to TOC and it is possible to refer to them.
 

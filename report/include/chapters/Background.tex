@@ -16,6 +16,69 @@ Here the relevant information regarding maritime stakeholders are stored. This i
 The Service Registry acts to Maritime Services as the Identity Registry acts to the Maritime Stakeholders. Here all Maritime Services are registered and stored. The Service Registry holds both commercial and non-commercial, as well as authorized and non-authorized services, either free of charge or for a fee. The Service Registry is comparable with the App Store or Google Play in that it distributes services of all kinds to registered users.\cite{efficienSea2}
 \subsection{Messaging Service}
 \tit{"An information broker that intelligently exchanges information between communication systems connected to the platform, taking into account the current geographical position and communication links available to the recipient."}\cite{efficienSea2}
+
+\section{Monadic Parsing}
+
+\section{Property-Based Testing}
+
+Property based testing, also known as Automation Testing, is the principle of testing properties of code, rather than instances, as is done in manual unit testing. Unit tests are fast and easy to set up and execute, however, in most instances they only provide coverage to a certain degree. Depending on the complexity of the given program, most programmers can come up with tests, covering most of the given program, however many edge-cases are unintuitive and would require extensive testing to determine manually.
+
+Property-based testing solves this problem by setting up test cases that take into account mathematical models, describing the desired behavior of the code. Once such a test case has been created, semi-random execution instances can be run to the point of literal exhaustion, and thus a relatively small program can test for thousands of occurrences at once.
+
+An example of this can be seen in Listing \ref{lst:pbtEx}, that describe a snippet of Haskell quicksort code. A property of quicksort is that a list, sorted once is equivalent to a list, sorted twice, which is what the function \ttt{prop\_idempotent} validates.
+
+\begin{lstlisting}[caption={Example of Property-Based Testing. \cite{realWorldHaskell11}}, captionpos={below}, label={lst:pbtEx}]
+-- file: ch11/QC-basics.hs
+import Test.QuickCheck
+import Data.List
+
+qsort :: Ord a => [a] -> [a]
+qsort []     = []
+qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
+    where lhs = filter  (< x) xs
+          rhs = filter (>= x) xs
+
+prop_idempotent xs = qsort (qsort xs) == qsort xs
+\end{lstlisting}
+
+
 \section{Model-Based Testing}
 
-\section{Automated Model-Based testing of MCP}
+The principle of Model-based testing is to check behavior of software against predictions made by a model. Behavior can be described in a variety of manners, including data flow, control flow, dependencies, decision trees/cycles, and state transition machines. Model-based testing is good at describing the behavior of a system, when it reacts to a specific action, which is determined by another specific model. Using this technique, the behavior of a system can easily be determined and validated.
+
+\subsection{Finite State Machines (FSM)}
+A finite state machine is, as the name suggests, a mathematical machine, consisting of a collection of states. An arbitrary FSM has a start state along with a collection of states that are accessed through various status- and/or input-combinations. An example of this can be seen in Figure \ref{fig:fsmEx} as well as Table \ref{tab:fsmEx}. These describe the control flow of a turnstile, which allows for one pass through, whereafter it prompts for a coin before allowing another pass through.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
+		\tikzstyle{every state}=[fill=black,draw=none,text=white]
+
+		\node[state, initial] (A)              {Locked};
+		\node[state] (B) [right of=A] {Unlocked};
+
+		\path (A) edge [bend left,  above] node {Insert Coin} (B)
+							edge [loop above, above] node {Push}        (A)
+					(B) edge [bend left,  below] node {Push}        (A)
+							edge [loop above, above] node {Insert Coin} (B);
+	\end{tikzpicture}
+	\caption{Example of a finite state machine, describing a turnstile. This figure relates to Table \ref{tab:fsmEx}.}
+	\label{fig:fsmEx}
+\end{figure}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{l|l|l|l}\toprule
+		State    & Action      & Next State & Output \\ \midrule
+		Locked   & Insert Coin & Unlocked   & Unlocks turnstile, allowing passage. \\
+		Locked   & Push        & Locked     & Blocks passage. \\
+		Unlocked & Insert Coin & Unlocked   & Returns coin. \\
+		Unlocked & Push        & Locked     & Allows passage, locks. \\ \bottomrule
+	\end{tabular}
+	\caption{Example of a finite state machine, describing a turnstile. This table relates to Figure \ref{fig:fsmEx}.}
+	\label{tab:fsmEx}
+\end{table}
+
+\subsection{State Charts}
+
+\subsection{Unified Modeling Language (UML)}

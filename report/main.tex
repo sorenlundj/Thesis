@@ -22,13 +22,10 @@
 \usepackage{xspace}
 \usepackage{listings}
 \usepackage{url}
+\usepackage{booktabs}
+\usepackage{nameref}
 
-\newcommand{\tbf}[1]{\textbf{#1}}
-\newcommand{\tit}[1]{\textit{#1}}
-\newcommand{\ttt}[1]{\texttt{#1}}
-%\newcommand{\t}[1]{\text{#1}}
-%\newcommand{\t}[1]{\text{#1}}
-%\newcommand{\t}[1]{\text{#1}}
+\usetikzlibrary{arrows,automata}
 
 %%%%% Make abbreviations emphasized. Use if you like.
 \newcommand{\ie}{\emph{i.e.}\xspace}
@@ -40,6 +37,37 @@
 \newcommand{\etal}{\emph{et~al.}\xspace}
 
 \newcommand{\fitToPage}[1]{\resizebox{\columnwidth}{!}{#1}}
+
+\newcommand{\tbf}[1]{\textbf{#1}}
+\newcommand{\tit}[1]{\textit{#1}}
+\newcommand{\ttt}[1]{\texttt{#1}}
+
+\newcommand{\refNumName}[1]{\ref{#1}: \nameref{#1}}
+
+
+
+\lstset{
+  basicstyle=\ttfamily,
+  frame=single,
+  xleftmargin=2pt,
+  stepnumber=1,
+%  numbers=left,
+  numbersep=5pt,
+  belowcaptionskip=\bigskipamount,
+  escapeinside={*'}{'*},
+  language=haskell,
+  tabsize=2,
+  emphstyle={\bf},
+  stringstyle=\mdseries\rmfamily,
+  showspaces=false,
+  keywordstyle=\bfseries\rmfamily,
+  columns=fullflexible,
+  basicstyle=\small\sffamily,
+  showstringspaces=false,
+  morecomment=[l]\%,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
 
 %http://detexify.kirelabs.org/classify.html
 

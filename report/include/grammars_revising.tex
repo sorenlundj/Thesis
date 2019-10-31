@@ -1,7 +1,7 @@
 \section{Parser Grammars}
 
 \subsection{ServiceSpecificationScema}
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}[mathescape=true, keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
@@ -22,12 +22,23 @@ spec ::= name
 authorInfos ::= authorInfo authorInfos
      | $\epsilon$
 
-authorInfo ::= spec specifications
+authorInfo ::= aSpec authorInfo
+     | $\epsilon$
+
+aSpec ::= id
+     | name
+     | description
+     | contactInfo
 
 requirements ::= requirement requirements
      | $\epsilon$
 
-requirement ::= spec specifications
+requirement ::= rSpec requirement
+     | $\epsilon$
+
+rSpec ::= id
+     | name
+     | text
 
 serviceDataModel ::= definitionAsXSD
 
@@ -36,39 +47,53 @@ definitionAsXSD ::= $\epsilon$
 serviceInterfaces ::= serviceInterface serviceInterfaces
      | $\epsilon$
 
-serviceInterface ::= spec
+serviceInterface ::= siSpec serviceInterface
+     | $\epsilon$
+
+siSpec ::= name
+     | description
      | dataExchangePattern
      | operations
 
 operations ::= operation operations
      | $\epsilon$
 
-operation ::= spec
+operation ::= oSpec operation
+     | $\epsilon$
+
+oSpec ::= name
+     | description
      | returnValueType
      | parameterTypes
 
 returnValueType ::= typeReference
 
-parameterType ::= typeReference
 
+parameterTypes ::= parameterType parameterTypes
+     | $\epsilon$
+
+parameterType ::= ptSpec parameterType
+     | $\epsilon$
+
+ptSpec ::= typeReference
 \end{lstlisting}
 
 \subsection{ServiceDesignSchema}
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}[mathescape=true, keywordstyle={}]
 ServiceDesignSchema ::= specifications
 
 specifications ::= spec specifications
      | $\epsilon$
      
-spec ::= name
-     | status
-     | id
+spec ::= id
      | version
+     | name
+     | status
      | description
      | offersTransport
      | designServiceSpecifications
      | designedBy
-     | servicePhysicalModel
+     | servicePhysicalDataModel
      
 offersTransport ::= offersTransport offersTransport
      | name
@@ -81,20 +106,26 @@ designsServiceSpecifications ::= designsServiceSpecifications designsServiceSpec
      | version
      | $\epsilon$
 
-designedBy ::= id
+designedBy ::= dbSpec designedBy
+     | $\epsilon$
+
+dbSpec ::= id
      | name
      | description
      | contactInfo
      | isCommercial
 
-servicePhysicalDatamodel ::= name
+servicePhysicalDatamodel ::= spdSpec servicePhysicalModel
+     | $\epsilon$
+
+spdSpec ::= name
      | description
      | modelType
      | model
 \end{lstlisting}
 
 \subsection{ServiceInstanceSchema}
-\begin{lstlisting}[mathescape=true]
+\begin{lstlisting}[mathescape=true, keywordstyle={}]
 serviceInstanceSchema :: specifications
 
 specifications ::= spec specifications
@@ -114,30 +145,44 @@ spec ::= name
      | producedBy
      | providedBy
 
-implementsServiceDesign ::= id
+implementsServiceDesign ::= isdSpec implementsServiceDesign
+     | $\epsilon$
+
+isdSpec ::= id
      | version
 
-offersServiceLevel ::= availability
+offersServiceLevel ::= oslSpec offersServiceLevel
+     | $\epsilon$
+
+oslSpec ::= availability
      | name
      | description
 
 coversAreas ::= coversArea coversAreas
      | $\epsilon$
 
-coversArea ::= name
+coversArea ::= caSpec coversArea
+     | $\epsilon$
+
+caSpec ::= name
      | description
      | geometryAsWKT
 
-producedBy ::= id
+producedBy ::= prodSpec producedBy
+     | $\epsilon$
+
+prodSpec ::= id
      | name
      | description
      | contactInfo
      | isCommercial
      
-providedBy ::= id
+providedBy ::= provSpec providedBy
+     | $\epsilon$
+
+provSpec ::= id
      | name
      | description
      | contactInfo
      | isCommercial
-     
 \end{lstlisting}

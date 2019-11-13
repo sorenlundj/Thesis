@@ -1,11 +1,41 @@
 \chapter{Analysis}
+% Lav analyse af hvad der er nu ( data) og hvad kan jeg bruge det til
+% Hvad KAN jeg bruge det til og hvad vil jeg bruge det til
 
-In this chapter, I will analyze the data made available by the MCP in the three documents \tit{E2 - NW-NM DMA Service Instance}, \tit{E2 - NW-NM REST Service Technical Design}, and \tit{E2 - NW-NM Service Specification}. 
+% Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker
+
+In this chapter, I will present and analyze the data made available by the MCP in the three documents \tit{E2 - NW-NM DMA Service Instance}, \tit{E2 - NW-NM REST Service Technical Design}, and \tit{E2 - NW-NM Service Specification}, which represent all data, made available to me. Furthermore, I will explain the necessity of testing the MCP, as well as present a description of a favorable model structure. 
+
+\section{Data} %hvad er tilgængeligt nu?
+
+% specifikation bruges ikke til noget pt.
 
 \section{Testing the MCP} % Why do we want to test/validate
 
+The core component in the MCP is restructuring and streamlining maritime software sharing in a manner that can be done the world over, and the very nature of this statement dictates that the platform must be highly scalable. This adds the necessity of running quality-checks on all of the maritime services that are uploaded to the platform. To accommodate this issue, model-based testing immediately seems like the obvious solution, as this technique covers most of the required desired functionality. If implemented satisfyingly, a model-based testing suite for the MCP would be able to
+\begin{enumerate}
+	\item Present or verify behavior of maritime services.\\
+	There are many obvious common behavioral traits of maritime services, such as adding ships and maritime stakeholders, as well as removing them, however other behavioral patterns will often vary to the point of lowered manageability. A model, describing the maritime service in question will provide a clear and undeniable description of the service's behavior.
+	\item Visualize functionality of maritime services.\\
+	Just as well as behavioral traits, functionality will differ greatly from one maritime service to another, and therefore it is very useful for a model to visualize said functionality, as well as verifying that it works as intended.
+	\item Present the structures of maritime services.\\
+	This trait will be used to visualize the structural components of maritime services. Just as point 1 and two, this functionality will be useful for creating a quick and clear projection of how the maritime service behaves.
+	\item Increase reliability and efficiency of maritime services.\\
+	Through correct implementation of points 1-3 it is possible to elevate the reliability and efficiency of the maritime services found on the MCP. This is due to the same reasoning that all testing is conducted on the basis of: the need for safe, consistent, and correct code.
+\end{enumerate}
+
+As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing. 
+
 % Hvordan kan man teste dette?
 
-\section{Model Structure}
+\section{Model Structure} % Hvordan ville en model ideelt se ud?
 
-\section{Automated Model-Based testing of MCP}
+% tilføj/fjern entitet (skib/person/ø/hvad ved jeg?)
+% tilføj/fjern rettigheder til entitet
+% tilføj/fjern anonym funktion til entitet
+% opret statuseffekt (skib er nyt/skib er rustent/skib er overbebyrdet)
+% tilføj statuseffekt til entitet
+
+\section{Model-Based testing of MCP} % Hvad ville kunne testes
+
+\section{Issues} %Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk

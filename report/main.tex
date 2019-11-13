@@ -25,7 +25,7 @@
 \usepackage{booktabs}
 \usepackage{nameref}
 
-\usetikzlibrary{arrows,automata}
+\usetikzlibrary{arrows, automata}
 
 %%%%% Make abbreviations emphasized. Use if you like.
 \newcommand{\ie}{\emph{i.e.}\xspace}
@@ -72,6 +72,9 @@
 %http://detexify.kirelabs.org/classify.html
 
 %Auto label sections either by [sub[sub]]section/chapter[label]{name}, or just [sub[sub]]section/chapter{label=name}
+% Chapters
+\let\orichaptermark\chaptermark
+\renewcommand\chaptermark[1]{\label{chp:#1}\orichaptermark{chp:#1}}
 % Sections
 \let\orisectionmark\sectionmark
 \renewcommand\sectionmark[1]{\label{sec:#1}\orisectionmark{sec:#1}}
@@ -81,10 +84,6 @@
 % Subsubsections
 \let\orisubsubsectionmark\subsubsectionmark
 \renewcommand\subsubsectionmark[1]{\label{sssec:#1}\orisubsubsectionmark{sssec:#1}}
-
-\let\orichaptermark\chaptermark
-\renewcommand\chaptermark[1]{\label{chp:#1}\orichaptermark{chp:#1}}
-
 
 % Where graphic files are located
 \graphicspath{{figures/}}

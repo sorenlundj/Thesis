@@ -54,8 +54,8 @@ The principle of Model-based testing is to check behavior of software against pr
 		\centering
 		\begin{tikzpicture}
 			% horizontal and vertical axis
-			\draw (0,0) -- (6,0) {};
-			\draw (0,0) -- (0,4) {};
+			\draw	(0,0) -- (6,0)
+					(0,0) -- (0,4);
 
 			% horizontal and vertical labels
 			\draw	(0,0)	node[anchor=north]	{0}
@@ -75,11 +75,11 @@ The principle of Model-based testing is to check behavior of software against pr
 					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
 			
 			% models
-			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$};
-			\draw	(2,0) -- (2,1) node[anchor=north west]	{$M_2$};
-			\draw	(3,0) -- (3,2) node[anchor=north west]	{$M_3$};
-			\draw	(4,0) -- (4,3) node[anchor=north west]	{$M_4$};
-			\draw	(5,0) -- (5,3) node[anchor=west]		{$M_5$};
+			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$}
+					(2,0) -- (2,1) node[anchor=north west]	{$M_2$}
+					(3,0) -- (3,2) node[anchor=north west]	{$M_3$}
+					(4,0) -- (4,3) node[anchor=north west]	{$M_4$}
+					(5,0) -- (5,3) node[anchor=west]		{$M_5$};
 
 			% cumulative time consumption
 			\draw[dashed, red, thick]	(0,0) -- (4,4);
@@ -96,8 +96,8 @@ The principle of Model-based testing is to check behavior of software against pr
 		\centering
 		\begin{tikzpicture}
 			% horizontal and vertical axis
-			\draw (0,0) -- (6,0) {};
-			\draw (0,0) -- (0,4) {};
+			\draw	(0,0) -- (6,0)
+					(0,0) -- (0,4);
 
 			% horizontal and vertical labels
 			\draw	(0,0)	node[anchor=north]	{0}
@@ -117,11 +117,11 @@ The principle of Model-based testing is to check behavior of software against pr
 					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
 			
 			% models
-			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$};
-			\draw	(2,0) -- (2,1) node[anchor=north west]	{$M_2$};
-			\draw	(3,0) -- (3,2) node[anchor=north west]	{$M_3$};
-			\draw	(4,0) -- (4,3) node[anchor=north west]	{$M_4$};
-			\draw	(5,0) -- (5,3) node[anchor=west]		{$M_5$};
+			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$}
+					(2,0) -- (2,1) node[anchor=north west]	{$M_2$}
+					(3,0) -- (3,2) node[anchor=north west]	{$M_3$}
+					(4,0) -- (4,3) node[anchor=north west]	{$M_4$}
+					(5,0) -- (5,3) node[anchor=west]		{$M_5$};
 
 			% cumulative time consumption
 			\draw[dashed, red, thick]	(0,0) -- (1,1) -- (5,1);

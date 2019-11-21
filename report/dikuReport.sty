@@ -151,6 +151,50 @@ Submitted: & \@date \\%
 % NO RESETTING OF FOOTNOTES AT CHAPER CHANGE
 \makeatletter\@removefromreset{footnote}{chapter}\makeatother
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% START OF CONFIGURATIONS MADE BY ME (SØREN)                              %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MAKE TABLES, FIGURES AND LISTINGS SHARE COUNTER
+\makeatletter
+\AtBeginDocument{
+  \let\c@figure\c@lstlisting
+  \let\thefigure\thelstlisting
+  \let\c@table\c@lstlisting
+  \let\thetable\thelstlisting
+  \let\ftype@lstlisting\ftype@figure  % give the floats the same precedence
+  \let\ftype@table\ftype@figure       % give the floats the same precedence
+}
+\makeatother
+
+\lstset{
+  basicstyle=\ttfamily,
+  frame=single,
+  xleftmargin=2pt,
+  stepnumber=1,
+%  numbers=left, %TODO Left out, as it messes line numbers up
+  numbersep=5pt,
+  belowcaptionskip=\bigskipamount,
+  escapeinside={*'}{'*},
+  language=haskell,
+  tabsize=2,
+  emphstyle={\bf},
+  stringstyle=\mdseries\rmfamily,
+  showspaces=false,
+  keywordstyle=\bfseries\rmfamily,
+  columns=fullflexible,
+  basicstyle=\small\sffamily,
+  showstringspaces=false,
+  morecomment=[l]\%,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END OF CONFIGURATIONS MADE BY ME (SØREN)                                %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 % Set the style of chapter heads
 
 %\definecolor{TemplateColor}{rgb}{.75,.116,.60}  % KU Red

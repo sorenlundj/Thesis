@@ -1,5 +1,5 @@
 \chapter{Analysis}
-% Lav analyse af hvad der er nu ( data) og hvad kan jeg bruge det til
+% Lav analyse af hvad der er nu (data) og hvad kan jeg bruge det til
 % Hvad KAN jeg bruge det til og hvad vil jeg bruge det til
 
 % Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker
@@ -111,7 +111,9 @@ spec ::= specifications
 
 As mentioned above, the service specification is to be used to verify the behavior of the maritime service from a technical stand point. At the moment, the xml-document provides a technical description of its corresponding maritime service, but the most commonly used expression method is free text. As this is a very non-technical design choice, a large portion of the obvious technical advantages, provided by the xml-format are lost. 
 
-% Skal jeg have mere ind her? om hvordan det kan ændres til noget smartere, eller skal jeg gemme det til 'work'
+As it is possible to utilize free text though the use of natural language processing \cite{nlp}, no modifications are strictly necessary, however even with utilization of such or similar method, implementation hereof would be unstable in terms of usability. This is due to the fact that free language formulation varies at an unforeseeable degree, and as such creating uniform model based on this would add a great layer of complexity.
+
+For a more sustainable solution to the problem, see Section \ref{sec:Updated Data}.
 
 The xml-version of the service specification can be found in appendix \ref{sec:E2 - NW-NM Service Specification}.
 
@@ -129,40 +131,76 @@ The core principle in the MCP is to restructure and streamlining maritime softwa
 	Through correct implementation of points 1-3 it is possible to elevate the reliability and efficiency of the maritime services found on the MCP. This is due to the same reasoning that all testing is conducted on the basis of: the need for safe, consistent, and correct code.
 \end{enumerate}
 
-As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing. 
+As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.
+
+% Hvad med en hybrid? Kunne være et program, der laver en model, som man efterfølgende kan arbejde videre på?
 
 % Hvordan kan man teste dette?
 
 \section{Model Structure} % Hvordan ville en model ideelt se ud?
 
-\begin{figure}[H]
+\begin{figure}[H] %abstrakt struktur/kommunikationssetup
 	\centering
 	\begin{tikzpicture}
-		
 		% timelines
-		\draw	[dashed] (0,5) -- (0,0)
-				[dashed] (3,5) -- (3,0)
-				[dashed] (6,5) -- (6,0);
-
+		\draw	[dashed]	(0,5)	--	(0,0)
+				[dashed]	(3,5)	--	(3,0)
+				[dashed]	(6,5)	--	(6,0);
 		% labels
 		\draw	(0,5.15)	node	{Ship}
 				(3,5.15)	node	{Service}
 				(6,5.15)	node	{Company};
-
 		% interaction lines
-		\draw	(0,5) -- (3,4) -- (0,3)			% API call (request/response)
-				(3,4) -- (6,3) -- (3,2) -- (0,1)% Service requests/recieves data from company/data center
-				(6,2) -- (3,1) -- (0,0);		% Additional line
+		\draw	(0,5)	--	(3,4)	--	(0,3)				% API call (request/response)
+				(3,4)	--	(6,3)	--	(3,2)	--	(0,1)	% Service requests/recieves data from company/data center
+				(6,2)	--	(3,1)	--	(0,0);				% Additional line
 	\end{tikzpicture}
 	\caption{Rough draft of a model example, where a ship requests something from a service (could be a weather update)}
-	\label{fig:modelEx}
+	\label{fig:modelExProtocol}
+\end{figure}
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
+		\tikzstyle{every state}=[draw=black]
+
+		\node[state, initial]	(A)	[rectangle,	rounded corners]					{No map loaded};
+		\node[state]			(B)	[rectangle,	rounded corners,below left of=A]	{Awaiting Map};
+		\node[state]			(C)	[rectangle,	rounded corners,below right of=A]	{Map loaded};
+
+		\path	(A)	edge[bend right,left]									node{Request Map}	(B)
+					edge[loop above,left,		out=130,in=100,	looseness=7]node{Trash Map}		(A)
+					edge[loop right,right,		out=50,	in=80,	looseness=7]node{Await Response}(A)
+				(B)	edge[loop above,below left,	out=130,in=100, looseness=7]node{Request Map}	(B)
+					edge[loop below,below,		out=240,in=270, looseness=7]node{Trash Map}		(B)
+					edge[bend right,below]									node{Await Response}(C)
+				(C)	edge[bend right,above]									node{Request Map}	(B)
+					edge[bend right,right]									node{Trash Map}		(A)
+					edge[loop below,below right,out=300,in=270,	looseness=7]node{Await Response}(C);
+	\end{tikzpicture}
+	\caption{Final state machine, describing the \ttt{Ship} entity in Figure \ref{tab:fsmEx}.}
+	\label{fig:fsmExShip}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
+		\tikzstyle{every state}=[draw=black]
+
+		\node[state, initial]	(A)	[rectangle,	rounded corners]			{Idle};
+		\node[state]			(B)	[rectangle,	rounded corners,right of=A]	{Active};
+
+		\path	(A)	edge[loop above,left,	align=center,	out=130,in=100,	looseness=7]	node{Process Request\\(Invalid Request)}(A)
+					edge[bend left,	above,	align=center]									node{Process Request\\(Valid Request)}	(B)
+				(B)	edge[bend left,	below]													node{Respond}							(A);
+	\end{tikzpicture}
+	\caption{Final state machine, describing the \ttt{Ship} entity in Figure \ref{tab:fsmEx}.}
+	\label{fig:modelExFsm}
 \end{figure}
 
 % i XML'en:
 %	lav et felt, der hedder entitet
 %		definer relation, rolle, etc
-%	definer videre på roller, hvad vil de have fra hinanden?
-%	
+%	definer videre på roller, hvad vil de have fra hinanden? Hvad konstituerer en request (på f.esk et kort), skal man bruge adgangskode, hvad sker der hvis den er forkert?
 
 
 % definér en protokol
@@ -181,4 +219,6 @@ As stated in Section \ref{sec:Model-Based Testing} there are two main types of m
 
 \section{Model-Based testing of MCP} % Hvad kan man teste med dette?
 
-\section{Issues} %Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk
+\section{Issues} 
+%Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk
+

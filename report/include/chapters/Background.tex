@@ -96,8 +96,8 @@ The principle of Model-based testing is to check behavior of software against pr
 		\centering
 		\begin{tikzpicture}
 			% horizontal and vertical axis
-			\draw	(0,0) -- (6,0)
-					(0,0) -- (0,4);
+			\draw	(0,0)	--	(6,0)
+					(0,0)	--	(0,4);
 
 			% horizontal and vertical labels
 			\draw	(0,0)	node[anchor=north]	{0}
@@ -117,16 +117,16 @@ The principle of Model-based testing is to check behavior of software against pr
 					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
 			
 			% models
-			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$}
-					(2,0) -- (2,1) node[anchor=north west]	{$M_2$}
-					(3,0) -- (3,2) node[anchor=north west]	{$M_3$}
-					(4,0) -- (4,3) node[anchor=north west]	{$M_4$}
-					(5,0) -- (5,3) node[anchor=west]		{$M_5$};
+			\draw	(1,0)	--	(1,2)	node[anchor=west]		{$M_1$}
+					(2,0)	--	(2,1)	node[anchor=north west]	{$M_2$}
+					(3,0)	--	(3,2)	node[anchor=north west]	{$M_3$}
+					(4,0)	--	(4,3)	node[anchor=north west]	{$M_4$}
+					(5,0)	--	(5,3)	node[anchor=west]		{$M_5$};
 
 			% cumulative time consumption
-			\draw[dashed, red, thick]	(0,0) -- (1,1) -- (5,1);
+			\draw[dashed, red, thick]	(0,0)	--	(1,1)	--	(5,1);
 			% complexity constraint
-			\draw[dashed, blue, thick]	(1,1) -- (5,1);
+			\draw[dashed, blue, thick]	(1,1)	--	(5,1);
 		\end{tikzpicture}
 		\caption{Time consumption and complexity restraint of sequential model building and testing.}
 		\label{fig:sequenceMBT}
@@ -136,20 +136,20 @@ The principle of Model-based testing is to check behavior of software against pr
 
 
 \subsection{Finite State Machines (FSM)}
-A finite state machine is, as the name suggests, a mathematical machine, consisting of a collection of states. An arbitrary FSM has a start state along with a collection of states that are accessed through various status- and/or input-combinations. An example of this can be seen in Figure \ref{fig:fsmEx} as well as Table \ref{tab:fsmEx}. These describe the control flow of a turnstile, which allows for one pass through, whereafter it prompts for a coin before allowing another pass through.
+A finite state machine is, as the name suggests, a mathematical machine, consisting of a collection of states. An arbitrary FSM has a start state along with a collection of states that are accessed through various status- and/or input-combinations. An example of this can be seen in Figure \ref{fig:fsmEx} as well as Table \ref{tab:fsmEx}. These describe the control flow of a turnstile, which allows for one pass through, after which it prompts for a coin before allowing another pass through.
 
 \begin{figure}
 	\centering
 	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
-		\tikzstyle{every state}=[fill=black,draw=none,text=white]
+		\tikzstyle{every state}=[draw=black]
 
-		\node[state, initial]	(A)					{Locked};
-		\node[state]			(B)	[right of=A]	{Unlocked};
+		\node[state, initial]	(A)	[rectangle,	rounded corners]				{Locked};
+		\node[state]			(B)	[rectangle,	rounded corners, right of=A]	{Unlocked};
 
-		\path	(A) edge [bend left,  above] node {Insert Coin} (B)
-					edge [loop above, above] node {Push}        (A)
-				(B) edge [bend left,  below] node {Push}        (A)
-					edge [loop above, above] node {Insert Coin} (B);
+		\path	(A)	edge	[bend	left,	above]	node	{Insert Coin}	(B)
+					edge	[loop	above,	above]	node	{Pass Through}			(A)
+				(B)	edge	[bend	left,	below]	node	{Pass Through}			(A)
+					edge	[loop	above,	above]	node	{Insert Coin}	(B);
 	\end{tikzpicture}
 	\caption{Example of a finite state machine, describing a turnstile. Furthermore, this figure describes Table \ref{tab:fsmEx}.}
 	\label{fig:fsmEx}
@@ -158,16 +158,14 @@ A finite state machine is, as the name suggests, a mathematical machine, consist
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{l|l|l|l}\toprule
-		State    & Action      & Next State & Output \\ \midrule
-		Locked   & Insert Coin & Unlocked   & Unlocks turnstile, allowing passage. \\
-		Locked   & Push        & Locked     & Blocks passage. \\
-		Unlocked & Insert Coin & Unlocked   & Returns coin. \\
-		Unlocked & Push        & Locked     & Allows passage, locks. \\ \bottomrule
+		State		& action		& Next State	& Output \\ \midrule
+		Locked		& Insert Coin	& Unlocked		& Unlocks turnstile, allowing passage. \\
+		Locked		& Push			& Locked		& Blocks passage. \\
+		Unlocked	& Insert Coin	& Unlocked		& Returns coin. \\
+		Unlocked	& Push			& Locked		& Allows passage, locks. \\ \bottomrule
 	\end{tabular}
 	\caption{Example of a finite state machine, describing a turnstile. Furthermore, this table describes Figure \ref{fig:fsmEx}.}
 	\label{tab:fsmEx}
 \end{table}
 
 \subsection{State Charts}
-
-\subsection{Unified Modeling Language (UML)}

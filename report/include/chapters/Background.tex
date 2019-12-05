@@ -3,7 +3,7 @@
 \section{The Maritime Connectivity Platform}
 The Maritime Connectivity Platform (MCP), which is formally known as the Maritime Cloud is a platform, developed by EfficienSea2 \cite{efficienSea2}, which is led by the Danish Maritime Consortium. MCP is a communication framework, that is to ensure efficient, reliable and secure communication, and exchange of information in the maritime sector.
 The goal of the platform is to connect maritime stakeholders with maritime information services.
-\begin{figure}[H]
+\begin{figure}
 	\includegraphics[width=1\textwidth]{figures/MCPStructure}
 	\caption{Diagram, describing the structure of MCP. \cite{efficienSea2}}
 	\label{fig:MCPStruct}
@@ -50,7 +50,7 @@ The principle of Model-based testing is to check behavior of software against pr
 \begin{itemize}
 	\item \tbf{Serial model building- and testing:}\\
 	This way of implementing model-based testing involves predefined models, upon which a number of tests are executed. Creating the model ahead of execution allows the tester to implement an additional layer of complexity to the created models. Depending on the amount of models, this is, however, a significantly slower process than the alternative, in that each model requires a similar amount of time to construct. Figure \ref{fig:serialMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.\\
-	\begin{figure}[H]
+	\begin{figure}
 		\centering
 		\begin{tikzpicture}
 			% horizontal and vertical axis
@@ -92,7 +92,7 @@ The principle of Model-based testing is to check behavior of software against pr
 	Figure \ref{fig:serialMBT} shows the time consumption increasing for every model built, while the model complexity is directly matching the requirement, set by each specific model.
 	\item \tbf{Sequential model building- and testing:}\\
 	This way of implementing model-based testing involves on-the-fly model creation- and testing. Here a program is designed to take in arguments, describing different model behaviors, upon the basis of which the program tests the models immediately after they are generated. Compared with the implementation described above, this technique scales to a much better degree, as the program will only need to be written once in order to create a virtually infinite amount of models. The created models are, however, constrained to the lowest common complexity level, shared across all of the generated models. Figure \ref{fig:sequenceMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.
-	\begin{figure}[H]
+	\begin{figure}
 		\centering
 		\begin{tikzpicture}
 			% horizontal and vertical axis
@@ -141,10 +141,10 @@ A finite state machine is, as the name suggests, a mathematical machine, consist
 \begin{figure}
 	\centering
 	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
-		\tikzstyle{every state}=[draw=black]
+		\tikzstyle{every state}=[draw=black,rectangle,rounded corners]
 
-		\node[state, initial]	(A)	[rectangle,	rounded corners]				{Locked};
-		\node[state]			(B)	[rectangle,	rounded corners, right of=A]	{Unlocked};
+		\node[state, initial]	(A)	[]				{Locked};
+		\node[state]			(B)	[right of=A]	{Unlocked};
 
 		\path	(A)	edge	[bend	left,	above]	node	{Insert Coin}	(B)
 					edge	[loop	above,	above]	node	{Pass Through}			(A)

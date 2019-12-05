@@ -24,8 +24,11 @@
 \usepackage{url}
 \usepackage{booktabs}
 \usepackage{nameref}
-%\usepackage{hyperref}
 
+\usepackage{array}
+\usepackage{makecell}
+
+\DeclareUnicodeCharacter{00A0}{~}
 \usetikzlibrary{arrows, automata}
 
 %%%%% Make abbreviations emphasized. Use if you like.
@@ -41,9 +44,17 @@
 \newcommand{\tit}[1]{\textit{#1}}
 \newcommand{\ttt}[1]{\texttt{#1}}
 
+\newcommand{\e}{\epsilon}
+
+\newcommand{\ra}{$\rightarrow$}
+
 \newcommand{\refNumName}[1]{\ref{#1}: \nameref{#1}}
 \newcommand{\fitToPage}[1]{\resizebox{\linewidth}{!}{#1}}
 
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
 
 %http://detexify.kirelabs.org/classify.html
 

@@ -1,40 +1,78 @@
 \chapter{Work/Design}
 
 In this chapter I will describe the work I have done in order to implement model-based testing into the MCP. The workload that is contained in the implementation and description herein includes implementation of a monadic parser that reads the xml-specification files, an update of the fields and contents of fields in the xml-specification files, as well as a model, that is built upon the foundation of aforementioned updated xml-specification. %TODO Hvis det fungerer med interpreter(parser(xml))=model, så skriv det på.
-
 \section{Updated Data}
 
-As discussed in Section \ref{sec:Data}, in order to create uniform models, upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. 
+As discussed in Section \ref{sec:Data}, in order to create uniform models, upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language, for reliable model-generation.
 
-One way to implement these changes is make the user able to assign variables, based on a fixed collection of available options. An example of execution of this is given in Figure \ref{fig:entityStruct}. Each level in the tree describes a field, which can be filled with predefined variables, which in the end forms a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. 
-% Hvordan ville JEG designe en specifikation
-% What data WILL be available after?
-\begin{figure}
-	\centering
-	\begin{tikzpicture}[sibling distance=10em,
-		every node/.style = {shape=rectangle, rounded corners,
-			draw, align=center}]]
-		\node {Choose Field type}
-			child{
-				node{Choose relation[s]}
-				child{
-					node{Choose something}
-					child{
-						node{Choose Requirement[s]} %requirement[s] to above specific relatino
-					}
-				}
-			};
-	\end{tikzpicture}
-	\caption{New entity structure in xml-specification files.}
-	\label{fig:entityStruct}
-\end{figure}
 
-The updated xml-specification files would be limiting the flexibility of the models in some aspects, as not all maritime services would follow the layout given in Figure \ref{fig:entityStruct}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
+%TODO: Evt en figur, der viser hvilke attributter, der indeholder hvilke atributter.
 
-\section{Parser Grammars}
+\section{Updated Parser Grammars}
 
-\subsection{ServiceInstanceSchema}		%EFTERFØLGENDE grammatik -- den opdaterede, som man godt kan få noget ud af
-\subsection{General Grammar}			%EFTERFØLGENDE grammatik -- den opdaterede, som man godt kan få noget ud af
+\subsection{Updated Service Specification Grammar}
+
+One way to implement these changes is make the user able to assign variables, based on a fixed collection of available options. An example of execution of this is given in Listing \ref{lst:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{lst:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{lst:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. 
+
+\begin{lstlisting}[keywordstyle={},label={lst:sSpecUpd},caption={Updated parser grammar of Service Specification Schema}]
+ServiceSpecificationSchema ::= specifications
+
+specifications ::= spec specifications
+     | $\e$
+     
+spec ::= name
+     | status
+     | id
+     | Entities
+
+Entities ::= ESpec Entities
+     | $\e$
+
+ESpec ::= Ship
+     | Service
+     | Company
+
+Ship ::= name
+     | id
+     | Relations
+
+Service ::= name
+     | id
+     | Relations
+     | Dependencies
+
+Company ::= name
+     | id
+     | Relations
+
+Relations ::= RSpec Relations
+     | $\e$
+
+RSpec ::= ESpec ESpec
+
+Dependencies ::= DSpec Dependencies
+     | $\e$
+
+DSpec ::= Dependency RSpec
+\end{lstlisting}
+
+\subsection{Updated General Grammar}
+The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Listing \ref{lst:sSpecUpd}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
+
+Listing \ref{lst:sSpecUpdRed} describes a reduced form of Listing \ref{lst:sSpecUpd}. It can be seen that Listing \ref{lst:sSpecUpdRed} is identical to Listing \ref{lst:sSpecRed}, which proves that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser.
+
+\begin{lstlisting}[keywordstyle={}, label={lst:sSpecUpdRed}, caption={Reduced parser grammar of the updated Service Specification Schema}]
+ServiceSpecificationSchema ::= specifications
+
+specifications ::= spec specifications
+     | $\e$
+     
+spec ::= specifications
+     | spec
+     | $\e$
+
+spec ::= string
+\end{lstlisting}
 
 \section{Implementation in the MCP}
 

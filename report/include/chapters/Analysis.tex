@@ -20,12 +20,13 @@ To provide a holistic description of a service instance, three documents are nec
 
 Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
 \section{Service Specification grammar}
-The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{lst:sSpecFull} as well as in Listing \ref{lst:sSpecReduced}, while the latter is in a severely reduced and generalized form.
-\begin{lstlisting}[mathescape=true, keywordstyle={},label={lst:sSpecFull},caption={Full parser grammar of Service Specification Schema},captionpos={below}]
+The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{lst:sSpecFull} as well as in Listing \ref{lst:sSpecRed}, while the latter is in a severely reduced and generalized form.
+%TODO: evt læg i appendix og referer til relevante bidder.
+\begin{lstlisting}[keywordstyle={},label={lst:sSpecFull},caption={Full parser grammar of Service Specification Schema}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
-     | $\epsilon$
+     | $\e$
      
 spec ::= name
      | status
@@ -40,10 +41,10 @@ spec ::= name
      | serviceInterfaces
      
 authorInfos ::= authorInfo authorInfos
-     | $\epsilon$
+     | $\e$
 
 authorInfo ::= aSpec authorInfo
-     | $\epsilon$
+     | $\e$
 
 aSpec ::= id
      | name
@@ -51,10 +52,10 @@ aSpec ::= id
      | contactInfo
 
 requirements ::= requirement requirements
-     | $\epsilon$
+     | $\e$
 
 requirement ::= rSpec requirement
-     | $\epsilon$
+     | $\e$
 
 rSpec ::= id
      | name
@@ -62,13 +63,13 @@ rSpec ::= id
 
 serviceDataModel ::= definitionAsXSD
 
-definitionAsXSD ::= $\epsilon$
+definitionAsXSD ::= $\e$
 
 serviceInterfaces ::= serviceInterface serviceInterfaces
-     | $\epsilon$
+     | $\e$
 
 serviceInterface ::= siSpec serviceInterface
-     | $\epsilon$
+     | $\e$
 
 siSpec ::= name
      | description
@@ -76,10 +77,10 @@ siSpec ::= name
      | operations
 
 operations ::= operation operations
-     | $\epsilon$
+     | $\e$
 
 operation ::= oSpec operation
-     | $\epsilon$
+     | $\e$
 
 oSpec ::= name
      | description
@@ -90,23 +91,25 @@ returnValueType ::= typeReference
 
 
 parameterTypes ::= parameterType parameterTypes
-     | $\epsilon$
+     | $\e$
 
 parameterType ::= ptSpec parameterType
-     | $\epsilon$
+     | $\e$
 
 ptSpec ::= typeReference
 \end{lstlisting}
 
-\begin{lstlisting}[mathescape=true, keywordstyle={}, label={lst:sSpecReduced}, caption={Reduced parser grammar of Service Specification Schema},captionpos={below}]
+\begin{lstlisting}[keywordstyle={}, label={lst:sSpecRed}, caption={Reduced parser grammar of Service Specification Schema}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
-     | $\epsilon$
+     | $\e$
      
 spec ::= specifications
      | spec
-     | $\epsilon$
+     | $\e$
+
+spec ::= string
 \end{lstlisting}
 
 As mentioned above, the service specification is to be used to verify the behavior of the maritime service from a technical stand point. At the moment, the xml-document provides a technical description of its corresponding maritime service, but the most commonly used expression method is free text. As this is a very non-technical design choice, a large portion of the obvious technical advantages, provided by the xml-format are lost. 
@@ -161,21 +164,19 @@ As stated in Section \ref{sec:Model-Based Testing} there are two main types of m
 \begin{figure}
 	\centering
 	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
-		\tikzstyle{every state}=[draw=black]
+		\tikzstyle{every state}=[draw=black,rectangle,rounded corners]
 
-		\node[state, initial]	(A)	[rectangle,	rounded corners]					{No map loaded};
-		\node[state]			(B)	[rectangle,	rounded corners,below left of=A]	{Awaiting Map};
-		\node[state]			(C)	[rectangle,	rounded corners,below right of=A]	{Map loaded};
+		\node[state, initial]	(A)	[]					{No map loaded};
+		\node[state]			(B)	[below left of=A]	{Awaiting Map};
+		\node[state]			(C)	[below right of=A]	{Map loaded};
 
 		\path	(A)	edge[bend right,left]									node{Request Map}	(B)
 					edge[loop above,left,		out=130,in=100,	looseness=7]node{Trash Map}		(A)
-					edge[loop right,right,		out=50,	in=80,	looseness=7]node{Await Response}(A)
 				(B)	edge[loop above,below left,	out=130,in=100, looseness=7]node{Request Map}	(B)
 					edge[loop below,below,		out=240,in=270, looseness=7]node{Trash Map}		(B)
 					edge[bend right,below]									node{Await Response}(C)
 				(C)	edge[bend right,above]									node{Request Map}	(B)
-					edge[bend right,right]									node{Trash Map}		(A)
-					edge[loop below,below right,out=300,in=270,	looseness=7]node{Await Response}(C);
+					edge[bend right,right]									node{Trash Map}		(A);
 	\end{tikzpicture}
 	\caption{Final state machine, describing the \ttt{Ship} entity in Figure \ref{tab:fsmEx}.}
 	\label{fig:fsmExShip}
@@ -184,16 +185,16 @@ As stated in Section \ref{sec:Model-Based Testing} there are two main types of m
 \begin{figure}
 	\centering
 	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
-		\tikzstyle{every state}=[draw=black]
+		\tikzstyle{every state}=[draw=black,rectangle,rounded corners]
 
-		\node[state, initial]	(A)	[rectangle,	rounded corners]			{Idle};
-		\node[state]			(B)	[rectangle,	rounded corners,right of=A]	{Active};
+		\node[state, initial]	(A)	[]				{Idle};
+		\node[state]			(B)	[right of=A]	{Active};
 
 		\path	(A)	edge[loop above,left,	align=center,	out=130,in=100,	looseness=7]	node{Process Request\\(Invalid Request)}(A)
 					edge[bend left,	above,	align=center]									node{Process Request\\(Valid Request)}	(B)
 				(B)	edge[bend left,	below]													node{Respond}							(A);
 	\end{tikzpicture}
-	\caption{Final state machine, describing the \ttt{Ship} entity in Figure \ref{tab:fsmEx}.}
+	\caption{Final state machine, describing the \ttt{Service} entity in Figure \ref{tab:fsmEx}.}
 	\label{fig:modelExFsm}
 \end{figure}
 

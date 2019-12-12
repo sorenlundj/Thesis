@@ -1,18 +1,103 @@
 \chapter{Work/Design}
 
-In this chapter I will describe the work I have done in order to implement model-based testing into the MCP. The workload that is contained in the implementation and description herein includes implementation of a monadic parser that reads the xml-specification files, an update of the fields and contents of fields in the xml-specification files, as well as a model, that is built upon the foundation of aforementioned updated xml-specification. %TODO Hvis det fungerer med interpreter(parser(xml))=model, så skriv det på.
+In this chapter I will describe the work I have done in order to implement model-based testing into the MCP. The workload that is contained in the implementation and description herein includes implementation of a monadic parser that reads the xml-specification files, an update of the fields and contents of fields in the xml-specification files, as well as a model, that is built upon the foundation of aforementioned updated xml-specification.
+%TODO Hvis det fungerer med interpreter(parser(xml))=model, så skriv det på.
 \section{Updated Data}
 
 As discussed in Section \ref{sec:Data}, in order to create uniform models, upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language, for reliable model-generation.
 
+One way to implement these changes is make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generation as well as give maximum flexibility in future model design.
 
-%TODO: Evt en figur, der viser hvilke attributter, der indeholder hvilke atributter.
+\begin{description}
+	\item[Entity]\ \\
+	An entity is the most basic component of the models, without which, the models would not be able to exist. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which will occur throughout execution of the models. At the moment, three entities exist, however support for additional models is possible.
+	\begin{description}
+		\item[Ship]\ \\
+		If comparing the MCP to the App Store or Google Play, a ship would undertake the role of the user. The user can be the one utilizing the maritime service or in other cases other users, which are somehow connected to the user. 
+		\item[Service]\ \\
+		The Service entity represents the maritime service, which is being modeled. Like a ship entity, multiple instances of a service entity can occur. If multiple instances of a service entity occurs, this will correspond to cross app interaction, using the same comparison as above.
+		\item[Company]\ \\
+		Company entities serve as nodes, which hold data or other goods, which can be desired by ship entities for a variety of reasons. Multiple company entities can exist at one time. 
+	\end{description}
+	\item[Relation]\ \\
+	A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between 'Ship' and 'Service' as well as 'Service' and 'Company'.
+
+	A ship entity can share a relation with other ship entities, as well as service entities, but in order to access data held by the company entity, it will need to consult the service entity.
+
+	A service entity needs to be able to share a relation with all other entities in order to act as an intermedium between ship entities and company entities, while also being able to interact with other service entities.
+
+	A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, whether communicating with companies or citizens.
+	\item[Dependency]\ \\
+	XXXXX %TODO Er der her tale om dependencies fra andre entities, eller er det mere 'miljøvariabler?'
+\end{description}
+
+% Snak om de forskællige nye attributter: entities, relations, dependencies og så videre
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->,>=stealth', node distance=5 cm]
+		\node[]	(A)	[]	
+			{\begin{tabular}{|l|}\hline{1}
+				State          \\ \hline{2.5}
+				Ship            \\ \hline{1}
+				Service          \\ \hline{1}
+				Company	          \\ \hline{1}
+			\end{tabular}};
+		\node[]	(B)	[above right of=A]
+			{\begin{tabular}{|l|}\hline{1}
+				Relation       \\ \hline{2.5}
+				Ship            \\ \hline{1}
+				Service          \\ \hline{1}
+			\end{tabular}};
+		\node[]	(C)	[right of=A]
+			{\begin{tabular}{|l|}\hline{1}
+				Relation       \\ \hline{2.5}
+				Ship            \\ \hline{1}
+				Service          \\ \hline{1}
+				Company           \\ \hline{1}
+			\end{tabular}};
+		\node[]	(D)	[below right of=A]
+			{\begin{tabular}{|l|}\hline{1}
+				Relation       \\ \hline{2.5}
+				Service         \\ \hline{1}
+				Company          \\ \hline{1}
+			\end{tabular}};
+		\node[]	(E)	[right of=B]
+			{\begin{tabular}{|l|}\hline{1}
+				Dependency     \\ \hline{2.5}
+				Ship            \\ \hline{1}
+				Service          \\ \hline{1}
+			\end{tabular}};
+		\node[]	(F)	[right of=C]
+			{\begin{tabular}{|l|}\hline{1}
+				Dependency     \\ \hline{2.5}
+				Ship            \\ \hline{1}
+				Service          \\ \hline{1}
+				Company           \\ \hline{1}
+			\end{tabular}};
+		\node[]	(G)	[right of=D]
+			{\begin{tabular}{|l|}\hline{1}
+				Dependency     \\ \hline{2.5}
+				Service         \\ \hline{1}
+				Company          \\ \hline{1}
+			\end{tabular}};
+		\path	(A)	edge	[out=10]	node	{}	(B)
+					edge	[out=345]	node	{}	(C)
+					edge	[out=325]	node	{}	(D)
+				(B)	edge	[out=30]	node	{}	(E)
+				(C)	edge	[out=30]	node	{}	(F)
+				(D)	edge	[out=30]	node	{}	(G);
+	\end{tikzpicture}
+	\caption{Relations and dependencies for ships, services, and companies}
+	\label{fig:entities}
+\end{figure}
+
 
 \section{Updated Parser Grammars}
 
-\subsection{Updated Service Specification Grammar}
+The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{lst:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{lst:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{lst:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. The parser grammar abides by the rules, presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
 
-One way to implement these changes is make the user able to assign variables, based on a fixed collection of available options. An example of execution of this is given in Listing \ref{lst:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{lst:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{lst:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. 
+\subsection{Updated Service Specification Grammar}
 
 \begin{lstlisting}[keywordstyle={},label={lst:sSpecUpd},caption={Updated parser grammar of Service Specification Schema}]
 ServiceSpecificationSchema ::= specifications
@@ -75,16 +160,21 @@ spec ::= string
 \end{lstlisting}
 
 \section{Implementation in the MCP}
+%TODO
+
+% Hvordan skal dette implementeres/BRUGES i MCP (ikke teknisk)
+
+\section{Technical Implementation}
+%TODO
 
 % Monadisk parsing
 
 % Evt. lav en specifikationsXML selv.
 
 % Evt lav nedenstående til et Chapter
-
-\section{Technical Implementation}
 \subsection{Executing Instructions}
+%TODO
 
 \section{Testing}
-
+%TODO
 

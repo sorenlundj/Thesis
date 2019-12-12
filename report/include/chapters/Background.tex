@@ -19,7 +19,7 @@ The Service Registry acts to Maritime Services as the Identity Registry acts to 
 
 \section{Monadic Parsing}
 
-Text parsing is a functionality, supported in virtually every programming language.
+Text parsing is a functionality, supported in virtually every programming language. %TODO
 
 \section{Property-Based Testing}
 
@@ -47,9 +47,9 @@ prop_idempotent xs = qsort (qsort xs) == qsort xs
 
 The principle of Model-based testing is to check behavior of software against predictions made by a model. Behavior can be described in a variety of manners, including data flow, control flow, dependencies, decision trees/cycles, and state transition machines. Model-based testing is good at describing the behavior of a system, when it reacts to a specific action, which is determined by another specific model. Using this technique, the behavior of a system can easily be determined and validated. Currently there are two main types of model-based testing-techniques:
 
-\begin{itemize}
-	\item \tbf{Serial model building- and testing:}\\
-	This way of implementing model-based testing involves predefined models, upon which a number of tests are executed. Creating the model ahead of execution allows the tester to implement an additional layer of complexity to the created models. Depending on the amount of models, this is, however, a significantly slower process than the alternative, in that each model requires a similar amount of time to construct. Figure \ref{fig:serialMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.\\
+\begin{description}
+	\item[Serial model building- and testing]
+	is a way of implementing model-based testing that involves predefined models, upon which a number of tests are executed. Creating the model ahead of execution allows the tester to implement an additional layer of complexity to the created models. Depending on the amount of models, this is, however, a significantly slower process than the alternative, in that each model requires a similar amount of time to construct. Figure \ref{fig:serialMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.\\
 	\begin{figure}
 		\centering
 		\begin{tikzpicture}
@@ -90,23 +90,24 @@ The principle of Model-based testing is to check behavior of software against pr
 		\label{fig:serialMBT}
 	\end{figure}
 	Figure \ref{fig:serialMBT} shows the time consumption increasing for every model built, while the model complexity is directly matching the requirement, set by each specific model.
-	\item \tbf{Sequential model building- and testing:}\\
-	This way of implementing model-based testing involves on-the-fly model creation- and testing. Here a program is designed to take in arguments, describing different model behaviors, upon the basis of which the program tests the models immediately after they are generated. Compared with the implementation described above, this technique scales to a much better degree, as the program will only need to be written once in order to create a virtually infinite amount of models. The created models are, however, constrained to the lowest common complexity level, shared across all of the generated models. Figure \ref{fig:sequenceMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.
+	\item[Sequential model building- and testing:]
+	is a way of implementing model-based testing that involves on-the-fly model creation- and testing. Here a program is designed to take in arguments, describing different model behaviors, upon the basis of which the program tests the models immediately after they are generated. Compared with the implementation described above, this technique scales to a much better degree, as the program will only need to be written once in order to create a virtually infinite amount of models. The created models are, however, constrained to the lowest common complexity level, shared across all of the generated models. Figure \ref{fig:sequenceMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.
 	\begin{figure}
 		\centering
 		\begin{tikzpicture}
-			% horizontal and vertical axis
+			% horizontal axis
 			\draw	(0,0)	--	(6,0)
+			% vertical axis
 					(0,0)	--	(0,4);
 
-			% horizontal and vertical labels
+			% horizontal labels
 			\draw	(0,0)	node[anchor=north]	{0}
 					(1,0)	node[anchor=north]	{1}
 					(2,0)	node[anchor=north]	{2}
 					(3,0)	node[anchor=north]	{3}
 					(4,0)	node[anchor=north]	{4}
 					(5,0)	node[anchor=north]	{5}
-
+			% vertical labels
 					(0,1)	node[anchor=east]	{1}
 					(0,2)	node[anchor=east]	{2}
 					(0,3)	node[anchor=east]	{3};
@@ -132,7 +133,7 @@ The principle of Model-based testing is to check behavior of software against pr
 		\label{fig:sequenceMBT}
 	\end{figure}
 	Figure \ref{fig:sequenceMBT} shows that the time consumption halts to a stop when one model is built with the drawback that the model complexity constraint is set to the lowest common model.
-\end{itemize}
+\end{description}
 
 
 \subsection{Finite State Machines (FSM)}
@@ -169,3 +170,4 @@ A finite state machine is, as the name suggests, a mathematical machine, consist
 \end{table}
 
 \subsection{State Charts}
+%TODO eller er det relevant?

@@ -1,27 +1,23 @@
 \chapter{Analysis}
-% Lav analyse af hvad der er nu (data) og hvad kan jeg bruge det til
-% Hvad KAN jeg bruge det til og hvad vil jeg bruge det til
-
-% Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker
 
 In this chapter, I will present and analyze the data made available by the MCP in the three documents \ttt{E2 - NW-NM DMA Service Instance}, \ttt{E2 - NW-NM REST Service Technical Design}, and \ttt{E2 - NW-NM Service Specification}, which represent all data, made available to me. Furthermore, I will explain the necessity of testing the MCP, as well as present a description of a favorable model structure. 
 
-\section{Data} % hvad er tilgængeligt nu?
+\section{Data}
 
 To provide a holistic description of a service instance, three documents are necessarily provided. Below are the descriptions of the documents with the service instance \ttt{E2 - NW-NM DMA} as an example.
-\begin{itemize}
-	\item \ttt{E2 - NW-NM DMA Service Instance} \\
+\begin{description}
+	\item[E2 - NW-NM DMA Service Instance]\ \\
 	The purpose of this service instance document and its xml-defined counterpart is to describe a DMA instance of the REST-based technical design of the MW- NM service specification, according to the guidelines given in the Service Description Guidelines.
-	\item \ttt{E2 - NW-NM REST Service Technical Design} \\
+	\item[E2 - NW-NM REST Service Technical Design]\ \\
 	The purpose of this service technical design document and its xml-defined counterpart is to describe a REST-based technical design of the MW-NM service specification, according to the guidelines given in the Service Description Guidelines.
-	\item \ttt{E2 - NW-NM Service Specification} \\
+	\item[E2 - NW-NM Service Specification]\ \\
 	The purpose of this service specification document and its xml-defined counterpart is to provide a holistic overview of the MW-NM service and its building blocks in a technology-independent way, according to the guidelines given in the Service Description Guidelines.
-\end{itemize}
-
+\end{description}
 Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
 \section{Service Specification grammar}
 The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{lst:sSpecFull} as well as in Listing \ref{lst:sSpecRed}, while the latter is in a severely reduced and generalized form.
 %TODO: evt læg i appendix og referer til relevante bidder.
+%TODO: meget mere om listings.
 \begin{lstlisting}[keywordstyle={},label={lst:sSpecFull},caption={Full parser grammar of Service Specification Schema}]
 ServiceSpecificationSchema ::= specifications
 
@@ -120,7 +116,7 @@ For a more sustainable solution to the problem, see Section \ref{sec:Updated Dat
 
 The xml-version of the service specification can be found in appendix \ref{sec:E2 - NW-NM Service Specification}.
 
-\section{Testing the MCP} % Why do we want to test/validate
+\section{Testing the MCP}
 
 The core principle in the MCP is to restructure and streamlining maritime software sharing in a manner that can be done the world over, and the very nature of this statement dictates that the platform must be highly scalable. This adds the necessity of running quality-checks on all of the maritime services that are uploaded to the platform. To accommodate this issue, model-based testing immediately seems like the obvious solution, as this technique covers most of the required desired functionality. If implemented satisfyingly, a model-based testing suite for the MCP would be able to
 \begin{enumerate}
@@ -135,14 +131,14 @@ The core principle in the MCP is to restructure and streamlining maritime softwa
 \end{enumerate}
 
 As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.
-
+%TODO: Meget mere om figurerne
 % Hvad med en hybrid? Kunne være et program, der laver en model, som man efterfølgende kan arbejde videre på?
 
 % Hvordan kan man teste dette?
 
-\section{Model Structure} % Hvordan ville en model ideelt se ud?
+\section{Model Structure}
 
-\begin{figure}[H] %abstrakt struktur/kommunikationssetup
+\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
 		% timelines
@@ -215,11 +211,42 @@ As stated in Section \ref{sec:Model-Based Testing} there are two main types of m
 % tre foruddefinerede modeller, der snakker med hinanden. Simulér en interaktion mellem dem - hvordan skifter de forskellige tilstand når de interagerer?
 % hvilke reaktioner kommer der på aktioner?
 % opfører en entitet sig rigtigt i forhold til en anden entitet når de interagerer på en bestemt måde?
-% 
-% kan GODT lave drop down menuer i nye xml-filer
 
 \section{Model-Based testing of MCP} % Hvad kan man teste med dette?
+%TODO
 
-\section{Issues} 
+\section{Summary: advantages and disadvantages} 
+
+Issues will inevitably present themselves with a project such as this, however the scope and nature of these issues will vary with each approach possible. As different approaches offer tailored advantages to circumvent correlating unique concerns, another set of unique concerns will necessarily present themselves. In this section I will sum up the approaches presented throughout Chapter \ref{chp:Analysis}, along with their corresponding arising advantages and disadvantages.
+\begin{description}
+	\item[Manual model-creation]\ \\
+	\tbf{Advantages}
+	\begin{itemize}
+		\item a
+		\item b
+		\item c
+	\end{itemize}
+	\tbf{Disadvantages}
+	\begin{itemize}
+		\item d
+		\item e
+	\end{itemize}
+	\item[Manual model-creation]\ \\
+	\tbf{Advantages}
+	\begin{itemize}
+		\item f
+		\item g
+		\item h
+	\end{itemize}
+	\tbf{Disadvantages}
+	\begin{itemize}
+		\item i
+		\item j
+		\item k
+	\end{itemize}
+
+\end{description}
+
 %Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk
-
+% Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker
+%TODO

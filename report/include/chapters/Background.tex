@@ -19,7 +19,11 @@ The Service Registry acts to Maritime Services as the Identity Registry acts to 
 
 \section{Monadic Parsing}
 
-Text parsing is a functionality, supported in virtually every programming language. %TODO
+Parsing is a widely known tool in computer science. The term expresses a function, taking a string of input, from which it yields a parse tree that it constructs when applying the specific parser logic upon the input string. The parser performs a lexical analysis, meaning that it converts sections of the string to tokens that are ultimately easier to handle by an interpreter. When using Haskel to write parsers a library family known as parser combinators is very popular, in that it allows the programmer to embed domain specific language directly in the parser. The concept of combinatory parsing is using one or more of these libraries of higher-order functions, known as parser combinators. Parser combinators take in parsers of any kind imaginable as input and returns a new set of parsers as an output.
+
+Before 1995, implementation of top-down parsing, using parser combinators ran in and used both exponential time and space complexity when applied to ambiguous, context free grammars. At that time Frost and Szydlowski demonstrated that memoization can enhance parser combinators in order to optimize time complexity to polynomial. One year later through the use of monads parser combinators were reconstructed by Frost which introduced systematic and correct threading of memoization throughout execution\cite{memoization}.
+
+This 
 
 \section{Property-Based Testing}
 
@@ -27,9 +31,10 @@ Property based testing, also known as Automation Testing, is the principle of te
 
 Property-based testing solves this problem by setting up test cases that take into account mathematical models, describing the desired behavior of the code. Once such a test case has been created, semi-random execution instances can be run to the point of literal exhaustion, and thus a relatively small program can test for thousands of occurrences at once.
 
-An example of this can be seen in Listing \ref{lst:pbtEx}, that describe a snippet of Haskell quicksort code. A property of quicksort is that a list, sorted once is equivalent to a list, sorted twice, which is what the function \ttt{prop\_idempotent} validates.
-
-\begin{lstlisting}[caption={Example of Property-Based Testing. \cite{realWorldHaskell11}}, captionpos={below}, label={lst:pbtEx}]
+An example of this can be seen in Listing \ref{fig:pbtEx}, that describe a snippet of Haskell quicksort code. A property of quicksort is that a list, sorted once is equivalent to a list, sorted twice, which is what the function \ttt{prop\_idempotent} validates.
+\begin{figure}
+	\centering
+	\begin{lstlisting}
 import Test.QuickCheck
 import Data.List
 
@@ -40,8 +45,10 @@ qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
           rhs = filter (>= x) xs
 
 prop_idempotent xs = qsort (qsort xs) == qsort xs
-\end{lstlisting}
-
+	\end{lstlisting}
+	\caption{Example of Property-Based Testing. \cite{realWorldHaskell11}}
+	\label{fig:pbtEx}
+\end{figure}
 
 \section{Model-Based Testing}
 
@@ -53,18 +60,19 @@ The principle of Model-based testing is to check behavior of software against pr
 	\begin{figure}
 		\centering
 		\begin{tikzpicture}
-			% horizontal and vertical axis
+			% horizontal axis
 			\draw	(0,0) -- (6,0)
+			% vertical axis
 					(0,0) -- (0,4);
 
-			% horizontal and vertical labels
+			% horizontal labels
 			\draw	(0,0)	node[anchor=north]	{0}
 					(1,0)	node[anchor=north]	{1}
 					(2,0)	node[anchor=north]	{2}
 					(3,0)	node[anchor=north]	{3}
 					(4,0)	node[anchor=north]	{4}
 					(5,0)	node[anchor=north]	{5}
-
+			% vertical labels
 					(0,1)	node[anchor=east]	{1}
 					(0,2)	node[anchor=east]	{2}
 					(0,3)	node[anchor=east]	{3};
@@ -148,8 +156,8 @@ A finite state machine is, as the name suggests, a mathematical machine, consist
 		\node[state]			(B)	[right of=A]	{Unlocked};
 
 		\path	(A)	edge	[bend	left,	above]	node	{Insert Coin}	(B)
-					edge	[loop	above,	above]	node	{Pass Through}			(A)
-				(B)	edge	[bend	left,	below]	node	{Pass Through}			(A)
+					edge	[loop	above,	above]	node	{Pass Through}	(A)
+				(B)	edge	[bend	left,	below]	node	{Pass Through}	(A)
 					edge	[loop	above,	above]	node	{Insert Coin}	(B);
 	\end{tikzpicture}
 	\caption{Example of a finite state machine, describing a turnstile. Furthermore, this figure describes Table \ref{tab:fsmEx}.}

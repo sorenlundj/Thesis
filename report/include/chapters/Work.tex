@@ -28,7 +28,8 @@ One way to implement these changes is make the user able to assign variables, ba
 
 	A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, whether communicating with companies or citizens.
 	\item[Dependency]\ \\
-	XXXXX %TODO Er der her tale om dependencies fra andre entities, eller er det mere 'miljøvariabler?'
+	XXXXX
+	%TODO der er her tale om dependencies fra andre entities (kan evt tage en relation og en anonym funktion)
 \end{description}
 
 % Snak om de forskællige nye attributter: entities, relations, dependencies og så videre
@@ -38,7 +39,7 @@ One way to implement these changes is make the user able to assign variables, ba
 	\begin{tikzpicture}[->,>=stealth', node distance=5 cm]
 		\node[]	(A)	[]	
 			{\begin{tabular}{|l|}\hline{1}
-				State          \\ \hline{2.5}
+				Entity         \\ \hline{2.5}
 				Ship            \\ \hline{1}
 				Service          \\ \hline{1}
 				Company	          \\ \hline{1}
@@ -95,11 +96,13 @@ One way to implement these changes is make the user able to assign variables, ba
 
 \section{Updated Parser Grammars}
 
-The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{lst:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{lst:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{lst:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. The parser grammar abides by the rules, presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
+The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{fig:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{fig:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{fig:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. The parser grammar abides by the rules, presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
 
 \subsection{Updated Service Specification Grammar}
 
-\begin{lstlisting}[keywordstyle={},label={lst:sSpecUpd},caption={Updated parser grammar of Service Specification Schema}]
+\begin{figure}
+	\centering
+	\begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
@@ -139,14 +142,18 @@ Dependencies ::= DSpec Dependencies
      | $\e$
 
 DSpec ::= Dependency RSpec
-\end{lstlisting}
-
+	\end{lstlisting}
+	\caption{Updated parser grammar of Service Specification Schema}
+	\label{fig:sSpecUpd}
+\end{figure}
 \subsection{Updated General Grammar}
-The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Listing \ref{lst:sSpecUpd}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
+The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Listing \ref{fig:sSpecUpd}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
 
-Listing \ref{lst:sSpecUpdRed} describes a reduced form of Listing \ref{lst:sSpecUpd}. It can be seen that Listing \ref{lst:sSpecUpdRed} is identical to Listing \ref{lst:sSpecRed}, which proves that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser.
+Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpecUpd}. It can be seen that Listing \ref{fig:sSpecUpdRed} is identical to Listing \ref{fig:sSpecRed}, which proves that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser.
 
-\begin{lstlisting}[keywordstyle={}, label={lst:sSpecUpdRed}, caption={Reduced parser grammar of the updated Service Specification Schema}]
+\begin{figure}
+	\centering
+	\begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
@@ -157,7 +164,10 @@ spec ::= specifications
      | $\e$
 
 spec ::= string
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Reduced parser grammar of the updated Service Specification Schema}
+	\label{fig:sSpecUpdRed}
+\end{figure}
 
 \section{Implementation in the MCP}
 %TODO

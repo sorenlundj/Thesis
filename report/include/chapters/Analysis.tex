@@ -15,10 +15,13 @@ To provide a holistic description of a service instance, three documents are nec
 \end{description}
 Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
 \section{Service Specification grammar}
-The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{lst:sSpecFull} as well as in Listing \ref{lst:sSpecRed}, while the latter is in a severely reduced and generalized form.
+The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{fig:sSpecFull} as well as in Listing \ref{fig:sSpecRed}, while the latter is in a severely reduced and generalized form.
 %TODO: evt læg i appendix og referer til relevante bidder.
 %TODO: meget mere om listings.
-\begin{lstlisting}[keywordstyle={},label={lst:sSpecFull},caption={Full parser grammar of Service Specification Schema}]
+
+\begin{figure}
+	\centering
+	\begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
@@ -93,9 +96,14 @@ parameterType ::= ptSpec parameterType
      | $\e$
 
 ptSpec ::= typeReference
-\end{lstlisting}
+	\end{lstlisting}
+	\caption={Full parser grammar of Service Specification Schema}
+	\label{fig:sSpecFull}
+\end{figure}
 
-\begin{lstlisting}[keywordstyle={}, label={lst:sSpecRed}, caption={Reduced parser grammar of Service Specification Schema}]
+\begin{figure}
+	\centering
+	\begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
@@ -106,7 +114,10 @@ spec ::= specifications
      | $\e$
 
 spec ::= string
-\end{lstlisting}
+	\end{lstlisting}
+	\caption{Reduced parser grammar of Service Specification Schema}
+	\label{fig:sSpecRed}
+\end{figure}
 
 As mentioned above, the service specification is to be used to verify the behavior of the maritime service from a technical stand point. At the moment, the xml-document provides a technical description of its corresponding maritime service, but the most commonly used expression method is free text. As this is a very non-technical design choice, a large portion of the obvious technical advantages, provided by the xml-format are lost. 
 

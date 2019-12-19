@@ -188,9 +188,18 @@ Submitted: & \@date \\%
   morecomment=[l]\%,
   breaklines=true,
   postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
-  captionpos={below},
   mathescape=true
 }
+
+\newcommand{\e}{\epsilon}
+
+\newcommand{\ra}{$\rightarrow$}
+
+\renewcommand{\hline}[1]{\Xhline{#1\arrayrulewidth}}
+
+\newcommand{\refNumName}[1]{\ref{#1}: \nameref{#1}}
+\newcommand{\fitToPage}[1]{\resizebox{\linewidth}{!}{#1}}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% END OF CONFIGURATIONS MADE BY ME (SØREN)                                %%%

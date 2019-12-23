@@ -3,9 +3,10 @@ The Maritime Connectivity Platform \cite{mcp} (MCP) is, as the name suggests a p
 The MCP has provided specifications, which describe rules that software needs to adhere to. These specifications will be used to create the model, that will verify the software. The specifications are provided in \ttt{xml}-format, and are, as of now, not used in any formal degree. Ideally, the provided specifications should be used to automatically generate models, which can be used to verify that a certain piece of software adheres to the specification. 
 \section{Description of the Project}
 In this project, QuickCheck \cite{quickcheck} will be utilized in order to verify that instances fulfills the requirements set by specifications in the MCP.
-QuickCheck is a library, which allows for model-based testing of software. Originally, QuickCheck was written in Haskell, but has since been extended to more than 50 programming languages. The idea behind this method is, as the term \tit{model}-based testing suggests, to create models which describe the properties that the test-cases need to reflect. This means that in stead of conducting unit-tests, the model should reflect what needs to happen with an arbitrary input- and function-combination, and ideally catch every special case that either has not been accounted for in the model or in the analysed software.
+QuickCheck is a library, which allows for model-based testing of software. Originally, QuickCheck was written in Haskell, but has since been extended to more than 50 programming languages. The idea behind this method is, as the term \tit{model}-based testing suggests, to create models which describe the properties that the test-cases need to reflect. This means that in stead of conducting unit-tests, the model should reflect what needs to happen with an arbitrary input- and function-combination, and ideally catch every special case that either has not been accounted for in the model or in the analyzed software.
 Once an accurate model is created further testing can be streamlined, as a simple test can affirm an entire aspect of the tested software, in stead of just \tit{one} particular example.
-The goal of the project is to create an automatic test suite for the MCP, which performs better than a unit-based test suite. In the long run, such a test suite has the capacity to increase reliability, efficiency and ultimately make way for better distributed, and more uniformly created software components in the Maritime Connectivity Platform. 
+The goal of the project is to create an automatic test suite for the MCP, which performs better than a unit-based test suite. In the long run, such a test suite has the capacity to increase reliability, efficiency and ultimately make way for better distributed, and more uniformly created software components in the Maritime Connectivity Platform.
+
 \section{Learning Objectives}
 
 \begin{itemize}
@@ -26,14 +27,14 @@ The goal of the project is to create an automatic test suite for the MCP, which 
 	This chapter provides a description of the problem statement, the learning objectives and the project itself, as well as containing this list.
 	\item[Chapter \refNumName{chp:Background}]\ \\
 	This chapter describes the techniques, theories, and components that are used or analyzed throughout the thesis.
-	\item[Chapter \refNumName{chp:Analysis}]%\ \\
-	%TODO Description of Chapter 3
-	\item[Chapter \refNumName{chp:Work/Design}]%\ \\
-	%TODO Description of Chapter 4
-	\item[Chapter \refNumName{chp:Results}]%\ \\
-	%TODO Description of Chapter 5
-	\item[Chapter \refNumName{chp:Discussion}]%\ \\
-	%TODO Description of Chapter 6
-	\item[Chapter \refNumName{chp:Conclusion}]%\ \\
-	%TODO Description of Chapter 7
+	\item[Chapter \refNumName{chp:Analysis}]\ \\
+	This chapter examines potential solutions to the problem statement, and how to implement them into the MCP. This chapter contains advantages and disadvantages to each presented solution, which are summed up at the end of the chapter.
+	\item[Chapter \refNumName{chp:Work/Design}]\ \\
+	This chapter presents the work that went into implementing the desired functionality in the MCP.
+	\item[Chapter \refNumName{chp:Results}]\ \\
+	This chapter includes the results that came from the implementation, described in the previous chapters.
+	\item[Chapter \refNumName{chp:Discussion}]\ \\
+	This chapter contains a discussion of the results, described in chapter \ref{chp:Results}.
+	\item[Chapter \refNumName{chp:Conclusion}]\ \\
+	This chapter
 \end{description}

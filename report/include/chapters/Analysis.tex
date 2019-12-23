@@ -16,8 +16,10 @@ To provide a holistic description of a service instance, three documents are nec
 Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
 \section{Service Specification grammar}
 The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{fig:sSpecFull} as well as in Listing \ref{fig:sSpecRed}, while the latter is in a severely reduced and generalized form.
-%TODO: evt læg i appendix og referer til relevante bidder.
-%TODO: meget mere om listings.
+\TODO{evt læg i appendix og referer til relevante bidder.
+meget mere om listings.
+Håbløst placering af tekst/figurer}
+
 
 \begin{figure}
 	\centering
@@ -97,7 +99,7 @@ parameterType ::= ptSpec parameterType
 
 ptSpec ::= typeReference
 	\end{lstlisting}
-	\caption={Full parser grammar of Service Specification Schema}
+	\caption={Full parser grammar of Service Specification Schema.}
 	\label{fig:sSpecFull}
 \end{figure}
 
@@ -115,7 +117,7 @@ spec ::= specifications
 
 spec ::= string
 	\end{lstlisting}
-	\caption{Reduced parser grammar of Service Specification Schema}
+	\caption{Reduced parser grammar of Service Specification Schema.}
 	\label{fig:sSpecRed}
 \end{figure}
 
@@ -142,10 +144,9 @@ The core principle in the MCP is to restructure and streamlining maritime softwa
 \end{enumerate}
 
 As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.
-%TODO: Meget mere om figurerne
-% Hvad med en hybrid? Kunne være et program, der laver en model, som man efterfølgende kan arbejde videre på?
-
-% Hvordan kan man teste dette?
+\TODO:{Meget mere om figurerne
+Hvad med en hybrid? Kunne være et program, der laver en model, som man efterfølgende kan arbejde videre på?
+Hvordan kan man teste dette?}
 
 \section{Model Structure}
 
@@ -165,7 +166,7 @@ As stated in Section \ref{sec:Model-Based Testing} there are two main types of m
 				(3,4)	--	(6,3)	--	(3,2)	--	(0,1)	% Service requests/recieves data from company/data center
 				(6,2)	--	(3,1)	--	(0,0);				% Additional line
 	\end{tikzpicture}
-	\caption{Rough draft of a model example, where a ship requests something from a service (could be a weather update)}
+	\caption{Rough draft of a model example, where a ship requests something from a service (could be a weather update).}
 	\label{fig:modelExProtocol}
 \end{figure}
 \begin{figure}
@@ -205,26 +206,8 @@ As stated in Section \ref{sec:Model-Based Testing} there are two main types of m
 	\label{fig:modelExFsm}
 \end{figure}
 
-% i XML'en:
-%	lav et felt, der hedder entitet
-%		definer relation, rolle, etc
-%	definer videre på roller, hvad vil de have fra hinanden? Hvad konstituerer en request (på f.esk et kort), skal man bruge adgangskode, hvad sker der hvis den er forkert?
-
-
-% definér en protokol
-% byg på eksisterende entiteter
-% 
-% vejrudsigt-service
-% fra vejrservicens perspektiv:
-% et skib anmoder om oplysninger, hvilken informationer skal skibet videregive for at blive tildelt oplysninger
-% 
-% meget lavpraktisk model:
-% tre foruddefinerede modeller, der snakker med hinanden. Simulér en interaktion mellem dem - hvordan skifter de forskellige tilstand når de interagerer?
-% hvilke reaktioner kommer der på aktioner?
-% opfører en entitet sig rigtigt i forhold til en anden entitet når de interagerer på en bestemt måde?
-
-\section{Model-Based testing of MCP} % Hvad kan man teste med dette?
-%TODO
+\section{Model-Based testing of MCP} 
+\TODO{Hvad kan man teste med dette?}
 
 \section{Summary: advantages and disadvantages} 
 
@@ -255,9 +238,6 @@ Issues will inevitably present themselves with a project such as this, however t
 		\item j
 		\item k
 	\end{itemize}
-
 \end{description}
 
-%Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk
-% Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker
-%TODO
+\TODO{Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk. Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker}

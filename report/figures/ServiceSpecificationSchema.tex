@@ -1,0 +1,89 @@
+\begin{figure}[h]
+	\centering
+	\begin{lstlisting}[keywordstyle={}]
+ServiceSpecificationSchema ::= specifications
+
+specifications ::= spec specifications
+     | $\e$
+     
+spec ::= name
+     | status
+     | id
+     | version
+     | description
+     | keywords
+     | isSpatialExclusive
+     | authorInfos
+     | requirements
+     | serviceDataModel
+     | serviceInterfaces
+     
+authorInfos ::= authorInfo authorInfos
+     | $\e$
+
+authorInfo ::= aSpec authorInfo
+     | $\e$
+
+aSpec ::= id
+     | name
+     | description
+     | contactInfo
+
+requirements ::= requirement requirements
+     | $\e$
+     \end{lstlisting}
+     \caption{Full parser grammar of Service Specification Schema. (1 of 2)}
+     \label{fig:sSpecFull1}
+\end{figure}
+\newpage
+\begin{figure}[h!]
+     \centering
+     \begin{lstlisting}[keywordstyle={}]
+
+requirement ::= rSpec requirement
+     | $\e$
+
+rSpec ::= id
+     | name
+     | text
+
+serviceDataModel ::= definitionAsXSD
+
+definitionAsXSD ::= $\e$
+
+serviceInterfaces ::= serviceInterface serviceInterfaces
+     | $\e$
+
+serviceInterface ::= siSpec serviceInterface
+     | $\e$
+
+siSpec ::= name
+     | description
+     | dataExchangePattern
+     | operations
+
+operations ::= operation operations
+     | $\e$
+
+operation ::= oSpec operation
+     | $\e$
+
+oSpec ::= name
+     | description
+     | returnValueType
+     | parameterTypes
+
+returnValueType ::= typeReference
+
+
+parameterTypes ::= parameterType parameterTypes
+     | $\e$
+
+parameterType ::= ptSpec parameterType
+     | $\e$
+
+ptSpec ::= typeReference
+	\end{lstlisting}
+	\caption{Full parser grammar of Service Specification Schema. (2 of 2)}
+	\label{fig:sSpecFull2}
+\end{figure}

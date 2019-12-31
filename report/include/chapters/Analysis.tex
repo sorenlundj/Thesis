@@ -7,18 +7,16 @@ In this chapter, I will present and analyze the data made available by the MCP i
 To provide a holistic description of a service instance, three documents are necessarily provided. Below are the descriptions of the documents with the service instance \ttt{E2 - NW-NM DMA} as an example.
 \begin{description}
 	\item[E2 - NW-NM DMA Service Instance]\ \\
-	The purpose of this service instance document and its xml-defined counterpart is to describe a DMA instance of the REST-based technical design of the MW- NM service specification, according to the guidelines given in the Service Description Guidelines.
+		The purpose of this service instance document and its xml-defined counterpart is to describe a DMA instance of the REST-based technical design of the MW- NM service specification, according to the guidelines given in the Service Description Guidelines.
 	\item[E2 - NW-NM REST Service Technical Design]\ \\
-	The purpose of this service technical design document and its xml-defined counterpart is to describe a REST-based technical design of the MW-NM service specification, according to the guidelines given in the Service Description Guidelines.
+		The purpose of this service technical design document and its xml-defined counterpart is to describe a REST-based technical design of the MW-NM service specification, according to the guidelines given in the Service Description Guidelines.
 	\item[E2 - NW-NM Service Specification]\ \\
-	The purpose of this service specification document and its xml-defined counterpart is to provide a holistic overview of the MW-NM service and its building blocks in a technology-independent way, according to the guidelines given in the Service Description Guidelines.
+		The purpose of this service specification document and its xml-defined counterpart is to provide a holistic overview of the MW-NM service and its building blocks in a technology-independent way, according to the guidelines given in the Service Description Guidelines.
 \end{description}
 Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
 \section{Service Specification grammar}
 The service specification document is constructed using a general xml-format. The grammar of the document can be seen in Listing \ref{fig:sSpecFull} as well as in Listing \ref{fig:sSpecRed}, while the latter is in a severely reduced and generalized form.
-\TODO{evt læg i appendix og referer til relevante bidder.
-meget mere om listings.
-Håbløst placering af tekst/figurer}
+\TODO{meget mere om listings.}
 
 
 \begin{figure}
@@ -64,42 +62,15 @@ rSpec ::= id
 
 serviceDataModel ::= definitionAsXSD
 
-definitionAsXSD ::= $\e$
-
 serviceInterfaces ::= serviceInterface serviceInterfaces
-     | $\e$
-
-serviceInterface ::= siSpec serviceInterface
-     | $\e$
-
-siSpec ::= name
-     | description
-     | dataExchangePattern
-     | operations
-
-operations ::= operation operations
-     | $\e$
-
-operation ::= oSpec operation
      | $\e$
 
 oSpec ::= name
      | description
      | returnValueType
      | parameterTypes
-
-returnValueType ::= typeReference
-
-
-parameterTypes ::= parameterType parameterTypes
-     | $\e$
-
-parameterType ::= ptSpec parameterType
-     | $\e$
-
-ptSpec ::= typeReference
 	\end{lstlisting}
-	\caption={Full parser grammar of Service Specification Schema.}
+	\caption{Snippets of full parser grammar of Service Specification Schema. (Found in appendix \ref{fig:sSpecFull1}, \ref{fig:sSpecFull2})}
 	\label{fig:sSpecFull}
 \end{figure}
 
@@ -134,42 +105,49 @@ The xml-version of the service specification can be found in appendix \ref{sec:E
 The core principle in the MCP is to restructure and streamlining maritime software sharing in a manner that can be done the world over, and the very nature of this statement dictates that the platform must be highly scalable. This adds the necessity of running quality-checks on all of the maritime services that are uploaded to the platform. To accommodate this issue, model-based testing immediately seems like the obvious solution, as this technique covers most of the required desired functionality. If implemented satisfyingly, a model-based testing suite for the MCP would be able to
 \begin{enumerate}
 	\item Present or verify behavior of maritime services.\\
-	There are many obvious common behavioral traits of maritime services, such as adding ships and maritime stakeholders, as well as removing them, however other behavioral patterns will often vary to the point of lowered manageability. A model, describing the maritime service in question will provide a clear and undeniable description of the service's behavior.
+		There are many obvious common behavioral traits of maritime services, such as adding ships and maritime stakeholders, as well as removing them, however other behavioral patterns will often vary to the point of lowered manageability. A model, describing the maritime service in question will provide a clear and undeniable description of the service's behavior.
 	\item Visualize functionality of maritime services.\\
-	Just as well as behavioral traits, functionality will differ greatly from one maritime service to another, and therefore it is very useful for a model to visualize said functionality, as well as verifying that it works as intended.
+		Just as well as behavioral traits, functionality will differ greatly from one maritime service to another, and therefore it is very useful for a model to visualize said functionality, as well as verifying that it works as intended.
 	\item Present the structures of maritime services.\\
-	This trait will be used to visualize the structural components of maritime services. Just as point 1 and two, this functionality will be useful for creating a quick and clear projection of how the maritime service behaves.
+		This trait will be used to visualize the structural components of maritime services. Just as point 1 and two, this functionality will be useful for creating a quick and clear projection of how the maritime service behaves.
 	\item Increase reliability and efficiency of maritime services.\\
-	Through correct implementation of points 1-3 it is possible to elevate the reliability and efficiency of the maritime services found on the MCP. This is due to the same reasoning that all testing is conducted on the basis of: the need for safe, consistent, and correct code.
+		Through correct implementation of points 1-3 it is possible to elevate the reliability and efficiency of the maritime services found on the MCP. This is due to the same reasoning that all testing is conducted on the basis of: the need for safe, consistent, and correct code.
 \end{enumerate}
 
 As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.
-\TODO:{Meget mere om figurerne
-Hvad med en hybrid? Kunne være et program, der laver en model, som man efterfølgende kan arbejde videre på?
-Hvordan kan man teste dette?}
 
-\section{Model Structure}
+\section{Example Model Structure}
+Throughout this report, I will use a mapping service as an example. In this example the maritime service will act as an intermediate, broking between a ship and a company, where the map is being held. The ship will have to submit authentication information to the maritime service in order to get a the requested map. The model, which has been built upon the example protocol has been illustrated in Figure \ref{fig:modelExProtocol}. The lines numbered 1-6 illustrate interaction between the three entities \ttt{Ship}, \ttt{Service}, and \ttt{Company}, where *1 and *2, respectively illustrate a submitting of authentication information, to the service, and the service accepts the information and sends this response. *3 and *4 illustrates the service' request of the requested map, and its subsequent receiving hereof. *5 represents the service informing the ship that the information retrieval has been successful, and that the process will terminate shortly, while *6 illustrates the forwarding of requested information to the ship.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}
 		% timelines
 		\draw	[dashed]	(0,5)	--	(0,0)
 				[dashed]	(3,5)	--	(3,0)
 				[dashed]	(6,5)	--	(6,0);
-		% labels
+		% entity labels
 		\draw	(0,5.15)	node	{Ship}
 				(3,5.15)	node	{Service}
 				(6,5.15)	node	{Company};
+
+		% interaction labels
+		\draw	(1.5,4.75)	node	{*1}
+				(1.5,3.75)	node	{*2}
+				(4.5,3.75)	node	{*3}
+				(4.5,2.75)	node	{*4}
+				(1.5,1.75)	node	{*5}
+				(1.5,0.75)	node	{*6};
 		% interaction lines
-		\draw	(0,5)	--	(3,4)	--	(0,3)				% API call (request/response)
-				(3,4)	--	(6,3)	--	(3,2)	--	(0,1)	% Service requests/recieves data from company/data center
-				(6,2)	--	(3,1)	--	(0,0);				% Additional line
+		\draw	(0,5)	--	(3,4)	--	(0,3)	% API call (request/response)
+				(3,4)	--	(6,3)	--	(0,1)	% Service requests/recieves data from company/data center
+				(3,1)	--	(0,0);				% Information is forwarded to the ship.
 	\end{tikzpicture}
-	\caption{Rough draft of a model example, where a ship requests something from a service (could be a weather update).}
+	\caption{Rough draft of a model example, where a ship requests information from a service.}
 	\label{fig:modelExProtocol}
 \end{figure}
-\begin{figure}
+
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
 		\tikzstyle{every state}=[draw=black,rectangle,rounded corners]
@@ -186,58 +164,74 @@ Hvordan kan man teste dette?}
 				(C)	edge[bend right,above]									node{Request Map}	(B)
 					edge[bend right,right]									node{Trash Map}		(A);
 	\end{tikzpicture}
-	\caption{Final state machine, describing the \ttt{Ship} entity in Figure \ref{tab:fsmEx}.}
+	\caption{FSM, describing the \ttt{Ship} entity in Figure \ref{fig:modelExProtocol}.}
 	\label{fig:fsmExShip}
 \end{figure}
 
-\begin{figure}
+Figure \ref{fig:fsmExShip} represents a FSM, illustrating the \ttt{ship} entity in Figure \ref{fig:modelExProtocol}. The FSM starts in the \ttt{No map loaded} state, and has the three available actions \ttt{trash map}, \ttt{request map}, and \ttt{await response}. Performing \ttt{trash map} or \ttt{await response} in the initial state will yield no results, as no map is available to be trashed and no response is on the way. If \ttt{request map} is performed, the state will be changed to the intermediate state \ttt{awaiting map}, where \ttt{await response} is the only action that will change the state, as no map can be trashed, and requesting another map will change the state to the same, but where a different map is being waited for. The third and final state \ttt{map loaded} will allow the actions \ttt{trash map}, which will change the state to \ttt{no map loaded} and \ttt{request map}, which will, respectively, trash the loaded map, and request a new one, changing the state to \ttt{awaiting map}. 
+
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[->,>=stealth', node distance=3.5 cm, thick]
 		\tikzstyle{every state}=[draw=black,rectangle,rounded corners]
 
-		\node[state, initial]	(A)	[]				{Idle};
-		\node[state]			(B)	[right of=A]	{Active};
+		\node[state, initial]	(A)	[]			{Idle};
+		\node[state]			(B)	[right of=A]{Active};
 
-		\path	(A)	edge[loop above,left,	align=center,	out=130,in=100,	looseness=7]	node{Process Request\\(Invalid Request)}(A)
-					edge[bend left,	above,	align=center]									node{Process Request\\(Valid Request)}	(B)
-				(B)	edge[bend left,	below]													node{Respond}							(A);
+		\path	(A)	edge[loop above,left,	align=center,	out=130,in=100,	looseness=7]node{Process Request\\(Invalid Request)}(A)
+					edge[bend left,	above,	align=center]								node{Process Request\\(Valid Request)}	(B)
+				(B)	edge[bend left,	below]												node{Respond}							(A);
 	\end{tikzpicture}
-	\caption{Final state machine, describing the \ttt{Service} entity in Figure \ref{tab:fsmEx}.}
-	\label{fig:modelExFsm}
+	\caption{FSM, describing the \ttt{Service} entity in Figure \ref{fig:modelExProtocol}.}
+	\label{fig:fsmExService}
 \end{figure}
 
-\section{Model-Based testing of MCP} 
-\TODO{Hvad kan man teste med dette?}
+Figure \ref{fig:fsmExService} represents a FSM, illustrating the \ttt{service} entity in Figure \ref{fig:modelExProtocol}. The FSM has the two states \ttt{idle} and \ttt{active}, the former being the initial state. Whenever the entity receives a valid response the state changes to the \ttt{active} state, and when the request has been properly handled, the state changes back to \ttt{idle}.
 
+\section{Uses of model-based testing of the MCP}
+The main advantage that model-based testing comes from the large variety in testing algorithms which it produces. For a model to be machine readable the techniques which are listed below can be implemented fully automatic - and if not they can still be utilized however manually. The following techniques can be applied to true and fair maritime service-models in the MCP:
+\begin{description}
+	\item[Finite state machines]\ \\
+		As mentioned in Subsection \ref{ssec:Finite State Machines (FSM)}, a FSM is made up of states, and the ability of a simulating program to change state through a collection of actions. Executable paths are determined, which can be used to create test cases, as well as illustrate the behavior of the system. Furthermore FSMs are closely related to the further techniques, that will be explained in this section.
+	\item[Proving theorems]\ \\
+		Automatic theorem proving is a technique originally produced for proving logical formulas, which is a concept that can be rewritten to suit model-based testing. In order to create test cases, system behavior is assigned to equivalence classes. Following this step, predicates can be formed from equivalence classes and logical consequences of the equivalence classes. 
+	\item[Symbolic execution]\ \\
+		Much in the likes of a FSM, a symbolic execution of a program or system will executable paths, along with symbolic values, describing how they can be accessed. A symbolic execution engine will analyze possible variations of input in order to create a map of the software in case. Said map can subsequently be used to better understand, test, and develop the software in question.
+	\item[Model checkers]\ \\
+		Model checkers, also known as property checkers, are methods of determining if a FSM meets a specific set of requirements. The model checkers detects if requirements are met, either by determining examples or counterexamples. When a path, representing either an example or a counterexample is discovered it is logged as a \tit{witness}, which can be mutated upon when generating test cases.
+	\item[Markov chains]\ \\
+		Markov chains are named after the Russian mathematician Andrew Markov, and are also known as usage models. A Markov chain, or usage model, is made up of two primary components; firstly a FSM, which represents every available action of a given system, and secondly an operational profile, which is a statistical indicator of has been or will be used. The FSM is used by the operational profile in order to generate the statistical analysis, and the operational profile is used by the FSM to derive operational tests.
+\end{description}
+The scope of which features the above techniques will be able to test will be deemed by the actual maritime service model, however the expansive array of methods will cover maritime services extensively.
 \section{Summary: advantages and disadvantages} 
 
 Issues will inevitably present themselves with a project such as this, however the scope and nature of these issues will vary with each approach possible. As different approaches offer tailored advantages to circumvent correlating unique concerns, another set of unique concerns will necessarily present themselves. In this section I will sum up the approaches presented throughout Chapter \ref{chp:Analysis}, along with their corresponding arising advantages and disadvantages.
 \begin{description}
 	\item[Manual model-creation]\ \\
-	\tbf{Advantages}
-	\begin{itemize}
-		\item a
-		\item b
-		\item c
-	\end{itemize}
-	\tbf{Disadvantages}
-	\begin{itemize}
-		\item d
-		\item e
-	\end{itemize}
-	\item[Manual model-creation]\ \\
-	\tbf{Advantages}
-	\begin{itemize}
-		\item f
-		\item g
-		\item h
-	\end{itemize}
-	\tbf{Disadvantages}
-	\begin{itemize}
-		\item i
-		\item j
-		\item k
+		\tbf{Advantages}
+		\begin{itemize}
+			\item Manual model creation will have a shorter implementation time, as an arbitrary single model is faster to build than its auto-model-generator counterpart. 
+			\item Built maritime service models can be fully customized at once in order to catch all aspects of its maritime service counterparts.
+			\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following the techniques, described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for more exhaustive tests via manual model-creating than automatic model-creation.
+		\end{itemize}
+		\tbf{Disadvantages}
+		\begin{itemize}
+			\item The time consumption of manually creating each model will expand linearly with each maritime service, that is submitted, and subsequently needs a maritime service model. 
+			\item Having each maritime service model being created individually and manually will inevitable introduce much diversity both in the sense of the available standard actions and implementation style of the model.
+			\item The complexity as well as way of implementing testing techniques explained in Section \ref{sec:Uses of model-based testing of the MCP} varies to an extent, even without consideration of non-uniform models. Elaborating on the case that each maritime service model differs both in purpose, implementation style and exhaustiveness, creating test suites similar to those described in Section \ref{sec:Uses of model-based testing of the MCP} for each new maritime service will become an extensive project
+		\end{itemize}
+	\item[Automatic model-creation]\ \\
+		\tbf{Advantages}
+		\begin{itemize}
+			\item The first and foremost advantage of automatic model generation is the scalability, which it provides. This comes as the implementation of \tit{one} maritime service model generator module, ideally, will be able to automatically assemble each maritime model without further interference, as opposed to manual model generating.
+			\item As an automatic model generator abides by a set collection of rules and metrics, and would create models following the instructions of an xml specification-file, generated models will never deviate from the uniformity of the generator.
+			\item The uniformity in the generated models will further show advantage, as this will streamline test suite generation either because of the fact that similar models promote similar manual test suite generation, or because of the fact that it allows for almost total automation.
+		\end{itemize}
+		\tbf{Disadvantages}
+		\begin{itemize}
+			\item The obvious disadvantage that comes with automatic model generation is the lack of customization in models. As the generator should handle all models, that can be described through the xml specification files it needs to be generalized, which in turn means less specific models, which lowers the ability to custom-fit each model to its maritime specification counterpart.
+			\item Another inevitable downside to having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
 	\end{itemize}
 \end{description}
 
-\TODO{Problematikker: F.eks at folk, der lægger software op ikke nødvendigvis selv kan lave modellerne/forstå at give argumenterne, der skal bruges til at generere modeller automatisk. Diskuter problematikken om at man gerne vil lave tekniske ting, der skal bruges af ikke-tekniske mennesker}
+To sum up, both methods will be advantageous, as they will each allow for extensive testing with the former being more time detailed and exhaustive, while a lot more time consuming in the long run, and the latter being less detailed and a lot less time consuming in the long run.

@@ -204,6 +204,43 @@ Submitted: & \@date \\%
 \newcommand{\fitToPage}[1]{\resizebox{\linewidth}{!}{#1}}
 
 
+%%%%%% TODO-STUFF START %%%%%%
+\newcounter{todoCounterChp}[chapter]
+\newcounter{todoCounterAll}
+\newcounter{todoCounterReg}
+\newcounter{todoCounterWrite}
+\newcommand{\TODOREG}[1]{
+  \refstepcounter{todoCounterChp}
+  \refstepcounter{todoCounterAll}
+  \refstepcounter{todoCounterReg}
+  TODOREG \todo[linecolor=red,backgroundcolor=red!25,bordercolor=red]{#1}
+}%Comment line directly above to hide TODOs thorughout paper
+\newcommand{\TODOWRITE}{
+  \refstepcounter{todoCounterChp}
+  \refstepcounter{todoCounterAll}
+  \refstepcounter{todoCounterWrite}
+  \todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,inline]{TODOWRITE}
+}%Comment line directly above to hide TODOWRITEs thorughout paper
+\newcommand{\TODO}[1]{\ifthenelse{{\equal{#1}{ }}}{
+    \TODOWRITE
+  }{
+    \TODOREG{#1}
+  }
+}
+\newcommand{\displayCounters}{
+\ifthenelse{\thetodoCounterAll=0}{
+    No TODOs registered - You're all good, brah!!
+  }{
+    TODO(s) remaining in the document:
+    \begin{align*}
+      \text{TODOALL:}   & \ \ \thetodoCounterAll \\
+      \ifthenelse{\thetodoCounterReg=0}{}{\text{TODOREG:}   & \ \ \thetodoCounterReg \\}
+      \ifthenelse{\thetodoCounterWrite=0}{}{\text{TODOWRITE:} & \ \ \thetodoCounterWrite}
+    \end{align*}
+  }
+}
+%%%%%% TODO-STUFF END %%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% END OF CONFIGURATIONS MADE BY ME (SØREN)                                %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

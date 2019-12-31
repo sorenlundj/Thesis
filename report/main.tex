@@ -28,13 +28,8 @@
 \usepackage{array}
 \usepackage{makecell}
 
-\usepackage{xargs} 
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
 
-\newcounter{todoCounterChp}[chapter]
-\newcounter{todoCounterAll}
-\newcommandx{\TODO}[2][1=]{\refstepcounter{todoCounterChp}\refstepcounter{todoCounterAll}TODO \todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
-%\newcommand{\TODO}[1]{ }% Change commentation to deactivate TODOs
 
 \DeclareUnicodeCharacter{00A0}{~}
 \usetikzlibrary{arrows, automata}
@@ -182,7 +177,7 @@
 \appendix
 
 \include{include/etc/appendix/Appendix}
-%\thetodoCounterAll
+\displayCounters
 % Each paper is defined as a new section of an appendix chapter. This means that they automatically are added to TOC and it is possible to refer to them.
 
 % Updates section names to remove . (e.g. a section is named A1 instead of A.1)

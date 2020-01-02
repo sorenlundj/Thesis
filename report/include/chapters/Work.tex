@@ -1,7 +1,7 @@
 \chapter{Work/Design}
 
 In this chapter I will describe the work I have done in order to implement model-based testing into the MCP. The workload that is contained in the implementation and description herein includes implementation of a monadic parser that reads the xml-specification files, an update of the fields and contents of fields in the xml-specification files, as well as a model, that is built upon the foundation of aforementioned updated xml-specification.
-\TODO{Hvis det fungerer med interpreter(parser(xml))=model, så skriv det på.}
+\TODOOPT{Hvis det fungerer med interpreter(parser(xml))=model, så skriv det på.}
 \section{Updated Data}
 
 As discussed in Section \ref{sec:Data}, in order to create uniform models, upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language, for reliable model-generation.
@@ -28,10 +28,10 @@ One way to implement these changes is make the user able to assign variables, ba
 
 	A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, whether communicating with companies or citizens.
 	\item[Dependency]\ \\
-	\TODO{der er her tale om dependencies fra andre entities (kan evt tage en relation og en anonym funktion)}
+	A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation, which describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is an anonymous function, that describes what the entities require from each other. If two entities co-depend on each other a relation must be made from the first to the second, as well as from the second to the first. As only the anonymous function limits what the dependency entails, an entity \tit{can} depend on itself.
 \end{description}
 
-\TODO{Snak om de forskællige nye attributter: entities, relations, dependencies og så videre.}
+Figure \ref{fig:entities} describe which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure \ref{fig:entities} coincides with \ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
 
 \begin{figure}
 	\centering
@@ -88,7 +88,7 @@ One way to implement these changes is make the user able to assign variables, ba
 				(C)	edge	[out=30]	node	{}	(F)
 				(D)	edge	[out=30]	node	{}	(G);
 	\end{tikzpicture}
-	\caption{Relations and dependencies for ships, services, and companies}
+	\caption{Available relations and dependencies for ships, services, and companies}
 	\label{fig:entities}
 \end{figure}
 
@@ -177,8 +177,8 @@ Evt. lav en specifikationsXML selv.
 Evt lav nedenstående til et Chapter}
 
 \subsection{Executing Instructions}
-\TODO{Not written yet.}
+\TODO{ }
 
 \section{Testing}
-\TODO{Not written yet.}
+\TODO{ }
 

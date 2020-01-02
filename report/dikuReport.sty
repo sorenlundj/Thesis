@@ -221,6 +221,11 @@ Submitted: & \@date \\%
   \refstepcounter{todoCounterWrite}
   \todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,inline]{TODOWRITE}
 }%Comment line directly above to hide TODOWRITEs thorughout paper
+\newcommand{\TODOOPT}[1]{
+  \refstepcounter{todoCounterChp}
+  \refstepcounter{todoCounterAll}
+  \refstepcounter{todoCounterWrite}
+}
 \newcommand{\TODO}[1]{\ifthenelse{{\equal{#1}{ }}}{
     \TODOWRITE
   }{
@@ -228,17 +233,23 @@ Submitted: & \@date \\%
   }
 }
 \newcommand{\displayCounters}{
-\ifthenelse{\thetodoCounterAll=0}{
-    No TODOs registered - You're all good, brah!!
-  }{
-    TODO(s) remaining in the document:
-    \begin{align*}
-      \text{TODOALL:}   & \ \ \thetodoCounterAll \\
-      \ifthenelse{\thetodoCounterReg=0}{}{\text{TODOREG:}   & \ \ \thetodoCounterReg \\}
-      \ifthenelse{\thetodoCounterWrite=0}{}{\text{TODOWRITE:} & \ \ \thetodoCounterWrite}
-    \end{align*}
+  \ifthenelse{\thetodoCounterAll=0}{
+      No TODOs registered - You're all good, brah!!
+    }{
+      TODO(s) remaining in the document:
+      \begin{align*}
+        \text{TODOALL:}   & \ \ \thetodoCounterAll \\
+        \ifthenelse{\thetodoCounterReg=0}{}{\text{TODOREG:}   & \ \ \thetodoCounterReg \\}
+        \ifthenelse{\thetodoCounterWrite=0}{}{\text{TODOWRITE:} & \ \ \thetodoCounterWrite}
+      \end{align*}
+    }
+}
+\newcommand{\displayCounterChp}{
+  \ifthenelse{\thetodoCounterChp=0}{}{
+    \thetodoCounterChp\ counter(s) remaining in this chapter
   }
 }
+
 %%%%%% TODO-STUFF END %%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

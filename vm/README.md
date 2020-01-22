@@ -8,3 +8,15 @@ password:	hamster
 	- run 'login.sh'
 	- run 'mount.sh disk'
 	- cd into disk and path set in step 2 will be available
+
+
+###INSTALLS FOR VB
+
+---
+sudo apt-get install haskell-platform
+cabal update
+cabal install row-types
+cabal install indexed
+cabal install indexed-extras
+cabal install tasty
+cabal install tasty-hunit

@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Test where
 
 import MMod
@@ -8,16 +6,16 @@ import Types
 --import Test.Tasty
 --import Test.Tasty.HUnit
 
-ship    = Entity {entityType = Ship,    entityId = 001, entityName = "Ship1",    entityState = ["hehehe"]}
-service = Entity {entityType = Service, entityId = 002, entityName = "Service1", entityState = []}
-company = Entity {entityType = Company, entityId = 003, entityName = "Company1", entityState = []}
+ship    = Entity {eType = Ship,    eId = 001, eName = "Ship1",    eState = ["hehehe"]}
+service = Entity {eType = Service, eId = 002, eName = "Service1", eState = []}
+company = Entity {eType = Company, eId = 003, eName = "Company1", eState = []}
 
-dep1 = Dependency {name = "dep1", dep = True}
+dep1 = Dependency {desc = "dep1", val = True}
 
-relationShipService    = Relation {relationFrom = ship,    relationTo = service, dependency = [dep1]}
-relationServiceCompany = Relation {relationFrom = service, relationTo = company, dependency = []}
-relationServiceShip    = Relation {relationFrom = service, relationTo = ship,    dependency = []}
-relationCompanyService = Relation {relationFrom = company, relationTo = service, dependency = []}
+relationShipService    = Relation {rFrom = ship,    rTo = service, dep = [dep1]}
+relationServiceCompany = Relation {rFrom = service, rTo = company, dep = []}
+relationServiceShip    = Relation {rFrom = service, rTo = ship,    dep = []}
+relationCompanyService = Relation {rFrom = company, rTo = service, dep = []}
 
 main = runFsm (checkout) NoEntsRels [SelectE ship
                                     ,SelectE service
@@ -26,8 +24,8 @@ main = runFsm (checkout) NoEntsRels [SelectE ship
                                     ,SelectR relationServiceCompany 
                                     ,SelectR relationServiceShip 
                                     ,SelectR relationCompanyService]
---
 
+-- ved state change, aendr hele entityen
 
 
 

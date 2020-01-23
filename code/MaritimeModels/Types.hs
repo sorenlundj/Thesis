@@ -1,15 +1,14 @@
 {-# LANGUAGE FlexibleContexts  #-}
-{-# LANGUAGE OverloadedStrings #-}
 
 module Types where
 
 import Data.Text (Text)
 
 data Entity =
-  Entity { entityType  :: Type
-         , entityId    :: Int
-         , entityName  :: Text
-         , entityState :: [Text]
+  Entity { eType  :: Type
+         , eId    :: Int
+         , eName  :: String
+         , eState :: [String]
          } deriving (Show, Eq)
 
 data Type = Ship
@@ -18,12 +17,12 @@ data Type = Ship
           deriving (Show, Eq)
 
 data Relation =
-  Relation { relationFrom :: Entity
-           , relationTo   :: Entity
-           , dependency   :: [Dependency]
+  Relation { rFrom :: Entity
+           , rTo   :: Entity
+           , dep   :: [Dependency]
            } deriving (Show, Eq)
 
 data Dependency =
-  Dependency { desc :: Text
-             , dep  :: Bool -- (This should be an anonymous function)
+  Dependency { desc :: String
+             , val  :: Bool -- (This should be an anonymous function)
              } deriving (Show, Eq)

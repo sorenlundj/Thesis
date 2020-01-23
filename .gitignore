@@ -244,3 +244,9 @@ TSWLatexianTemp*
 ### Haskell
 *.hi
 *.o
+
+### Erlang
+*.beam
+
+
+

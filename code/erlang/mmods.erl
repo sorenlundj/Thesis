@@ -2,12 +2,12 @@
 
 -behaviour(gen_statem).
 
--export([start/1, add_relation/2, add_dependency/3, add_info/2]).
+-import(lists, [delete/2, member/2]).
+
+-export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3]).
 -export([get_state/1, get_type/1, get_relations/1, get_info/1]).
 
 -export([init/1, callback_mode/0, terminate/3, code_change/4, mmods_handler/3]).
-
-%-export([insert_index/3]).
 
 -define(SERVER, ?MODULE).
 
@@ -36,8 +36,14 @@ add_relation(From, To) ->
 add_dependency(From, To, Dependency) ->
  gen_statem:call(From, {add_dependency_call, {To, Dependency}}).
 
-add_info(Id, Data) ->
-  gen_statem:call(Id, {add_info_call, Data}).
+add_info(Id, Info) ->
+  gen_statem:cast(Id, {add_info_call, Info}).
+
+remove_info(Id, Info) ->
+  gen_statem:cast(Id, {remove_info_call, Info}).
+
+transfer_info(From, To, Info) ->
+  gen_statem:call(From, {transfer_info_call, {To, Info}}).
 
 get_state(Id) ->
   gen_statem:call(Id, {get_state_call, none}).
@@ -73,6 +79,20 @@ code_change(_Vsn, State, Data, _Extra) ->
 % Top-level function                                                %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+mmods_handler(cast, {Function_name, Request}, {Type, Relations, Self, Info}=State) ->
+  case Function_name of
+    add_info_call ->
+      Add_info = Request,
+      {keep_state, {Type, Relations, Self, [Add_info|Info]}};
+    remove_info_call ->
+      Remove_info = Request,
+      case lists:member(Remove_info, Info) of
+        true ->
+          {keep_state, {Type, Relations, Self, lists:delete(Remove_info, Info)}};
+        false ->
+          {keep_state, State}
+      end
+  end;
 mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, Info}=State) ->
   case Function_name of
     add_relation_call ->
@@ -88,13 +108,38 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
       case relation_exists(To, Relations) of
         true  ->
           Updated_relations = dep_to_rel_list(To, Dependency, Relations, []),
-          {keep_state, {Type, Updated_relations, Self, Info}, [{reply, From, {ok, Dependency}}]};
+          case Updated_relations of 
+            error ->
+              {keep_state, State, [{reply, From, {error, bug_in_relation_list}}]};
+            _ ->
+            {keep_state, {Type, Updated_relations, Self, Info}, [{reply, From, {ok, Dependency}}]}
+          end;
         false ->
-          {keep_state, State, [{reply, From, {error, relation_doesnt_exist}}]}
+          {keep_state, State, [{reply, From, {error, nonexistent_relation}}]}
       end;
-    add_info_call ->
-      New_info = Request,
-        {keep_state, {Type, Relations, Self, [New_info|Info]}, [{reply, From, {ok, Self}}]};
+    transfer_info_call ->
+      {To, Transfer_info} = Request,
+      case lists:member(Transfer_info, Info) of
+        true ->
+          case relation_exists(To, Relations) of
+            true ->
+              case Type of
+                ship ->
+                  {keep_state, State, [{reply, From, {error, cannot_transfer_data_from_ship}}]};
+                service ->
+                  add_info(To, Transfer_info),
+                  remove_info(Self, Transfer_info),
+                  {keep_state, State, [{reply, From, {ok, Transfer_info}}]};
+                company ->
+                  add_info(To, Transfer_info),
+                  {keep_state, State, [{reply, From, {ok, Transfer_info}}]}
+              end;                  
+            false ->
+              {keep_state, State, [{reply, From, {error, nonexistent_relation}}]}
+          end;
+        false ->
+          {keep_state, State, [{reply, From, {error, nonexistent_information}}]}
+      end;
     get_state_call     -> {keep_state, State, [{reply, From, State}]};
     get_type_call      -> {keep_state, State, [{reply, From, Type}]};
     get_relations_call -> {keep_state, State, [{reply, From, Relations}]};
@@ -135,13 +180,13 @@ dep_to_rel_list(To, Dep, [{Rel_head, Dep_list}|Rel_list], Rest_list) ->
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODOS
-% funktion 'transfer data', der tjekker om der er en relation, og så gør den bare
-% case Type of
-%        ship -> kan ikke
-%        service -> send data, slet data
-%        company -> send data
-
 % funktion 'request' (ship->service->company), der ser om der er en vej fra ship til company, og så reqer data
+% add cases for dependencies
+% 
+% algo:
+% 1: tjek kodeord
+% 2: tjek om det reqquede atom er hvor der reqqes
+% 3: hvis der reqqes til en service, tjek om det reqqede atom er i en nabo-company, og hvis det er muligt, overfør til service, derefter ship
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

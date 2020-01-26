@@ -6,7 +6,9 @@
                 get_type/1,
                 get_relations/1,
                 add_dependency/3,
-                add_info/2]).
+                add_info/2,
+                remove_info/2,
+                transfer_info/3]).
 
 -compile(export_all).
 -compile(nowarn_export_all).
@@ -49,8 +51,26 @@ deps_true() ->
   {ok, Ship}    = mmods:add_relation(Ship, Service4),
   {ok, service1}   = mmods:add_dependency(Ship, Service1, service1),
   {ok, service2}   = mmods:add_dependency(Ship, Service2, service2),
+  {ok, service2}   = mmods:add_dependency(Ship, Service2, service2),
+  {ok, service2}   = mmods:add_dependency(Ship, Service2, service2),
   {ok, service3}   = mmods:add_dependency(Ship, Service3, service3),
   {ok, service4}   = mmods:add_dependency(Ship, Service4, service4),
   mmods:get_state(Ship).
+
+transfer() ->
+  {ok, Ship}    = mmods:start(ship),
+  {ok, Service} = mmods:start(service),
+  {ok, Company} = mmods:start(company),
+  {ok, Company} = mmods:add_relation(Company, Service),
+  {ok, Service} = mmods:add_relation(Service, Ship),
+  mmods:add_info(Company, map),
+  {ok, map}     = mmods:transfer_info(Company, Service, map),
+  {ok, map}     = mmods:transfer_info(Service, Ship, map),
+  Ship_info     = mmods:get_info(Ship),
+  Company_info  = mmods:get_info(Company),
+  (Ship_info == Company_info).
+
+
+
 
 

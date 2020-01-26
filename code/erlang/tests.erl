@@ -8,7 +8,8 @@
                 add_dependency/3,
                 add_info/2,
                 remove_info/2,
-                transfer_info/3]).
+                transfer_info/3,
+                request_info/4]).
 
 -compile(export_all).
 -compile(nowarn_export_all).
@@ -21,9 +22,9 @@ main() ->
   {ok, Service} = mmods:add_relation(Service, Company),
   {ok, Service} = mmods:add_relation(Service, Ship),
   {ok, Company} = mmods:add_relation(Company, Service),
-  {ok, test1}   = mmods:add_dependency(Ship, Service, test1),
-  {ok, test2}   = mmods:add_dependency(Ship, Service, test2),
-  {ok, test3}   = mmods:add_dependency(Ship, Service, test3),
+  mmods:add_dependency(Ship, Service, fun trivial/1),
+  mmods:add_dependency(Ship, Service, fun trivial/1),
+  mmods:add_dependency(Ship, Service, test3),
   mmods:add_info(Company, map),
   mmods:add_info(Company, map),
   mmods:add_info(Company, map),
@@ -31,6 +32,10 @@ main() ->
   B             = mmods:get_state(Service),
   C             = mmods:get_state(Company),
   {A, B, C}.
+
+trivial(_) -> true.
+
+%fun(X) -> X == hund end
 
 t2() ->
   {ok, Ship1} = mmods:start(ship),
@@ -40,21 +45,21 @@ t2() ->
   {A, B}.
 
 deps_true() ->
-  {ok, Ship}    = mmods:start(ship),
+  {ok, Ship}     = mmods:start(ship),
   {ok, Service1} = mmods:start(service),
   {ok, Service2} = mmods:start(service),
   {ok, Service3} = mmods:start(service),
   {ok, Service4} = mmods:start(service),
-  {ok, Ship}    = mmods:add_relation(Ship, Service1),
-  {ok, Ship}    = mmods:add_relation(Ship, Service2),
-  {ok, Ship}    = mmods:add_relation(Ship, Service3),
-  {ok, Ship}    = mmods:add_relation(Ship, Service4),
-  {ok, service1}   = mmods:add_dependency(Ship, Service1, service1),
-  {ok, service2}   = mmods:add_dependency(Ship, Service2, service2),
-  {ok, service2}   = mmods:add_dependency(Ship, Service2, service2),
-  {ok, service2}   = mmods:add_dependency(Ship, Service2, service2),
-  {ok, service3}   = mmods:add_dependency(Ship, Service3, service3),
-  {ok, service4}   = mmods:add_dependency(Ship, Service4, service4),
+  {ok, Ship}     = mmods:add_relation(Ship, Service1),
+  {ok, Ship}     = mmods:add_relation(Ship, Service2),
+  {ok, Ship}     = mmods:add_relation(Ship, Service3),
+  {ok, Ship}     = mmods:add_relation(Ship, Service4),
+  mmods:add_dependency(Ship, Service1, service1),
+  mmods:add_dependency(Ship, Service2, service2),
+  mmods:add_dependency(Ship, Service2, service2),
+  mmods:add_dependency(Ship, Service2, service2),
+  mmods:add_dependency(Ship, Service3, service3),
+  mmods:add_dependency(Ship, Service4, service4),
   mmods:get_state(Ship).
 
 transfer() ->
@@ -70,7 +75,22 @@ transfer() ->
   Company_info  = mmods:get_info(Company),
   (Ship_info == Company_info).
 
+request() ->
+  {ok, Ship}    = mmods:start(ship),
+  {ok, Service} = mmods:start(service),
+  {ok, Company} = mmods:start(company),
+  {ok, Ship}    = mmods:add_relation(Ship, Service),
+  {ok, Service} = mmods:add_relation(Service, Ship),
+  {ok, Company} = mmods:add_relation(Company, Service),
+  {ok, Service} = mmods:add_relation(Service, Company),
+  mmods:add_dependency(Ship, Service, fun trivial/1),
+  mmods:add_info(Company, map),
+  mmods:request_info(Ship, Service, map, [ans]),
+  mmods:get_info(Ship).
 
-
-
-
+bug() ->
+  {ok, Service} = mmods:start(service),
+  {ok, Company} = mmods:start(company),
+  {ok, Company} = mmods:add_relation(Company, Service),
+  {ok, Service} = mmods:add_relation(Service, Company),
+  get_relations(Company).

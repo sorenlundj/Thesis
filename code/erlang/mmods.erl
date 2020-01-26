@@ -2,9 +2,13 @@
 
 -behaviour(gen_statem).
 
--import(lists, [delete/2, member/2]).
+-import(lists, [delete/2, member/2, filter/2]).
+-import(string, [str/2]).
 
--export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3]).
+%%% Model-builder functions
+-export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3, request_info/4]).
+
+%%% Getter-functions
 -export([get_state/1, get_type/1, get_relations/1, get_info/1]).
 
 -export([init/1, callback_mode/0, terminate/3, code_change/4, mmods_handler/3]).
@@ -34,7 +38,7 @@ add_relation(From, To) ->
   gen_statem:call(From, {add_relation_call, To}).
 
 add_dependency(From, To, Dependency) ->
- gen_statem:call(From, {add_dependency_call, {To, Dependency}}).
+ gen_statem:cast(From, {add_dependency_call, {To, Dependency}}).
 
 add_info(Id, Info) ->
   gen_statem:cast(Id, {add_info_call, Info}).
@@ -44,6 +48,9 @@ remove_info(Id, Info) ->
 
 transfer_info(From, To, Info) ->
   gen_statem:call(From, {transfer_info_call, {To, Info}}).
+
+request_info(From, To, Info, Answers) -> 
+  gen_statem:call(From, {request_info_call, {To, Info, Answers}}).
 
 get_state(Id) ->
   gen_statem:call(Id, {get_state_call, none}).
@@ -91,6 +98,20 @@ mmods_handler(cast, {Function_name, Request}, {Type, Relations, Self, Info}=Stat
           {keep_state, {Type, Relations, Self, lists:delete(Remove_info, Info)}};
         false ->
           {keep_state, State}
+      end;
+    add_dependency_call ->
+      {To, Dependency} = Request,
+      case relation_exists(To, Relations) of
+        true  ->
+          Updated_relations = dep_to_rel_list(To, Dependency, Relations, []),
+          case Updated_relations of 
+            error ->
+              {keep_state, State};
+            _ ->
+              {keep_state, {Type, Updated_relations, Self, Info}}
+          end;
+        false ->
+          {keep_state, State}
       end
   end;
 mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, Info}=State) ->
@@ -102,20 +123,6 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
           {keep_state, {Type, [{To, []}|Relations], Self, Info}, [{reply, From, {ok, Self}}]};
         false ->
           {keep_state, State, [{reply, From, {error, illegal_relation}}]}
-      end;
-    add_dependency_call ->
-      {To, Dependency} = Request,
-      case relation_exists(To, Relations) of
-        true  ->
-          Updated_relations = dep_to_rel_list(To, Dependency, Relations, []),
-          case Updated_relations of 
-            error ->
-              {keep_state, State, [{reply, From, {error, bug_in_relation_list}}]};
-            _ ->
-            {keep_state, {Type, Updated_relations, Self, Info}, [{reply, From, {ok, Dependency}}]}
-          end;
-        false ->
-          {keep_state, State, [{reply, From, {error, nonexistent_relation}}]}
       end;
     transfer_info_call ->
       {To, Transfer_info} = Request,
@@ -140,6 +147,27 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
         false ->
           {keep_state, State, [{reply, From, {error, nonexistent_information}}]}
       end;
+    request_info_call ->
+      {To, Req_info, Answers} = Request,
+      Dep_list = get_dep_list(To, Relations),
+      case answers_to_deps(Answers, Dep_list) of
+        true  ->
+          To_info = get_info(To),
+          case lists:member(Req_info, To_info) of
+            true ->
+              transfer_info(To, Self, Req_info),
+              {keep_state, State, [{reply, From, {ok, Self}}]};
+            false ->
+              Nb_ids  = extract_rels(get_relations(To), []),
+              New_ids = delete_at_index(index_of(Self, Nb_ids), Nb_ids),
+              Rels    = filter_rels(company, New_ids, []),
+              request_loop(To, Rels, Req_info,[]),
+              transfer_info(To, Self, Req_info),
+              {keep_state, State, [{reply, From, {ok, Info}}]}    
+          end;
+        false ->
+          {keep_state, State, [{reply, From, {error, incorrect_answers}}]}
+      end;
     get_state_call     -> {keep_state, State, [{reply, From, State}]};
     get_type_call      -> {keep_state, State, [{reply, From, Type}]};
     get_relations_call -> {keep_state, State, [{reply, From, Relations}]};
@@ -148,16 +176,13 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
   end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Non-op-level functions                                            %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary functions                                               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 legal_relation(From, To) ->
   case {From, To} of
     {ship, company} -> false;
+    {ship, ship}    -> false;
     {company, ship} -> false;
     _               -> true
   end.
@@ -177,17 +202,49 @@ dep_to_rel_list(To, Dep, [{Rel_head, Dep_list}|Rel_list], Rest_list) ->
     true  -> Rest_list ++ [{Rel_head, [Dep|Dep_list]}|Rel_list];
     false -> dep_to_rel_list(To, Dep, Rel_list, Rest_list ++ [{Rel_head, Dep_list}])
   end.
-  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODOS
-% funktion 'request' (ship->service->company), der ser om der er en vej fra ship til company, og så reqer data
-% add cases for dependencies
-% 
-% algo:
-% 1: tjek kodeord
-% 2: tjek om det reqquede atom er hvor der reqqes
-% 3: hvis der reqqes til en service, tjek om det reqqede atom er i en nabo-company, og hvis det er muligt, overfør til service, derefter ship
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+answers_to_deps(_, []) ->
+  true;
+answers_to_deps([H_ans|Answers], [H_dep|Dependencies]) ->
+  case H_dep(H_ans) of
+    true  -> answers_to_deps(Answers, Dependencies);
+    false -> false
+  end.
+
+get_dep_list(_, []) ->
+  error;
+get_dep_list(To, [{Rel_head, Dep_list}|Rel_list]) ->
+  case To == Rel_head of
+    true  -> Dep_list;
+    false -> get_dep_list(To, Rel_list)
+  end.
+
+extract_rels([], Ids) ->
+  Ids;
+extract_rels([{Id, _}|Rels], Ids) ->
+  extract_rels(Rels, [Id] ++ Ids).
+
+filter_rels(_, [], Res) ->
+  Res;
+filter_rels(Type, [Id|Ids], Res) ->
+  case Type == get_type(Id) of
+    true  -> filter_rels(Type, Ids, [Id] ++ Res);
+    false -> filter_rels(Type, Ids, Res)
+  end.
+
+delete_at_index(I, Items) ->
+  {Left, [_|Right]} = lists:split(I, Items),
+  Left ++ Right.
+
+index_of(Element, List) ->
+  string:str(List, [Element]) - 1.
+
+request_loop(_, [], _, _) ->
+  ok;
+request_loop(From, [Head|To], Info, Answers) ->
+  request_info(From, Head, Info, Answers),
+  request_loop(From, To, Info, Answers).
+
 
 
 

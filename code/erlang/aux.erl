@@ -10,6 +10,8 @@
          index_of/3,
          insert_at_index/3,
          read_at_index/2,
+         fst/1,
+         snd/1,
          %mmods auxiliary functions
          legal_relation/2,
          relation_exists/2,
@@ -39,6 +41,9 @@ insert_at_index(Element, List, Index) ->
 read_at_index(Index, List) ->
   lists:nth(Index, List).
 
+fst({Elem,_}) -> Elem.
+
+snd({_,Elem}) -> Elem.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -110,7 +110,10 @@ protocol() ->
 
   request_info(Ship, Service, map, [anton, 1234]),
 
-  mmods:get_info(Ship) == [map].
+  A = mmods:get_info(Ship)    == [map],
+  B = mmods:get_info(Service) == [],
+  C = mmods:get_info(Company) == [map],
+  {A, B, C}.
 
 
 % [{xmlText,[{relations,6},{ent,2},{entities,1}],1,[],"\n      ",text}, {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],2,[],[{xmlText,[{relation,2},{relations,6},{ent,2},{entities,1}],1,[],"Service",text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],3,[],"\n    ",text}]

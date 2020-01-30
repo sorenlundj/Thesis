@@ -4,11 +4,13 @@
 
 -import(lists, [member/2]).
 
--import(aux, [index_of/2,
-              insert_at_index/3,
-              read_at_index/2]).
+-import(aux, [insert_at_index/3,
+              read_at_index/2,
+              to_atom/1,
+              write_v/3,
+              read_v/3]).
 
--export([main/1, m/0, get_entity/1, c_l_helper/0, write_v/3, read_v/3, to_atom/1]).
+-export([main/1, m/0, get_entity/1, c_l_helper/0]).
 
 -export([test_wr/0]).
 
@@ -79,7 +81,7 @@ main(File) ->
   %].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Auxiliary functions                                               %
+% Auxiliary/tmp functions                                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 list_vals() ->
@@ -94,36 +96,6 @@ list_vals_nofuninfo() ->
   Co = ["company", "Company", ["Service"]        ],
   {Sh, Se, Co}.
 
-to_atom(String) ->
-  case String of
-    "ship"    -> ship;
-    "service" -> service;
-    "company" -> company
-  end.
-
-write_v(String, Name_list, Val_list) ->
-  case Name_list == [] andalso Val_list == [] of
-    true  -> {[String], [make_ref()]};
-    false ->
-     case member(String, Name_list) of
-       true  -> {error, bound_variable};
-       false -> 
-         Val       = make_ref(),
-         Index     = aux:index_of(String, Name_list),
-         Upd_name_list = aux:insert_at_index(String, Name_list, Index),
-         Upd_val_list  = aux:insert_at_index(Val, Val_list, Index),
-         {Upd_name_list, Upd_val_list}
-     end
-    end.
-
-read_v(String, Name_list, Val_list) ->
-  case member(String, Name_list) of
-    true  -> 
-      Index = aux:index_of(String, Name_list),
-      read_at_index(Index, Val_list);
-    false -> {error, unbound_variable}
-  end.
-
 c_l_helper() ->
   _Input = list_vals(),
   Input_nofuninfo = list_vals_nofuninfo(),
@@ -135,14 +107,13 @@ convert_lists(Input) ->
 test_wr()->
   NL = [],
   VL = [],
-  {NL1, VL1} = write_v("Ship", NL, VL),
+  {NL1, VL1} = aux:write_v("Ship", NL, VL),
   erlang:display({NL1, VL1}),
-  {NL2, VL2} = write_v("Service", NL1, VL1),
+  {NL2, VL2} = aux:write_v("Service", NL1, VL1),
   erlang:display({NL2, VL2}),
-  {NL3, VL3} = write_v("Company", NL2, VL2),
+  {NL3, VL3} = aux:write_v("Company", NL2, VL2),
   erlang:display({NL3, VL3}),
-  erlang:display({ship, read_v("Ship", NL3, VL3)}),
-  erlang:display({service, read_v("Service", NL3, VL3)}),
-  erlang:display({company, read_v("Company", NL3, VL3)}),
-  ok.
+  erlang:display({ship, aux:read_v("Ship", NL3, VL3)}),
+  erlang:display({service, aux:read_v("Service", NL3, VL3)}),
+  erlang:display({company, aux:read_v("Company", NL3, VL3)}).
 

@@ -7,14 +7,12 @@
         </relations>
         <dependencies>
             <dependency>
-                <dep>
-                    <to>Service</to>
-                    <constraint>fun (X) -> X == anton end</constraint>
-                </dep>
-                <dep>
-                    <to>Service</to>
-                    <constraint>fun (X) -> X == 1234 end</constraint>
-                </dep>                    
+                <to>Service</to>
+                <constraint>fun user</constraint>
+            </dependency>
+            <dependency>
+                <to>Service</to>
+                <constraint>fun psswd</constraint>
             </dependency>
         </dependencies>
         <information></information>

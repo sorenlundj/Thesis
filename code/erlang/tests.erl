@@ -11,7 +11,8 @@
                 transfer_info/3,
                 request_info/4]).
 
--import(aux, [read_at_index/2,
+-import(aux, [fun_token/1,
+              read_at_index/2,
               write_v/4,
               read_v/3,
               fst/1,
@@ -52,9 +53,9 @@ is_equal(X) ->
     false -> false
   end.
 
-user(X) -> X == anton.
+user(X) -> X == "anton".
 
-psswd(X) -> X == 1234.
+psswd(X) -> X == "1234".
 
 deps_true() ->
   {ok, Ship}     = mmods:start(ship),
@@ -124,23 +125,23 @@ protocol() ->
   {A, B, C}.
 
 
-list_vals_nofuninfo() ->
-  Sh = [{"ship",    "Ship"},    ["Service"]        ],
-  Se = [{"service", "Service"}, ["Ship", "Company"]],
-  Co = [{"company", "Company"}, ["Service"]        ],
+list_vals_noreq() ->
+  Sh = [{"ship",    "Ship"},    ["Service"],         [], [{"Service","fun user"}, {"Service","fun psswd"}]],
+  Se = [{"service", "Service"}, ["Ship", "Company"], [], []                                               ],
+  Co = [{"company", "Company"}, ["Service"],    ["map"], []                                               ],
   [Sh, Se, Co].
 
-list_vals_nofun() ->
-  Sh = [{"ship",    "Ship"},    ["Service"],         []],
-  Se = [{"service", "Service"}, ["Ship", "Company"], []],
-  Co = [{"company", "Company"}, ["Service"],    ["map"]],
+list_vals() ->
+  Sh = [{"ship",    "Ship"},    ["Service"],         [], [{"Service","fun psswd"}, {"Service","fun user"}], [["Service", "map", ["anton", "1234"]]]],
+  Se = [{"service", "Service"}, ["Ship", "Company"], [], [],                                                []],
+  Co = [{"company", "Company"}, ["Service"],    ["map"], [],                                                []],
   [Sh, Se, Co].
 
 
 c_l_helper() ->
-  _Input_nofuninfo = list_vals_nofuninfo(),
-  _Input_nofun     = list_vals_nofun(),
-  convert_lists(_Input_nofun).
+  _Input       = list_vals(),
+  _Input_noreq = list_vals_noreq(),
+  convert_lists(_Input).
 
 e_loop_start(0, _, Name_list, Val_list) ->
   {Name_list, Val_list};
@@ -151,14 +152,12 @@ e_loop_start(Count, [EH|Entities], Name_list, Val_list) ->
 start_helper([{S_atom, S_name}|_], Name_list, Val_list) ->
   aux:write_v(S_name, S_atom, Name_list, Val_list).
 
-e_loop_add_relation(0, _, _, Name_list, Val_list) ->
-  {Name_list, Val_list};
+e_loop_add_relation(0, _, _, _, _) ->
+  ok;
 e_loop_add_relation(Count, C, Entities, Name_list, Val_list) ->
-  ok        = add_relation_help(C,  Entities, Name_list, Val_list),
+  ok = add_relation_help(C,  Entities, Name_list, Val_list),
   e_loop_add_relation(Count - 1, C + 1, Entities, Name_list, Val_list).
 
-add_relation_help(_, [], _, _) ->
-  ok;
 add_relation_help(C, Entities, Name_list, Val_list) ->
   Ent      = aux:read_at_index(C, Entities),
   Ent_pair = aux:read_at_index(1, Ent),
@@ -174,11 +173,83 @@ r_loop_add_relation(From, [RH|Rels], Name_list, Val_list) ->
   {ok, From} = mmods:add_relation(From, To),
   r_loop_add_relation(From, Rels, Name_list, Val_list).
 
+e_loop_add_info(0, _, _, _, _) ->
+  ok;
+e_loop_add_info(Count, C, Entities, Name_list, Val_list) ->
+  ok = add_info_help(C, Entities, Name_list, Val_list),
+  e_loop_add_info(Count - 1, C + 1, Entities, Name_list, Val_list).
+
+add_info_help(C, Entities, Name_list, Val_list) ->
+  Ent      = aux:read_at_index(C, Entities),
+  Ent_pair = aux:read_at_index(1, Ent),
+  Info     = aux:read_at_index(3, Ent),
+  Ent_name = aux:snd(Ent_pair),
+  Id       = aux:read_v(Ent_name, Name_list, Val_list),  
+  i_loop_add_info(Id, Info, Name_list, Val_list).
+
+i_loop_add_info(_, [], _, _) ->
+  ok;
+i_loop_add_info(Id, [IH|Info], Name_list, Val_list) ->
+  ok = mmods:add_info(Id, IH),
+  i_loop_add_info(Id, Info, Name_list, Val_list).
+
+e_loop_add_dependency(0, _, _, _, _) ->
+  ok;
+e_loop_add_dependency(Count, C, Entities, Name_list, Val_list) ->
+  ok = add_dependency_help(C, Entities, Name_list, Val_list),
+  e_loop_add_dependency(Count - 1, C + 1, Entities, Name_list, Val_list).
+
+add_dependency_help(C, Entities, Name_list, Val_list) ->
+  Ent        = aux:read_at_index(C, Entities),
+  Ent_pair   = aux:read_at_index(1, Ent),
+  Dependency = aux:read_at_index(4, Ent),
+  Ent_name   = aux:snd(Ent_pair),
+  From       = aux:read_v(Ent_name, Name_list, Val_list),  
+  d_loop_add_dependency(From, Dependency, Name_list, Val_list).
+
+d_loop_add_dependency(_, [], _, _) ->
+  ok;
+d_loop_add_dependency(Id, [DH|Dependency], Name_list, Val_list) ->
+  To  = aux:read_v(aux:fst(DH), Name_list, Val_list),
+  Dep = aux:fun_token(aux:snd(DH)),
+  ok  = mmods:add_dependency(Id, To, Dep),
+  d_loop_add_dependency(Id, Dependency, Name_list, Val_list).
+
+e_loop_request(0, _, _, _, _) ->
+  ok;
+e_loop_request(Count, C, Entities, Name_list, Val_list) ->
+  ok = request_help(C, Entities, Name_list, Val_list),
+  e_loop_request(Count - 1, C + 1, Entities, Name_list, Val_list).
+
+request_help(C, Entities, Name_list, Val_list) ->
+  Ent      = aux:read_at_index(C, Entities),
+  Ent_pair = aux:read_at_index(1, Ent),
+  Request  = aux:read_at_index(5, Ent),
+  Ent_name = aux:snd(Ent_pair),
+  From     = aux:read_v(Ent_name, Name_list, Val_list),  
+  r_loop_request(From, Request, Name_list, Val_list).
+
+r_loop_request(_, [], _, _) ->
+  ok;
+r_loop_request(Id, [RH|Request], Name_list, Val_list) ->
+  To      = aux:read_v(aux:read_at_index(1, RH), Name_list, Val_list),
+  Info    = aux:read_at_index(2, RH),
+  Answers = aux:read_at_index(3, RH),
+  erlang:display(To),
+  erlang:display(Info),
+  erlang:display(Answers),
+  mmods:request_info(Id, To, Info, Answers),
+  r_loop_request(Id, Request, Name_list, Val_list).
+
+
 convert_lists([]) ->
   ok;
 convert_lists(Entities) ->
   {Name_list, Val_list} = e_loop_start(length(Entities), Entities, [], []),
-  e_loop_add_relation(length(Entities), 1, Entities, Name_list, Val_list),
+  ok = e_loop_add_relation(length(Entities), 1, Entities, Name_list, Val_list),
+  ok = e_loop_add_info(length(Entities), 1, Entities, Name_list, Val_list),
+  ok = e_loop_add_dependency(length(Entities), 1, Entities, Name_list, Val_list),
+  ok = e_loop_request(length(Entities), 1, Entities, Name_list, Val_list),
   _A = mmods:get_state(aux:read_at_index(1, Val_list)),
   _B = mmods:get_state(aux:read_at_index(2, Val_list)),
   _C = mmods:get_state(aux:read_at_index(3, Val_list)),

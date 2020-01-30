@@ -10,27 +10,25 @@
               write_v/4,
               read_v/3]).
 
--export([main/1, m/0, get_entity/1, c_l_helper/0]).
+-export([main/1, m/0, get_entity/1]).
 
 -export([test_wr/0]).
 
 m() -> 
   Test = "
-  <entities>
-      <ent> 
-          <type>company</type>
-          <name>Company</name>
-          <relations>
-              <relation>Service</relation>
-          </relations>
-          <dependencies> </dependencies>
-          <information>
-              <info>map</info>
-          </information>
-      </ent>
-  </entities>", %find mængde af tags med nedenstående, og gå iterativt op i niveau
+      <dependencies>
+        <dependency>
+          <to>Service</to>
+          <constraint>fun user</constraint>
+        </dependency>
+        <dependency>
+          <to>Service</to>
+          <constraint>fun psswd</constraint>
+        </dependency>
+      </dependencies>
+", %find mængde af tags med nedenstående, og gå iterativt op i niveau
   {Xml, _} = xmerl_scan:string(Test),
-  _Layer_counter = count_subtags(Xml, "entities"),
+  _Layer_counter = count_subtags(Xml, "constraint"),
   Xml.
 
 val(X) ->
@@ -83,18 +81,6 @@ main(File) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary/tmp functions                                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-list_vals() ->
-  Sh = ["ship",    "Ship",    ["Service"],         [{"Service", fun (X) -> X == anton end}, {"Service", fun (X) -> X == 1234 end}], []],
-  Se = ["service", "Service", ["Ship", "Company"], [],                                                                              []],
-  Co = ["company", "Company", ["Service"],         [],                                                                           [map]],
-  {Sh, Se, Co}.
-
-list_vals_nofuninfo() ->
-  Sh = ["ship",    "Ship",    ["Service"]        ],
-  Se = ["service", "Service", ["Ship", "Company"]],
-  Co = ["company", "Company", ["Service"]        ],
-  {Sh, Se, Co}.
 
 test_wr()->
   NL = [],

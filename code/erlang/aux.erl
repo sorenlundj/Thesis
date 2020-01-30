@@ -24,6 +24,7 @@
          request_loop/4,
          %parser auxiliary functions
          to_atom/1,
+         fun_token/1,
          write_v/4,
          read_v/3]).
 
@@ -126,6 +127,21 @@ to_atom(String) ->
     "company" -> company;
     _         -> error
   end.
+
+fun_token(String) ->
+  case String of
+    "fun psswd"   -> fun psswd/1;
+    "fun user"    -> fun user/1;
+    "fun trivial" -> fun trivial/1
+  end.
+
+trivial(_) -> true.
+
+user(X) -> X == "anton".
+
+psswd(X) -> X == "1234".
+
+
 
 write_v(S_name, S_atom, Name_list, Val_list) ->
   case Name_list == [] andalso Val_list == [] of

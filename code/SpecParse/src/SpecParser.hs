@@ -133,3 +133,24 @@ parseXML input = case parse xmlParser "" input of
 
 parseFile :: FilePath -> IO (Either ErrMsg Tag)
 parseFile fp = do s <- readFile fp; return $ parseXML s
+
+
+-- Removes spaces
+remSpace :: Parser a -> Parser a
+remSpace p =
+            do a <- p
+               spaces
+               return a
+
+
+-----------
+-- PLAN:
+-- Atomer:
+--     parser-atomer               =  erlang-atomer
+--    [Ship_a|Service_a|Company_a] = [ship|service|company]
+--    Derved kan der parses til variabelnavne
+-- 
+-- Variabelnavne
+-- 
+-- 
+

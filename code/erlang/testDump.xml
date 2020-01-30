@@ -1,9 +1,11 @@
+<!-- dumping file for 'test.xml' -->
 <entities>
     <ent>
         <type>ship</type>
         <name>Ship</name>
         <relations>
             <relation>Service</relation>
+            <relation>Company</relation>
         </relations>
         <dependencies>
             <dependency>
@@ -16,7 +18,7 @@
         </dependencies>
         <information></information>
     </ent>
-    <!--[ship, Ship, [Service], [{Service,[fun (X) -> X == anton end, fun (X) -> X == 1234 end]}]]-->
+    <!--{ship, Ship, [Service], [{Service,[fun (X) -> X == anton end, fun (X) -> X == 1234 end]}]}-->
     <ent>
         <type>service</type>
         <name>Service</name>

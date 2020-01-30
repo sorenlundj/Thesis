@@ -1,16 +1,52 @@
-
-
-
-<test>
-   abcd e 
-
-   <t2>
-
-   		jaja
-   	
-   	</t2>
-
-
-    f   g
-</test>
-
+<entities>
+    <ent>
+        <type>ship</type>
+        <name>Ship</name>
+        <relations>
+            <relation>Service</relation>
+            <relation>Company</relation>
+        </relations>
+        <dependencies>
+            <dependency>
+                <dep>
+                    <to>Service</to>
+                    <constraint></constraint>
+                    <constraint></constraint>
+                </dep>
+            </dependency>
+        </dependencies>
+        <information></information>
+    </ent>
+    <ent>
+        <type>service</type>
+        <name>Service</name>
+        <relations>
+            <relation>Ship</relation>
+            <relation>Company</relation>
+        </relations>
+        <dependencies></dependencies>
+        <information></information>
+    </ent>
+    <ent> 
+        <type>company</type>
+        <name>Company</name>
+        <relations>
+            <relation>Service</relation>
+        </relations>
+        <dependencies> </dependencies>
+        <information>
+            <info>map</info>
+        </information>
+    </ent>
+    <ent> 
+        <type>company</type>
+        <name>Company</name>
+        <relations>
+            <relation>Service</relation>
+        </relations>
+        <dependencies> </dependencies>
+        <information>
+            <info>map</info>
+        </information>
+    </ent>
+</entities>

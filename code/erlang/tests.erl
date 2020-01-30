@@ -142,87 +142,43 @@ c_l_helper() ->
   _Input_nofun     = list_vals_nofun(),
   convert_lists(_Input_nofun).
 
-loop_start(0, _, Name_list, Val_list, Rest_list) ->
-  {Name_list, Val_list, Rest_list};
-loop_start(Count, [IH|Input], Name_list, Val_list, Rest_list) ->
-  {Upd_name_list, Upd_val_list, Rest} = start_helper(IH, Name_list, Val_list),
-  loop_start(Count - 1, Input, Upd_name_list, Upd_val_list, Rest ++ Rest_list).
+e_loop_start(0, _, Name_list, Val_list) ->
+  {Name_list, Val_list};
+e_loop_start(Count, [EH|Entities], Name_list, Val_list) ->
+  {Upd_name_list, Upd_val_list} = start_helper(EH, Name_list, Val_list),
+  e_loop_start(Count - 1, Entities, Upd_name_list, Upd_val_list).
 
-start_helper([{S_atom, S_name}|Rest_list], Name_list, Val_list) ->
-  {Upd_name_list, Upd_val_list} = aux:write_v(S_name, S_atom, Name_list, Val_list),
-  {Upd_name_list, Upd_val_list, Rest_list}.
+start_helper([{S_atom, S_name}|_], Name_list, Val_list) ->
+  aux:write_v(S_name, S_atom, Name_list, Val_list).
 
-loop_relations(0, _, _, Name_list, Val_list, Rest_list) ->
-  {Name_list, Val_list, Rest_list};
-loop_relations(Count, Rev_c, [IH|Input], Name_list, Val_list, Rest_list) ->
-  relations_helper(length(IH), Rev_c,  IH, Name_list, Val_list),
-  loop_relations(Count - 1, Rev_c + 1, Input, Name_list, Val_list, Rest_list).
+e_loop_add_relation(0, _, _, Name_list, Val_list) ->
+  {Name_list, Val_list};
+e_loop_add_relation(Count, C, Entities, Name_list, Val_list) ->
+  ok        = add_relation_help(C,  Entities, Name_list, Val_list),
+  e_loop_add_relation(Count - 1, C + 1, Entities, Name_list, Val_list).
 
-relations_helper(0, _, [], _, _) ->
+add_relation_help(_, [], _, _) ->
   ok;
-relations_helper(Count, Rev_c, [IH|Input], Name_list, Val_list) ->
-  From       = aux:read_v(aux:read_at_index(Rev_c, Name_list), Name_list, Val_list),
-  To         = aux:read_v(IH, Name_list, Val_list),
-  {ok, From} = mmods:add_relation(From, To ),
-  relations_helper(Count - 1, Rev_c, Input, Name_list, Val_list).
+add_relation_help(C, Entities, Name_list, Val_list) ->
+  Ent      = aux:read_at_index(C, Entities),
+  Ent_pair = aux:read_at_index(1, Ent),
+  Rels     = aux:read_at_index(2, Ent),
+  Ent_name = aux:snd(Ent_pair),
+  From     = aux:read_v(Ent_name, Name_list, Val_list),  
+  r_loop_add_relation(From, Rels, Name_list, Val_list).
 
-loop_add_relation(0, _, _, Name_list, Val_list, Rest_list) ->
-  {Name_list, Val_list, Rest_list};
-loop_add_relation(Count, C, Entities, Name_list, Val_list, Rest_list) ->
-  erlang:display({here, Entities}),
-
-  Ent = aux:read_at_index(C, Entities),
-
-  erlang:display({current_ent, Ent}),
-
-  Relations = aux:read_at_index(2, Ent),
-
-  erlang:display({current_rels, Relations}),
-
-  ok = add_relation_help(length(Relations), C,  Entities, Name_list, Val_list),
-  loop_add_relation(Count - 1, C + 1, Entities, Name_list, Val_list, Rest_list).
-
-
-add_relation_help(0, _, [], _, _) ->
+r_loop_add_relation(_, [], _, _) ->
   ok;
-add_relation_help(Count, C, Entities, Name_list, Val_list) ->
-  erlang:display("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"),
-
-  Ent = aux:read_at_index(C, Entities),
-
-  erlang:display({ent, Ent}),
-
-  Rels        = aux:read_at_index(2, Ent),
-
-  erlang:display({rel,Rels}),
-
-  Ent_pair   = aux:read_at_index(1, Ent),
-
-  erlang:display({pair, Ent_pair}),
-
-  Ent_name   = aux:snd(Ent_pair),
-
-  erlang:display({name, Ent_name}),
-
-  From       = aux:read_v(Ent_name, Name_list, Val_list),
-  
-  add_loop(From, Rels, Name_list, Val_list).
-
-add_loop(_, [], _, _) ->
-  ok;
-add_loop(From, [RH|Rels], Name_list, Val_list) ->
+r_loop_add_relation(From, [RH|Rels], Name_list, Val_list) ->
   To = aux:read_v(RH, Name_list, Val_list),
   {ok, From} = mmods:add_relation(From, To),
-  add_loop(From, Rels, Name_list, Val_list).
-
+  r_loop_add_relation(From, Rels, Name_list, Val_list).
 
 convert_lists([]) ->
   ok;
 convert_lists(Entities) ->
-  {Name_list, Val_list, Relations} = loop_start(length(Entities), Entities, [], [], []),
-  loop_add_relation(length(Entities), 1, Entities, Name_list, Val_list, []),
-%  loop_relations(length(Relations), 1, Relations, Name_list, Val_list, []),
-  erlang:display(Relations),
+  {Name_list, Val_list} = e_loop_start(length(Entities), Entities, [], []),
+  e_loop_add_relation(length(Entities), 1, Entities, Name_list, Val_list),
   _A = mmods:get_state(aux:read_at_index(1, Val_list)),
   _B = mmods:get_state(aux:read_at_index(2, Val_list)),
   _C = mmods:get_state(aux:read_at_index(3, Val_list)),

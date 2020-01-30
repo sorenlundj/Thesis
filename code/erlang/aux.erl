@@ -2,28 +2,28 @@
 
 
 -import(lists, [nth/2,
-				member/2]).
+                member/2]).
 
 -import(string, [str/2]).
 
 -export([%Shared auxiliary functions
-		 index_of/3,
-		 insert_at_index/3,
-		 read_at_index/2,
-		 %mmods auxiliary functions
-		 legal_relation/2,
-		 relation_exists/2,
-		 dep_to_rel_list/4,
-		 answers_to_deps/2,
-		 get_dep_list/2,
-		 extract_rels/2,
-		 delete_at_index/2,
-		 filter_rels/3,
-		 request_loop/4,
-		 %parser auxiliary functions
-		 to_atom/1,
-		 write_v/3,
-		 read_v/3]).
+         index_of/3,
+         insert_at_index/3,
+         read_at_index/2,
+         %mmods auxiliary functions
+         legal_relation/2,
+         relation_exists/2,
+         dep_to_rel_list/4,
+         answers_to_deps/2,
+         get_dep_list/2,
+         extract_rels/2,
+         delete_at_index/2,
+         filter_rels/3,
+         request_loop/4,
+         %parser auxiliary functions
+         to_atom/1,
+         write_v/4,
+         read_v/3]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Shared auxiliary functions for modules 'mmods' and 'parser'        %
@@ -33,11 +33,11 @@ index_of(Element, List, ZerOne) ->
   string:str(List, [Element]) - ZerOne. % - ZerOne
 
 insert_at_index(Element, List, Index) ->
-	{Left, Right} = lists:split(Index, List),
-	Left ++ [Element|Right].
+  {Left, Right} = lists:split(Index, List),
+  Left ++ [Element|Right].
 
 read_at_index(Index, List) ->
-	lists:nth(Index, List).
+  lists:nth(Index, List).
 
 
 
@@ -102,7 +102,6 @@ filter_rels(Type, [Id|Ids], Res) ->
     false -> filter_rels(Type, Ids, Res)
   end.
 
-
 request_loop(_, [], _, _) ->
   ok;
 request_loop(From, [Head|To], Info, Answers) ->
@@ -113,32 +112,39 @@ request_loop(From, [Head|To], Info, Answers) ->
 % Auxiliary functions for module 'parser'                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% TODO: DO THIS FOR FUNCTIONS!!!!!
+
 to_atom(String) ->
   case String of
     "ship"    -> ship;
     "service" -> service;
-    "company" -> company
+    "company" -> company;
+    _         -> error
   end.
 
-write_v(String, Name_list, Val_list) ->
+write_v(S_name, S_atom, Name_list, Val_list) ->
   case Name_list == [] andalso Val_list == [] of
-    true  -> {[String], [make_ref()]};
+    true  -> 
+      Atom      = to_atom(S_atom),
+      {ok, Val} = mmods:start(Atom),
+      {[S_name], [Val]};
     false ->
-     case member(String, Name_list) of
-       true  -> {error, bound_variable};
-       false -> 
-         Val           = make_ref(),
-         Index         = index_of(String, Name_list, 0),
-         Upd_name_list = insert_at_index(String, Name_list, Index),
-         Upd_val_list  = insert_at_index(Val, Val_list, Index),
-         {Upd_name_list, Upd_val_list}
-     end
+      case member(S_name, Name_list) of
+        true  -> {error, bound_variable};
+        false ->
+          Atom          = to_atom(S_atom),
+          {ok, Val}     = mmods:start(Atom),
+          Index         = index_of(S_name, Name_list, 0),
+          Upd_name_list = insert_at_index(S_name, Name_list, Index),
+          Upd_val_list  = insert_at_index(Val, Val_list, Index),
+          {Upd_name_list, Upd_val_list}
+      end
     end.
 
-read_v(String, Name_list, Val_list) ->
-  case member(String, Name_list) of
+read_v(S_name, Name_list, Val_list) ->
+  case member(S_name, Name_list) of
     true  -> 
-      Index = index_of(String, Name_list, 0),
+      Index = index_of(S_name, Name_list, 0),
       read_at_index(Index, Val_list);
     false -> {error, unbound_variable}
   end.

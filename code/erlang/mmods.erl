@@ -15,27 +15,24 @@
               filter_rels/3,
               request_loop/4]).
 
-%%% Model-builder functions
--export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3, request_info/4]).
+%%% Model-builder functions  %%%
+-export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3]).
 
-%%% Getter-functions
+%%%     Getter functions     %%%
 -export([get_state/1, get_type/1, get_relations/1, get_info/1]).
+
+%%%   Simulation functions   %%%
+-export([request_info/4]).
 
 -export([init/1, callback_mode/0, terminate/3, code_change/4, mmods_handler/3]).
 
 -define(SERVER, ?MODULE).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Types                                                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%-type name() :: pid().
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % API                                                               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%-spec start(Type) -> {ok, name() | error, any()}.
 start(Type) ->
   case Type of
     ship    -> gen_statem:start_link(?MODULE, Type, []);

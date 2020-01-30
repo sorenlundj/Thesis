@@ -10,8 +10,11 @@
                 <dep>
                     <to>Service</to>
                     <constraint>fun (X) -> X == anton end</constraint>
-                    <constraint>fun (X) -> X == 1234 end</constraint>
                 </dep>
+                <dep>
+                    <to>Service</to>
+                    <constraint>fun (X) -> X == 1234 end</constraint>
+                </dep>                    
             </dependency>
         </dependencies>
         <information></information>

@@ -18,6 +18,8 @@
               fst/1,
               snd/1]).
 
+-import(parser, [co_helper/0]).
+
 -import(lists, [reverse/1]).
 
 -compile(export_all).
@@ -124,23 +126,41 @@ protocol() ->
   C = mmods:get_info(Company) == ["map"],
   {A, B, C}.
 
+test_wr()->
+  NL = [],
+  VL = [],
+  {NL1, VL1} = aux:write_v("Ship", "ship", NL, VL),
+  erlang:display({NL1, VL1}),
+  {NL2, VL2} = aux:write_v("Service", "service", NL1, VL1),
+  erlang:display({NL2, VL2}),
+  {NL3, VL3} = aux:write_v("Company", "company", NL2, VL2),
+  erlang:display({NL3, VL3}),
+  erlang:display({ship,    aux:read_v("Ship", NL3, VL3)}),
+  erlang:display({service, aux:read_v("Service", NL3, VL3)}),
+  erlang:display({company, aux:read_v("Company", NL3, VL3)}).
+
+
 
 list_vals_noreq() ->
-  Sh = [{"ship",    "Ship"},    ["Service"],         [], [{"Service","fun user"}, {"Service","fun psswd"}]],
-  Se = [{"service", "Service"}, ["Ship", "Company"], [], []                                               ],
-  Co = [{"company", "Company"}, ["Service"],    ["map"], []                                               ],
-  [Sh, Se, Co].
+%[[{"company","Company"},        ["Service"],         ["map"], [],                                                                                []],
+% [{"service","Service"},        ["Company","Ship"],  [],      [],                                                                                []],
+% [{"ship","Ship"}, ["Service"],                      [],      [{"Service","fun psswd"},{"Service","fun user"}],  ["Service","Map",["anton","1234"]]]].
+  [[{"company","Company"},["Service"],["map"],[],[]],
+ [{"service","Service"},["Company","Ship"],[],[],[]],
+ [{"ship","Ship"},
+  ["Service"],
+  [],
+  [{"Service","fun psswd"},{"Service","fun user"}],
+  [["Service","Map",["anton","1234"]]]]].
 
 list_vals() ->
-  Sh = [{"ship",    "Ship"},    ["Service"],         [], [{"Service","fun psswd"}, {"Service","fun user"}], [["Service", "map", ["anton", "1234"]]]],
-  Se = [{"service", "Service"}, ["Ship", "Company"], [], [],                                                []],
-  Co = [{"company", "Company"}, ["Service"],    ["map"], [],                                                []],
+  Sh = [{"ship",    "Ship"},    ["Service"],         [],      [{"Service","fun psswd"}, {"Service","fun user"}], [["Service", "map", ["anton", "1234"]]]],
+  Se = [{"service", "Service"}, ["Ship", "Company"], [],      [],                                                []],
+  Co = [{"company", "Company"}, ["Service"],         ["map"], [],                                                []],
   [Sh, Se, Co].
 
-
 c_l_helper() ->
-  _Input       = list_vals(),
-  _Input_noreq = list_vals_noreq(),
+  _Input       = parser:co_helper(),
   convert_lists(_Input).
 
 e_loop_start(0, _, Name_list, Val_list) ->
@@ -211,7 +231,7 @@ d_loop_add_dependency(_, [], _, _) ->
   ok;
 d_loop_add_dependency(Id, [DH|Dependency], Name_list, Val_list) ->
   To  = aux:read_v(aux:fst(DH), Name_list, Val_list),
-  Dep = aux:fun_token(aux:snd(DH)),
+  Dep = aux:token(aux:snd(DH)),
   ok  = mmods:add_dependency(Id, To, Dep),
   d_loop_add_dependency(Id, Dependency, Name_list, Val_list).
 
@@ -235,12 +255,8 @@ r_loop_request(Id, [RH|Request], Name_list, Val_list) ->
   To      = aux:read_v(aux:read_at_index(1, RH), Name_list, Val_list),
   Info    = aux:read_at_index(2, RH),
   Answers = aux:read_at_index(3, RH),
-  erlang:display(To),
-  erlang:display(Info),
-  erlang:display(Answers),
   mmods:request_info(Id, To, Info, Answers),
   r_loop_request(Id, Request, Name_list, Val_list).
-
 
 convert_lists([]) ->
   ok;
@@ -254,100 +270,3 @@ convert_lists(Entities) ->
   _B = mmods:get_state(aux:read_at_index(2, Val_list)),
   _C = mmods:get_state(aux:read_at_index(3, Val_list)),
   {_A, _B, _C}.
-
-
-
-% [{xmlText,[{relations,6},{ent,2},{entities,1}],1,[],"\n      ",text}, {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],2,[],[{xmlText,[{relation,2},{relations,6},{ent,2},{entities,1}],1,[],"Service",text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],3,[],"\n    ",text}]
-% 
-% [{xmlText,[{relations,6},{ent,2},{entities,1}],1,[],"\n      ",text}, {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],2,[],[{xmlText,[{relation,2},{relations,6},{ent,2},{entities,1}],1,[],"Service",text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],3,[],"\n      ",text},
-%                                                                       {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],4,[],[{xmlText,[{relation,4},{relations,6},{ent,2},{entities,1}],1,[],"Company",text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],5,[],"\n    ",text}]
-% 
-% [{xmlText,[{relations,6},{ent,2},{entities,1}],1,[],"\n      ",text}, {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],2,[],[{xmlText,[{relation,2},{relations,6},{ent,2},{entities,1}],1,[],"Service",text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],3,[],"\n      ",text},
-%                                                                       {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],4,[],[{xmlText,[{relation,4},{relations,6},{ent,2},{entities,1}],1,[],"Company",text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],5,[],"\n      ",text},
-%                                                                       {xmlElement,relation,relation,[],{xmlNamespace,[],[]},[{relations,6},{ent,2},{entities,1}],6,[],[{xmlText,[{relation,6},{relations,6},{ent,2},{entities,1}],1,[],"Ship",   text}],[],undefined,undeclared},{xmlText,[{relations,6},{ent,2},{entities,1}],7,[],"\n    ",text}]          
-
-
-
-%Right (
-%  Tag [] "entities" (
-%    Just [TagString "\n    ",Tag [] "ent" (
-%      Just [TagString "\n        ",Tag [] "type" (
-%        Just [TagString "ship"]
-%      ), TagString "\n        ",Tag [] "name" (
-%        Just [TagString "Ship"]
-%      ),TagString "\n        ", Tag [] "relations" (
-%        Just [TagString "\n            ",Tag [] "relation" (
-%          Just [TagString "Service"]
-%        ),TagString "\n            ",Tag [] "relation" (
-%          Just [TagString "Company"]
-%        ),TagString "\n        "]
-%      ),TagString "\n        ",Tag [] "dependencies" (
-%        Just [TagString "\n            ",Tag [] "dependency" (
-%          Just [TagString "\n                ",Tag [] "dep" (
-%            Just [TagString "\n                    ",Tag [] "to" (
-%              Just [TagString "Service"]
-%            ),TagString "\n                    ",Tag [] "constraint" (
-%              Just []
-%            ),TagString "\n                    ",Tag [] "constraint" (
-%              Just []
-%            ),TagString "\n                "]
-%          ),TagString "\n            "]
-%        ),TagString "\n        "]
-%      ),TagString "\n        ",Tag [] "information" (
-%        Just []
-%      ),TagString "\n    "]
-%    ),TagString "\n    ",Tag [] "ent" (
-%      Just [TagString "\n        ",Tag [] "type" (
-%        Just [TagString "service"]
-%      ),TagString "\n        ",Tag [] "name" (
-%        Just [TagString "Service"]
-%      ),TagString "\n        ",Tag [] "relations" (
-%        Just [TagString "\n            ",Tag [] "relation" (
-%          Just [TagString "Ship"]
-%        ),TagString "\n            ",Tag [] "relation" (
-%          Just [TagString "Company"]
-%        ),TagString "\n        "]
-%      ),TagString "\n        ",Tag [] "dependencies" (
-%        Just []
-%      ),TagString "\n        ",Tag [] "information" (
-%        Just []
-%      ),TagString "\n    "]
-%    ),TagString "\n    ",Tag [] "ent" (
-%      Just [TagString " \n        ",Tag [] "type" (
-%        Just [TagString "company"]
-%      ),TagString "\n        ",Tag [] "name" (
-%        Just [TagString "Company"]
-%      ),TagString "\n        ",Tag [] "relations" (
-%        Just [TagString "\n            ",Tag [] "relation" (
-%          Just [TagString "Service"]
-%        ),TagString "\n        "]
-%      ),TagString "\n        ",Tag [] "dependencies" (
-%        Just [TagString " "]
-%      ),TagString "\n        ",Tag [] "information" (
-%        Just [TagString "\n            ",Tag [] "info" (
-%          Just [TagString "map"]
-%        ),TagString "\n        "]
-%      ),TagString "\n    "]
-%    ),TagString "\n    ",Tag [] "ent" (
-%      Just [TagString " \n        ",Tag [] "type" (
-%        Just [TagString "company"]
-%      ),TagString "\n        ",Tag [] "name" (
-%        Just [TagString "Company"]
-%      ),TagString "\n        ",Tag [] "relations" (
-%        Just [TagString "\n            ",Tag [] "relation" (
-%          Just [TagString "Service"]
-%        ),TagString "\n        "]
-%      ),TagString "\n        ",Tag [] "dependencies" (
-%        Just [TagString " "]
-%      ),TagString "\n        ",Tag [] "information" (
-%        Just [TagString "\n            ",Tag [] "info" (
-%          Just [TagString "map"]
-%        ),TagString "\n        "]
-%      ),TagString "\n    "]
-%    ),TagString "\n"]
-%  )
-%)
-
-
-
-

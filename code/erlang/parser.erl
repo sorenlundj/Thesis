@@ -2,96 +2,90 @@
 
 -include_lib("xmerl/include/xmerl.hrl"). 
 
--import(lists, [member/2]).
+-import(aux, [fst/1,
+              snd/1,
+              read_at_index/2]).
 
--import(aux, [insert_at_index/3,
-              read_at_index/2,
-              to_atom/1,
-              write_v/4,
-              read_v/3]).
+-export([ie/1, co_helper/0]).
 
--export([main/1, m/0, get_entity/1]).
 
--export([test_wr/0]).
 
-m() -> 
-  Test = "
-      <dependencies>
-        <dependency>
-          <to>Service</to>
-          <constraint>fun user</constraint>
-        </dependency>
-        <dependency>
-          <to>Service</to>
-          <constraint>fun psswd</constraint>
-        </dependency>
-      </dependencies>
-", %find mængde af tags med nedenstående, og gå iterativt op i niveau
-  {Xml, _} = xmerl_scan:string(Test),
-  _Layer_counter = count_subtags(Xml, "constraint"),
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% XML parser                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ie(File) ->
+  AccFun = fun(#xmlText{value=V} = _, Acc, GS) -> 
+               case re:run(V, "^\\s*$") of
+                 {match, _} -> {Acc, GS}; 
+                 nomatch    -> {[V | Acc], GS} 
+               end; 
+             (E,Acc,GS) -> 
+               {[E|Acc], GS} 
+           end,
+  HookFun = fun(#xmlElement{name=Name, content=[Cont]}, GS) 
+                  when is_list(Cont) -> 
+                    {{Name, Cont}, GS}; 
+               (#xmlElement{name=Name, content=Cont}, GS) -> 
+                    {{Name, Cont}, GS}; 
+               (E, GS) -> 
+                    {E, GS} 
+            end,
+  {Xml, _} = xmerl_scan:file(File, [{acc_fun, AccFun}, {hook_fun, HookFun}]),
   Xml.
-
-val(X) ->
-    [#xmlElement{name = N, content = [#xmlText{value = V}|_]}] = X,
-    {N, V}.
-
-get_string(X) ->
-  [#xmlElement{content = [#xmlText{value = V}|_]}] = X,
-  V.
-
-get_entity(File) ->
-      {Xml, _} = xmerl_scan:string(File),
-  Ent = [get_string(xmerl_xpath:string("//type", Xml))
-        ,get_string(xmerl_xpath:string("//name", Xml))
-        ,val(xmerl_xpath:string("//relations", Xml))
-        ,val(xmerl_xpath:string("//dependencies", Xml))
-        ,val(xmerl_xpath:string("//information", Xml))],
-  Ent,
-  [{_V0,%xmlElement
-    _V1,%relations
-    _V2,%relations
-    _V3,%[]
-    _V4,%{xmlNamespace,[],[]}
-    _V5,%[{ent,2},{entities,1}]
-    _V6,%6
-    _V7,%[]
-    _V8,%
-    _V9,%[]
-    _V10,%undefined
-    _V11 %undeclared
-    }] = xmerl_xpath:string("//information", Xml),
-%  _V1 = get_multiple(xmerl_xpath:string("//relations", Xml)),
-  (length(_V8) - 1) / 2.
-
-count_subtags(Xml, Tag) ->
-  [{_,_,_,_,_,_,_,_,T8,_,_,_}] = xmerl_xpath:string("//" ++ Tag, Xml),
-  (length(T8) - 1) / 2.
-
-main(File) ->
-  {Xml, _} = xmerl_scan:file(File),
-  Ent = [val(xmerl_xpath:string("//type", Xml))
-        ,val(xmerl_xpath:string("//name", Xml))
-        ,val(xmerl_xpath:string("//relations", Xml))
-        ,val(xmerl_xpath:string("//dependencies", Xml))
-        ,val(xmerl_xpath:string("//information", Xml))],
-  Ent.
-  %,val(xmerl_xpath:string("//t4", Xml))
-  %].
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary/tmp functions                                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-test_wr()->
-  NL = [],
-  VL = [],
-  {NL1, VL1} = aux:write_v("Ship", "ship", NL, VL),
-  erlang:display({NL1, VL1}),
-  {NL2, VL2} = aux:write_v("Service", "service", NL1, VL1),
-  erlang:display({NL2, VL2}),
-  {NL3, VL3} = aux:write_v("Company", "company", NL2, VL2),
-  erlang:display({NL3, VL3}),
-  erlang:display({ship,    aux:read_v("Ship", NL3, VL3)}),
-  erlang:display({service, aux:read_v("Service", NL3, VL3)}),
-  erlang:display({company, aux:read_v("Company", NL3, VL3)}).
+
+loop_reqs([], Result) ->
+  Result;
+loop_reqs([Head|Requests], Result) ->
+  H    = aux:snd(Head),
+  To   = aux:snd(aux:read_at_index(1, H)),
+  Info = aux:snd(aux:read_at_index(2, H)),
+  Ans  = loop_info(aux:snd(aux:read_at_index(3, H)), []),
+  loop_reqs(Requests, [[To, Info, Ans]] ++ Result).
+
+loop_info([], Result) ->
+  Result;
+loop_info([Head|Information], Result) ->
+  loop_info(Information, [aux:snd(Head)] ++ Result).
+
+loop_deps([], Result) ->
+  Result;
+loop_deps([Head|Dependencies], Result) ->
+  To  = aux:snd(aux:read_at_index(1, aux:snd(Head))),
+  Con = aux:snd(aux:read_at_index(2, aux:snd(Head))),
+  loop_deps(Dependencies, [{To, Con}] ++ Result).
+
+loop_rels([], Result) ->
+  Result;
+loop_rels([Head|Relations], Result) ->
+  loop_rels(Relations, [aux:snd(Head)] ++ Result).
+
+loop_ents([], Result) ->
+  Result;
+loop_ents([Head|Ent_list], Result) ->
+  {ent, Prop_list} = Head,
+  [Type, Name, Relations, Dependencies, Information, Requests] = Prop_list,
+  Obj_pair = {aux:snd(Type), aux:snd(Name)},
+  Obj_rels = loop_rels(aux:snd(Relations), []),
+  Obj_deps = loop_deps(aux:snd(Dependencies), []),
+  Obj_info = loop_info(aux:snd(Information), []),
+  Obj_reqs = loop_reqs(aux:snd(Requests), []),
+  Entity   = [Obj_pair, Obj_rels, Obj_info, Obj_deps, Obj_reqs],
+  loop_ents(Ent_list, [Entity] ++ Result).
+
+create_objects(Entities) ->
+  {entities, Ent_list} = Entities,
+  loop_ents(Ent_list, []).
+
+co_helper() ->
+  Entities = ie('test.xml'),
+  Ret = create_objects(Entities),
+  Ret.
+
+
 

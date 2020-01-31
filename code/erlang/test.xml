@@ -1,59 +1,53 @@
 <entities>
-    <ent>
-        <type>ship</type>
-        <name>Ship</name>
-        <relations>
-            <relation>Service</relation>
-        </relations>
-        <dependencies>
-            <dependency>
-                <to>Service</to>
-                <constraint>fun user</constraint>
-            </dependency>
-            <dependency>
-                <to>Service</to>
-                <constraint>fun psswd</constraint>
-            </dependency>
-        </dependencies>
-        <information></information>
-    </ent>
-    <!--[ship, Ship, [Service], [{Service,[fun (X) -> X == anton end, fun (X) -> X == 1234 end]}]]-->
-    <ent>
-        <type>service</type>
-        <name>Service</name>
-        <relations>
-            <relation>Ship</relation>
-            <relation>Company</relation>
-        </relations>
-        <dependencies></dependencies>
-        <information></information>
-    </ent>
-    <!--{service, Service, [Ship, Company], [], []}-->
-    <ent> 
-        <type>company</type>
-        <name>Company</name>
-        <relations>
-            <relation>Service</relation>
-        </relations>
-        <dependencies> </dependencies>
-        <information>
-            <info>map</info>
-        </information>
-    </ent>
-   <!--{company, Company, [Service], [], [map]}-->
-</entities>
-
-<entities>
-    <ent> 
-        <type>company</type>
-        <name>Company</name>
-        <relations>
-            <relation>Service</relation>
-        </relations>
-        <dependencies> </dependencies>
-        <information>
-            <info>map</info>
-        </information>
-    </ent>
-   <!--{company, Company, [Service], [], [map]}-->
+  <ent>
+    <type>ship</type>
+    <name>Ship</name>
+    <relations>
+      <relation>Service</relation>
+    </relations>
+    <dependencies>
+      <dependency>
+        <to>Service</to>
+        <constraint>fun psswd</constraint>
+      </dependency>
+      <dependency>
+        <to>Service</to>
+        <constraint>fun user</constraint>
+      </dependency>
+    </dependencies>
+    <information></information>
+    <requests>
+      <request>
+        <to>Service</to>
+        <data>map</data>
+        <answers>
+          <answer>anton</answer>
+          <answer>1234</answer>
+        </answers>
+      </request>
+    </requests>
+  </ent>
+  <ent>
+      <type>service</type>
+      <name>Service</name>
+      <relations>
+        <relation>Ship</relation>
+        <relation>Company</relation>
+      </relations>
+      <dependencies></dependencies>
+      <information></information>
+      <requests></requests>
+  </ent>
+  <ent> 
+      <type>company</type>
+      <name>Company</name>
+      <relations>
+          <relation>Service</relation>
+      </relations>
+      <dependencies> </dependencies>
+      <information>
+          <info>map</info>
+      </information>
+      <requests></requests>
+  </ent>
 </entities>

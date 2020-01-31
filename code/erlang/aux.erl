@@ -23,8 +23,7 @@
          filter_rels/3,
          request_loop/4,
          %parser auxiliary functions
-         to_atom/1,
-         fun_token/1,
+         token/1,
          write_v/4,
          read_v/3]).
 
@@ -118,21 +117,17 @@ request_loop(From, [Head|To], Info, Answers) ->
 % Auxiliary functions for module 'parser'                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% TODO: DO THIS FOR FUNCTIONS!!!!!
-
-to_atom(String) ->
+token(String) ->
   case String of
+    % atoms
     "ship"    -> ship;
     "service" -> service;
     "company" -> company;
-    _         -> error
-  end.
-
-fun_token(String) ->
-  case String of
+    % functions
     "fun psswd"   -> fun psswd/1;
     "fun user"    -> fun user/1;
-    "fun trivial" -> fun trivial/1
+    "fun trivial" -> fun trivial/1;
+    _         -> error
   end.
 
 trivial(_) -> true.
@@ -146,14 +141,14 @@ psswd(X) -> X == "1234".
 write_v(S_name, S_atom, Name_list, Val_list) ->
   case Name_list == [] andalso Val_list == [] of
     true  -> 
-      Atom      = to_atom(S_atom),
+      Atom      = token(S_atom),
       {ok, Val} = mmods:start(Atom),
       {[S_name], [Val]};
     false ->
       case member(S_name, Name_list) of
         true  -> {error, bound_variable};
         false ->
-          Atom          = to_atom(S_atom),
+          Atom          = token(S_atom),
           {ok, Val}     = mmods:start(Atom),
           Index         = index_of(S_name, Name_list, 0),
           Upd_name_list = insert_at_index(S_name, Name_list, Index),

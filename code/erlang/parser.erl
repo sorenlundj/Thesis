@@ -4,17 +4,19 @@
 
 -import(aux, [fst/1,
               snd/1,
-              read_at_index/2]).
+              read_at_index/2,
+              write_v/4,
+              read_v/3,
+              token/1]).
 
--export([ie/1, co_helper/0]).
-
-
+-export([xml_parser/1,
+        interp/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % XML parser                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-ie(File) ->
+xml_parser(File) ->
   AccFun = fun(#xmlText{value=V} = _, Acc, GS) -> 
                case re:run(V, "^\\s*$") of
                  {match, _} -> {Acc, GS}; 
@@ -35,57 +37,107 @@ ie(File) ->
   Xml.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Auxiliary/tmp functions                                           %
+% Maritime Model Interpreter                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+interp(Term) ->
+  {entities, Entities} = Term,
+  {Name_list, Val_list} = loop_start(length(Entities), Entities, [], []),
+  ok = loop_add_info(length(Entities), Entities, Name_list, Val_list),
+  ok = loop_add_relations(length(Entities), Entities, Name_list, Val_list),
+  ok = loop_add_dependency(length(Entities), Entities, Name_list, Val_list),
+  ok = loop_request(length(Entities), Entities, Name_list, Val_list),
+  _A = mmods:get_state(aux:read_at_index(1, Val_list)),
+  _B = mmods:get_state(aux:read_at_index(2, Val_list)),
+  _C = mmods:get_state(aux:read_at_index(3, Val_list)),
+  {_A, _B, _C}.
 
-loop_reqs([], Result) ->
-  Result;
-loop_reqs([Head|Requests], Result) ->
-  H    = aux:snd(Head),
-  To   = aux:snd(aux:read_at_index(1, H)),
-  Info = aux:snd(aux:read_at_index(2, H)),
-  Ans  = loop_info(aux:snd(aux:read_at_index(3, H)), []),
-  loop_reqs(Requests, [[To, Info, Ans]] ++ Result).
+loop_start(0, _, Name_list, Val_list) ->
+  {Name_list, Val_list};
+loop_start(C, Entities, Name_list, Val_list) ->
+  {ent, Ent}                    = aux:read_at_index(C, Entities),
+  {Fields, Vals}                = aux:split_tuple_list(Ent, [], []),
+  Type                          = aux:read_at_index(aux:index_of(type, Fields, 0), Vals),
+  Name                          = aux:read_at_index(aux:index_of(name, Fields, 0), Vals),
+  {Upd_name_list, Upd_val_list} = aux:write_v(Name, Type, Name_list, Val_list),
+  loop_start(C - 1, Entities, Upd_name_list, Upd_val_list).
 
-loop_info([], Result) ->
-  Result;
-loop_info([Head|Information], Result) ->
-  loop_info(Information, [aux:snd(Head)] ++ Result).
+loop_add_info(0, _, _, _) ->
+  ok;
+loop_add_info(C, Entities, Name_list, Val_list) ->
+  {ent, Ent}     = aux:read_at_index(C, Entities),
+  {Fields, Vals} = aux:split_tuple_list(Ent, [], []),  
+  Name           = aux:read_at_index(aux:index_of(name, Fields, 0), Vals),
+  Info           = aux:read_at_index(aux:index_of(information, Fields, 0), Vals),
+  From           = aux:read_v(Name, Name_list, Val_list),
+  ok             = add_info_helper(From, Info),
+  loop_add_info(C - 1, Entities, Name_list, Val_list).
 
-loop_deps([], Result) ->
-  Result;
-loop_deps([Head|Dependencies], Result) ->
-  To  = aux:snd(aux:read_at_index(1, aux:snd(Head))),
-  Con = aux:snd(aux:read_at_index(2, aux:snd(Head))),
-  loop_deps(Dependencies, [{To, Con}] ++ Result).
+add_info_helper(_, []) ->
+  ok;
+add_info_helper(From, [I_head|Info]) ->
+  {info, Inf} = I_head,
+  mmods:add_info(From, Inf),
+  add_info_helper(From, Info).
 
-loop_rels([], Result) ->
-  Result;
-loop_rels([Head|Relations], Result) ->
-  loop_rels(Relations, [aux:snd(Head)] ++ Result).
+loop_add_relations(0, _, _, _) ->
+  ok;
+loop_add_relations(C, Entities, Name_list, Val_list) ->
+  {ent, Ent}     = aux:read_at_index(C, Entities),
+  {Fields, Vals} = aux:split_tuple_list(Ent, [], []),  
+  Name           = aux:read_at_index(aux:index_of(name, Fields, 0), Vals),
+  Relations      = aux:read_at_index(aux:index_of(relations, Fields, 0), Vals),
+  From           = aux:read_v(Name, Name_list, Val_list),
+  ok             = add_relation_helper(From, Relations, Name_list, Val_list),
+  loop_add_relations(C - 1, Entities, Name_list, Val_list).
 
-loop_ents([], Result) ->
-  Result;
-loop_ents([Head|Ent_list], Result) ->
-  {ent, Prop_list} = Head,
-  [Type, Name, Relations, Dependencies, Information, Requests] = Prop_list,
-  Obj_pair = {aux:snd(Type), aux:snd(Name)},
-  Obj_rels = loop_rels(aux:snd(Relations), []),
-  Obj_deps = loop_deps(aux:snd(Dependencies), []),
-  Obj_info = loop_info(aux:snd(Information), []),
-  Obj_reqs = loop_reqs(aux:snd(Requests), []),
-  Entity   = [Obj_pair, Obj_rels, Obj_info, Obj_deps, Obj_reqs],
-  loop_ents(Ent_list, [Entity] ++ Result).
+add_relation_helper(_, [], _, _) ->
+  ok;
+add_relation_helper(From, [R_head|Relations], Name_list, Val_list) ->
+  {relation, Relation} = R_head,
+  To = aux:read_v(Relation, Name_list, Val_list),
+  {ok, From} = mmods:add_relation(From, To),
+  add_relation_helper(From, Relations, Name_list, Val_list).
 
-create_objects(Entities) ->
-  {entities, Ent_list} = Entities,
-  loop_ents(Ent_list, []).
+loop_add_dependency(0, _, _, _) ->
+  ok;
+loop_add_dependency(C, Entities, Name_list, Val_list) ->
+  {ent, Ent}     = aux:read_at_index(C, Entities),
+  {Fields, Vals} = aux:split_tuple_list(Ent, [], []),  
+  Name           = aux:read_at_index(aux:index_of(name, Fields, 0), Vals),
+  Dependencies   = aux:read_at_index(aux:index_of(dependencies, Fields, 0), Vals),
+  From           = aux:read_v(Name, Name_list, Val_list),
+  ok             = add_dependency_helper(From, Dependencies, Name_list, Val_list),
+  loop_add_dependency(C - 1, Entities, Name_list, Val_list).
 
-co_helper() ->
-  Entities = ie('test.xml'),
-  Ret = create_objects(Entities),
-  Ret.
+add_dependency_helper(_, [], _, _) ->
+  ok;
+add_dependency_helper(From, [D_head|Dependencies], Name_list, Val_list) ->
+  {dependency, To_and_con} = D_head,
+  To      = aux:read_v(aux:snd(aux:read_at_index(1, To_and_con)), Name_list, Val_list),
+  Con     = aux:snd(aux:read_at_index(2, To_and_con)), 
+  mmods:add_dependency(From, To, aux:token(Con)),
+  add_dependency_helper(From, Dependencies, Name_list, Val_list).
 
+loop_request(0, _, _, _) ->
+  ok;
+loop_request(C, Entities, Name_list, Val_list) ->
+  {ent, Ent}     = aux:read_at_index(C, Entities),
+  {Fields, Vals} = aux:split_tuple_list(Ent, [], []),  
+  Name           = aux:read_at_index(aux:index_of(name, Fields, 0), Vals),
+  Requests       = aux:read_at_index(aux:index_of(requests, Fields, 0), Vals),
+  From           = aux:read_v(Name, Name_list, Val_list),
+  ok             = request_helper(From, Requests, Name_list, Val_list),
+  loop_request(C - 1, Entities, Name_list, Val_list).
 
-
+request_helper(_, [], _, _) ->
+  ok;
+request_helper(From, [R_head|Requests], Name_list, Val_list) ->
+  {request, Req}   = R_head,
+  {to, To_name}    = aux:read_at_index(1, Req),
+  {data, Data}     = aux:read_at_index(2, Req),
+  {answers, Ans_t} = aux:read_at_index(3, Req),
+  To               = aux:read_v(To_name, Name_list, Val_list),
+  {_, Ans}         = aux:split_tuple_list(Ans_t, [], []),
+  mmods:request_info(From, To, Data, Ans),
+  request_helper(From, Requests, Name_list, Val_list).

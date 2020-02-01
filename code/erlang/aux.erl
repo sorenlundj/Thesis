@@ -23,6 +23,7 @@
          filter_rels/3,
          request_loop/4,
          %parser auxiliary functions
+         split_tuple_list/3,
          token/1,
          write_v/4,
          read_v/3]).
@@ -116,6 +117,12 @@ request_loop(From, [Head|To], Info, Answers) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary functions for module 'parser'                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+split_tuple_list([], Fields, Vals) ->
+  {Fields, Vals};
+split_tuple_list([Head|List], Fields, Vals) ->
+  split_tuple_list(List, Fields ++ [fst(Head)], Vals ++ [snd(Head)]).
 
 token(String) ->
   case String of

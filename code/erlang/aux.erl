@@ -8,43 +8,30 @@
 
 -export([%Shared auxiliary functions
          index_of/3,
-         insert_at_index/3,
-         read_at_index/2,
-         fst/1,
-         snd/1,
          %mmods auxiliary functions
-         legal_relation/2,
          relation_exists/2,
          dep_to_rel_list/4,
-         answers_to_deps/2,
+         legal_relation/2,
          get_dep_list/2,
+         answers_to_deps/2,
          extract_rels/2,
          delete_at_index/2,
          filter_rels/3,
          request_loop/4,
-         %parser auxiliary functions
+         %interpreter auxiliary functions
          split_tuple_list/3,
-         token/1,
+         read_at_index/2,
          write_v/4,
-         read_v/3]).
+         read_v/3,
+         token/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Shared auxiliary functions for modules 'mmods' and 'parser'        %
+% Shared auxiliary functions for modules 'mmods' and 'interpreter'  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 index_of(Element, List, ZerOne) ->
   string:str(List, [Element]) - ZerOne. % - ZerOne
 
-insert_at_index(Element, List, Index) ->
-  {Left, Right} = lists:split(Index, List),
-  Left ++ [Element|Right].
-
-read_at_index(Index, List) ->
-  lists:nth(Index, List).
-
-fst({Elem,_}) -> Elem.
-
-snd({_,Elem}) -> Elem.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -115,14 +102,21 @@ request_loop(From, [Head|To], Info, Answers) ->
   request_loop(From, To, Info, Answers).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Auxiliary functions for module 'parser'                           %
+% Auxiliary functions for module 'interpreter'                      %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+read_at_index(Index, List) ->
+  lists:nth(Index, List).
+
+insert_at_index(Element, List, Index) ->
+  {Left, Right} = lists:split(Index, List),
+  Left ++ [Element|Right].
 
 split_tuple_list([], Fields, Vals) ->
   {Fields, Vals};
 split_tuple_list([Head|List], Fields, Vals) ->
-  split_tuple_list(List, Fields ++ [fst(Head)], Vals ++ [snd(Head)]).
+  {Field, Val} = Head,
+  split_tuple_list(List, Fields ++ [Field], Vals ++ [Val]).
 
 token(String) ->
   case String of
@@ -136,14 +130,6 @@ token(String) ->
     "fun trivial" -> fun trivial/1;
     _         -> error
   end.
-
-trivial(_) -> true.
-
-user(X) -> X == "anton".
-
-psswd(X) -> X == "1234".
-
-
 
 write_v(S_name, S_atom, Name_list, Val_list) ->
   case Name_list == [] andalso Val_list == [] of
@@ -171,3 +157,14 @@ read_v(S_name, Name_list, Val_list) ->
       read_at_index(Index, Val_list);
     false -> {error, unbound_variable}
   end.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dependency functions                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+trivial(_) -> true.
+user(X)  -> X == "anton".
+psswd(X) -> X == "1234".
+
+
+

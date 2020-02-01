@@ -4,30 +4,29 @@
 
 -import(lists, [delete/2, member/2]).
 
--import(aux, [index_of/3,
-              legal_relation/2,
-              relation_exists/2,
+-import(aux, [relation_exists/2,
               dep_to_rel_list/4,
-              answers_to_deps/2,
+              legal_relation/2,
               get_dep_list/2,
+              answers_to_deps/2,
               extract_rels/2,
               delete_at_index/2,
               filter_rels/3,
+              index_of/3,
               request_loop/4]).
 
 %%% Model-builder functions  %%%
 -export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3]).
 
-%%%     Getter functions     %%%
+%%% Getter functions         %%%
 -export([get_state/1, get_type/1, get_relations/1, get_info/1]).
 
-%%%   Simulation functions   %%%
+%%% Simulation functions     %%%
 -export([request_info/4]).
 
 -export([init/1, callback_mode/0, terminate/3, code_change/4, mmods_handler/3]).
 
 -define(SERVER, ?MODULE).
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % API                                                               %
@@ -83,7 +82,6 @@ callback_mode() ->
   state_functions.
 
 terminate(_Reason, _State, _Data) ->
-%  State = locked,
   ok.
 
 code_change(_Vsn, State, Data, _Extra) ->
@@ -181,7 +179,3 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
     get_info_call      -> {keep_state, State, [{reply, From, Info}]};
     _                  -> {keep_state, State, [{reply, From, {error, unhandled_case}}]}
   end.
-
-
-
-

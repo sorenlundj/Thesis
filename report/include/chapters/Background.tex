@@ -15,10 +15,11 @@ Here the relevant information regarding maritime stakeholders are stored. This i
 \subsection{Service Registry}
 The Service Registry acts to Maritime Services as the Identity Registry acts to the Maritime Stakeholders. Here all Maritime Services are registered and stored. The Service Registry holds both commercial and non-commercial, as well as authorized and non-authorized services, either free of charge or for a fee. The Service Registry is comparable with the App Store or Google Play in that it distributes services of all kinds to registered users.\cite{efficienSea2}
 \subsection{Messaging Service}
+\TODO{Use own description, and not just quote the website}
 \tit{"An information broker that intelligently exchanges information between communication systems connected to the platform, taking into account the current geographical position and communication links available to the recipient."}\cite{efficienSea2}
 
 \section{Monadic Parsing}
-
+\TODO{Relevant?}
 Parsing is a widely known tool in computer science. The term expresses a function, taking a string of input, from which it yields a parse tree that it constructs when applying the specific parser logic upon the input string. The parser performs a lexical analysis, meaning that it converts sections of the string to tokens that are ultimately easier to handle by an interpreter. When using Haskel to write parsers a library family known as parser combinators is very popular, in that it allows the programmer to embed domain specific language directly in the parser. The concept of combinatory parsing is using one or more of these libraries of higher-order functions, known as parser combinators. Parser combinators take in parsers of any kind imaginable as input and returns a new set of parsers as an output.
 
 Before 1995, implementation of top-down parsing, using parser combinators ran in and used both exponential time and space complexity when applied to ambiguous, context free grammars. At that time Frost and Szydlowski demonstrated that memoization can enhance parser combinators in order to optimize time complexity to polynomial. One year later through the use of monads parser combinators were reconstructed by Frost which introduced systematic and correct threading of memoization throughout execution\cite{memoization}.

@@ -8,6 +8,7 @@ As discussed in Section \ref{sec:Data}, in order to create uniform models, upon 
 
 One way to implement these changes is make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generation as well as give maximum flexibility in future model design.
 
+\TODO{Does not fitt 100 \% with the implemented}
 \begin{description}
 	\item[Entity]\ \\
 	An entity is the most basic component of the models, without which, the models would not be able to exist. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which will occur throughout execution of the models. At the moment, three entities exist, however support for additional models is possible.
@@ -65,7 +66,6 @@ Figure \ref{fig:entities} describe which options are excluded at selections of e
 		\node[]	(E)	[right of=B]
 			{\begin{tabular}{|l|}\hline{1}
 				Dependency     \\ \hline{2.5}
-				Ship            \\ \hline{1}
 				Service          \\ \hline{1}
 			\end{tabular}};
 		\node[]	(F)	[right of=C]
@@ -172,9 +172,7 @@ spec ::= string
 \TODO{Hvordan skal dette implementeres/BRUGES i MCP (ikke teknisk)}
 
 \section{Technical Implementation}
-\TODO{Monadisk parsing
-Evt. lav en specifikationsXML selv.
-Evt lav nedenstående til et Chapter}
+\TODO{Evt lav nedenstående til et Chapter}
 
 \subsection{Executing Instructions}
 \TODO{ }

@@ -15,13 +15,13 @@
 interp(Term) ->
   {entities, Entities} = Term,
   {Name_list, Val_list} = loop_start(length(Entities), Entities, [], []),
-  ok = loop_add_info(length(Entities), Entities, Name_list, Val_list),
-  ok = loop_add_relations(length(Entities), Entities, Name_list, Val_list),
-  ok = loop_add_dependency(length(Entities), Entities, Name_list, Val_list),
-  ok = loop_request(length(Entities), Entities, Name_list, Val_list),
-  _A = mmods:get_state(aux:read_at_index(1, Val_list)),
-  _B = mmods:get_state(aux:read_at_index(2, Val_list)),
-  _C = mmods:get_state(aux:read_at_index(3, Val_list)),
+  ok                    = loop_add_info(length(Entities), Entities, Name_list, Val_list),
+  ok                    = loop_add_relations(length(Entities), Entities, Name_list, Val_list),
+  ok                    = loop_add_dependency(length(Entities), Entities, Name_list, Val_list),
+  ok                    = loop_request(length(Entities), Entities, Name_list, Val_list),
+  _A                    = mmods:get_state(aux:read_at_index(1, Val_list)), %TODO: Change to dynamic
+  _B                    = mmods:get_state(aux:read_at_index(2, Val_list)), %TODO: Change to dynamic
+  _C                    = mmods:get_state(aux:read_at_index(3, Val_list)), %TODO: Change to dynamic
   {_A, _B, _C}.
 
 loop_start(0, _, Name_list, Val_list) ->
@@ -86,8 +86,8 @@ add_dependency_helper(_, [], _, _) ->
   ok;
 add_dependency_helper(From, [D_head|Dependencies], Name_list, Val_list) ->
   {dependency, To_and_con} = D_head,
-  {to,To_name}             = aux:read_at_index(1, To_and_con),
-  {constraint, Con}        = aux:read_at_index(2, To_and_con),
+  {to, To_name}            = aux:read_at_index(1, To_and_con), %TODO: Search for keyword in stead of fixed indexes
+  {constraint, Con}        = aux:read_at_index(2, To_and_con), %TODO: Search for keyword in stead of fixed indexes
   To                       = aux:read_v(To_name, Name_list, Val_list),
   mmods:add_dependency(From, To, aux:token(Con)),
   add_dependency_helper(From, Dependencies, Name_list, Val_list).

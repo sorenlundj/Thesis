@@ -19,11 +19,13 @@
          filter_rels/3,
          request_loop/4,
          %interpreter auxiliary functions
+         token/1,
          split_tuple_list/3,
          read_at_index/2,
+         read_val_by_id/3,
          write_v/4,
          read_v/3,
-         token/1]).
+         get_all_states/3]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Shared auxiliary functions for modules 'mmods' and 'interpreter'  %
@@ -31,8 +33,6 @@
 
 index_of(Element, List, ZerOne) ->
   string:str(List, [Element]) - ZerOne. % - ZerOne
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Auxiliary functions for module 'mmods'                            %
@@ -118,6 +118,9 @@ split_tuple_list([Head|List], Fields, Vals) ->
   {Field, Val} = Head,
   split_tuple_list(List, Fields ++ [Field], Vals ++ [Val]).
 
+read_val_by_id(Id, Fields, Vals) ->
+  read_at_index(index_of(Id, Fields, 0), Vals).
+
 token(String) ->
   case String of
     % atoms
@@ -157,6 +160,13 @@ read_v(S_name, Name_list, Val_list) ->
       read_at_index(Index, Val_list);
     false -> {error, unbound_variable}
   end.
+
+get_all_states(0, _, States) ->
+  States;
+get_all_states(Count, [V_head|Val_list], States) ->
+  State = mmods:get_state(V_head),
+  get_all_states(Count - 1, Val_list, [State] ++ States).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Dependency functions                                              %

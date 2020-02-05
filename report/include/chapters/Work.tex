@@ -1,35 +1,36 @@
 \chapter{Work/Design}
 
-In this chapter I will describe the work I have done in order to implement model-based testing into the MCP. The workload that is contained in the implementation and description herein includes implementation of a monadic parser that reads the xml-specification files, an update of the fields and contents of fields in the xml-specification files, as well as a model, that is built upon the foundation of aforementioned updated xml-specification.
-\TODOOPT{Hvis det fungerer med interpreter(parser(xml))=model, så skriv det på.}
+In this chapter I will describe the work I have done in order to implement model-based testing into the MCP. The workload that is contained in the implementation and description herein includes a model-building module, which is able to simulate given examples of maritime protocols. Furthermore, I will update the structure of the xml specification files, based on which I will introduce a parser/interpreter implementation, thus allowing me to automatically generate maritime models, equivalent to the one that I have created manually.
+
 \section{Updated Data}
 
 As discussed in Section \ref{sec:Data}, in order to create uniform models, upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language, for reliable model-generation.
 
 One way to implement these changes is make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generation as well as give maximum flexibility in future model design.
-
-\TODO{Does not fitt 100 \% with the implemented}
 \begin{description}
 	\item[Entity]\ \\
-	An entity is the most basic component of the models, without which, the models would not be able to exist. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which will occur throughout execution of the models. At the moment, three entities exist, however support for additional models is possible.
+	An entity is the most basic component of the models, without which, the models be devoid of all data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occurs throughout execution of a model. At the moment, three entities exist, however implementation of support for additional models is possible.
+	Multiple instances of each entity is allowed in a model.
 	\begin{description}
 		\item[Ship]\ \\
-		If comparing the MCP to the App Store or Google Play, a ship would undertake the role of the user. The user can be the one utilizing the maritime service or in other cases other users, which are somehow connected to the user. 
+			If comparing the MCP to the App Store or Google Play, a ship would undertake the role of the user. The user can be the one utilizing the maritime service.
 		\item[Service]\ \\
-		The Service entity represents the maritime service, which is being modeled. Like a ship entity, multiple instances of a service entity can occur. If multiple instances of a service entity occurs, this will correspond to cross app interaction, using the same comparison as above.
+			The Service entity represents the maritime service, which is being modeled. If multiple instances of a service entity occurs, this will correspond to cross app interaction, using the same comparison as above.
 		\item[Company]\ \\
-		Company entities serve as nodes, which hold data or other goods, which can be desired by ship entities for a variety of reasons. Multiple company entities can exist at one time. 
+			Company entities serve as nodes, which hold data or similar goods, which can be desired by ship entities for a variety of reasons. If multiple company entities exist at one time, they will not necessarily need a service entity to connect them. 
 	\end{description}
 	\item[Relation]\ \\
-	A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between 'Ship' and 'Service' as well as 'Service' and 'Company'.
+		A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between 'Ship' and 'Service' as well as 'Service' and 'Company'.
 
-	A ship entity can share a relation with other ship entities, as well as service entities, but in order to access data held by the company entity, it will need to consult the service entity.
+		A ship entity can share a relation with service entities, as they would have no way of communicating with company or ship entities without any prior software. In the case that a ship communicates with another ship, it will need an intermediate service entity to communicate through.
 
-	A service entity needs to be able to share a relation with all other entities in order to act as an intermedium between ship entities and company entities, while also being able to interact with other service entities.
+		A service entity needs to be able to share a relation with all other entities in order to act as an intermedium between ship entities and company entities, while also being able to interact with other service entities.
 
-	A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, whether communicating with companies or citizens.
+		A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, when communicating with companies and citizens.
 	\item[Dependency]\ \\
-	A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation, which describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is an anonymous function, that describes what the entities require from each other. If two entities co-depend on each other a relation must be made from the first to the second, as well as from the second to the first. As only the anonymous function limits what the dependency entails, an entity \tit{can} depend on itself.
+		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation, that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function, that describes what the entities require from each other. If two entities co-depend on each other a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
+	\item[Information]\ \\
+		All entities are able to store information, which is able to be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
 \end{description}
 
 Figure \ref{fig:entities} describe which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure \ref{fig:entities} coincides with \ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
@@ -169,7 +170,7 @@ spec ::= string
 \end{figure}
 
 \section{Implementation in the MCP}
-\TODO{Hvordan skal dette implementeres/BRUGES i MCP (ikke teknisk)}
+As described in Chapter \ref{chp:Analysis}, 
 
 \section{Technical Implementation}
 The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
@@ -193,7 +194,7 @@ The functions \ttt{start/1}, \ttt{add\_relation/2}, \ttt{add\_dependency/3}, \tt
 	\item[The parser module]\ \\
 		The parser module utilizes the \ttt{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \ttt{xml\_parser/1}-function uses the accumulator function \ttt{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \ttt{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \ttt{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following the xmerl reference manual \cite{xmerl}.
 	\item[The interpreter module]\ \\
-		The interpreter module exports the single function \ttt{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \ttt{interp/1} function adds builds maritime models in the order that is adding entities, info, relations, dependencies, and lastly performing information requests. Each adder function dynamically searches its corresponding keyword rather than retrieving by index in the xml term, which allows for variation in the the structure of the xml along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally the interpreter shows the states of all entities, as is after addition of all data. Models \ttt{can} be interacted with post-automatic creation. \TODO{Change interp, so it shows models dynamically}
+		The interpreter module exports the single function \ttt{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \ttt{interp/1} function adds builds maritime models in the order that is adding entities, info, relations, dependencies, and lastly performing information requests. Each adder function dynamically searches its corresponding keyword rather than retrieving by index in the xml term, which allows for variation in the the structure of the xml along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally the interpreter shows the states of all entities, as is after addition of all data. Models \ttt{can} be interacted with post-automatic creation.
 \end{description}
 \subsection{Executing Instructions}
 In an Erlang-shell all files can be compiled with \ttt{c(file)}, where after manual model generation can be run from the \ttt{mmods.erl} file \footnote{See \ttt{tests.erl} for examples}.
@@ -201,5 +202,5 @@ For automatic model generation, the \ttt{main.erl} file gathers the functionalit
 
 Using a model post-creation both possible though the uses of manual and automatic model-creating. 
 \section{Testing}
-\TODO{ }
+\TODO{Skriv efter input om implementering}
 

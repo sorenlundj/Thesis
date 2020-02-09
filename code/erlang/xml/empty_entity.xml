@@ -1,0 +1,11 @@
+<entities>
+  <ent>
+    <type>ship</type>
+    <name>Name</name>
+    <relations></relations>
+    <dependencies></dependencies>
+    <information></information>
+    <requests>
+    </requests>
+  </ent>
+</entities>

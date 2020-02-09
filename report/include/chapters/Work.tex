@@ -105,43 +105,52 @@ The fields described in Section \ref{sec:Updated Data} furthermore need to be tr
 	\begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
-specifications ::= spec specifications
-     | $\e$
+specifications ::= entities specifications
+    | $\e$
      
-spec ::= name
-     | status
-     | id
-     | Entities
+entities ::= ent entities
+    | $\e$
 
-Entities ::= ESpec Entities
-     | $\e$
+ent ::= type
+    | name
+    | relations
+    | dependencies
+    | information
+    | requests
 
-ESpec ::= Ship
-     | Service
-     | Company
+type ::= atom
 
-Ship ::= name
-     | id
-     | Relations
+name ::= String
 
-Service ::= name
-     | id
-     | Relations
-     | Dependencies
+relations ::= relation Relations
+    | $\e$
 
-Company ::= name
-     | id
-     | Relations
+relation ::= ent
 
-Relations ::= RSpec Relations
-     | $\e$
+dependencies ::= dependency dependencies
+    | $\e$
 
-RSpec ::= ESpec ESpec
+dependency ::= relation
+    | constraint
 
-Dependencies ::= DSpec Dependencies
-     | $\e$
+constraint ::= function
 
-DSpec ::= Dependency RSpec
+information ::= info information
+    | $\e$
+
+info ::= variant
+
+requests ::= request requests
+    | $\e$
+
+request ::= relation
+    | info
+    | answers
+
+answers ::= answer answers
+    | $\e$
+
+answer ::= variant
 	\end{lstlisting}
 	\caption{Updated parser grammar of Service Specification Schema}
 	\label{fig:sSpecUpd}
@@ -157,11 +166,11 @@ Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpec
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
-     | $\e$
+    | $\e$
      
 spec ::= specifications
-     | spec
-     | $\e$
+    | spec
+    | $\e$
 
 spec ::= string
 	\end{lstlisting}
@@ -170,10 +179,10 @@ spec ::= string
 \end{figure}
 
 \section{Implementation in the MCP}
-As described in Chapter \ref{chp:Analysis}, 
+As described in Chapter \ref{chp:Analysis}, the choice between the two model creation plays a vital role in the utilization
 
 \section{Technical Implementation}
-The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
+The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpr eter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
 
 \subsection{The mmods module}
 The core of the project is contained in the \ttt{mmods.erl} file, which contains the functionality, that creates the finite state machine models. This module creates processes which includes the following fields:
@@ -192,7 +201,7 @@ The functions \ttt{start/1}, \ttt{add\_relation/2}, \ttt{add\_dependency/3}, \tt
 
 \begin{description}
 	\item[The parser module]\ \\
-		The parser module utilizes the \ttt{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \ttt{xml\_parser/1}-function uses the accumulator function \ttt{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \ttt{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \ttt{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following the xmerl reference manual \cite{xmerl}.
+		The parser module utilizes the \ttt{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \ttt{xml\_parser/1}-function uses the accumulator function \ttt{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \ttt{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \ttt{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual\cite{xmerl} and an example posted online\cite{xmerlEx}, and the parser grammar, described in Figures \ref{fig:sSpecUpd} and \ref{fig:sSpecUpdRed}.
 	\item[The interpreter module]\ \\
 		The interpreter module exports the single function \ttt{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \ttt{interp/1} function adds builds maritime models in the order that is adding entities, info, relations, dependencies, and lastly performing information requests. Each adder function dynamically searches its corresponding keyword rather than retrieving by index in the xml term, which allows for variation in the the structure of the xml along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally the interpreter shows the states of all entities, as is after addition of all data. Models \ttt{can} be interacted with post-automatic creation.
 \end{description}
@@ -202,5 +211,5 @@ For automatic model generation, the \ttt{main.erl} file gathers the functionalit
 
 Using a model post-creation both possible though the uses of manual and automatic model-creating. 
 \section{Testing}
-\TODO{Skriv efter input om implementering}
+Testing of the implementation has been divided into two parts, one of which is detailed here, the other in Chapter \ref{chp:Results}. All testing of the mmods module has been contained in the \ttt{tests.erl} file, which includes multiple tests for each API function, exported from the mmods module. After compilation, all tests can be run in an Erlang shell, either as the normal zero-input functions they are, or as the \ttt{main/0} function, which encapsulates all created test cases. All tests are created to return the atom \ttt{true} if they succeed, or the corresponding error message, if they do not.
 

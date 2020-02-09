@@ -23,67 +23,66 @@ The service specification document is constructed using a general xml-format. Th
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
-     | $\e$
+    | $\e$
      
 spec ::= name
-     | status
-     | id
-     | version
-     | description
-     | keywords
-     | isSpatialExclusive
-     | authorInfos
-     | requirements
-     | serviceDataModel
-     | serviceInterfaces
+    | status
+    | id
+    | version
+    | description
+    | keywords
+    | isSpatialExclusive
+    | authorInfos
+    | requirements
+    | serviceDataModel
+    | serviceInterfaces
      
 authorInfos ::= authorInfo authorInfos
-     | $\e$
+    | $\e$
 
 authorInfo ::= aSpec authorInfo
-     | $\e$
+    | $\e$
 
 aSpec ::= id
-     | name
-     | description
-     | contactInfo
+    | name
+    | description
+    | contactInfo
 
 requirements ::= requirement requirements
-     | $\e$
+    | $\e$
 
 requirement ::= rSpec requirement
-     | $\e$
+    | $\e$
 
 rSpec ::= id
-     | name
-     | text
+    | name
+    | text
 
 serviceDataModel ::= definitionAsXSD
 
 serviceInterfaces ::= serviceInterface serviceInterfaces
-     | $\e$
+    | $\e$
 
 oSpec ::= name
-     | description
-     | returnValueType
-     | parameterTypes
+    | description
+    | returnValueType
+    | parameterTypes
 	\end{lstlisting}
 	\caption{Snippets of full parser grammar of Service Specification Schema. (Found in appendix \ref{fig:sSpecFull1}, \ref{fig:sSpecFull2})}
 	\label{fig:sSpecFull}
 \end{figure}
 
-\TODO{Change a bit}
 \begin{figure}
 	\centering
 	\begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
-     | $\e$
+    | $\e$
      
 spec ::= specifications
-     | spec
-     | $\e$
+    | spec
+    | $\e$
 
 spec ::= string
 	\end{lstlisting}

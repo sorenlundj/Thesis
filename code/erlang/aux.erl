@@ -25,7 +25,11 @@
          read_val_by_id/3,
          write_v/4,
          read_v/3,
-         get_all_states/3]).
+         get_all_states_wrapper/1,
+         %dependency functions
+         trivial/1,
+         user/1,
+         psswd/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Shared auxiliary functions for modules 'mmods' and 'interpreter'  %
@@ -131,7 +135,7 @@ token(String) ->
     "fun psswd"   -> fun psswd/1;
     "fun user"    -> fun user/1;
     "fun trivial" -> fun trivial/1;
-    _         -> error
+    _             -> error
   end.
 
 write_v(S_name, S_atom, Name_list, Val_list) ->
@@ -167,6 +171,8 @@ get_all_states(Count, [V_head|Val_list], States) ->
   State = mmods:get_state(V_head),
   get_all_states(Count - 1, Val_list, [State] ++ States).
 
+get_all_states_wrapper(List) ->
+  get_all_states(length(List), List, []).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Dependency functions                                              %

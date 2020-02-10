@@ -21,7 +21,7 @@ interp(Term) ->
   ok            = loop_add_relations(Counter, Entities, Names, Vals),
   ok            = loop_add_dependency(Counter, Entities, Names, Vals),
   ok            = loop_request(Counter, Entities, Names, Vals),
-  aux:get_all_states(Counter, Vals, []).
+  aux:get_all_states_wrapper(Vals).
   
 
 loop_start(0, _, Name_list, Val_list) ->

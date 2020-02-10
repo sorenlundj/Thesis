@@ -1,6 +1,4 @@
-\chapter{Results}
-
-
+\chapter{Experiments and Results}
 
 \begin{figure}
 	\centering
@@ -43,13 +41,27 @@ Term =
 \begin{figure}
 	\centering
 	\begin{lstlisting}[keywordstyle={}]
-[{company,[{<0.79.0>,[]}],<0.78.0>,["map"]},
- {service,[{<0.78.0>,[]},{<0.80.0>,[]}],<0.79.0>,[]},
- {ship,[{<0.79.0>,
-         [#Fun<aux.1.111753582>,#Fun<aux.0.111753582>]}],
-       <0.80.0>,
+[{company,[{<0.96.0>,[]}],<0.95.0>,["map"]},
+ {service,[{<0.95.0>,[]},{<0.97.0>,[]}],<0.96.0>,[]},
+ {ship,[{<0.96.0>,
+         [#Fun<aux.1.64654801>,#Fun<aux.0.64654801>]}],
+       <0.97.0>,
        ["map"]}]
 	\end{lstlisting}
 	\caption{Maritime model, resulting of interpreting the file \ttt{protocol.xml} with \ttt{main:parse\_and\_interpret('xml/protocol.xml')}}
 	\label{fig:protocolParsedInterpreted}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{lstlisting}[keywordstyle={}]
+[{company,[{<0.79.0>,[]}],<0.80.0>,["map"]},
+ {service,[{<0.78.0>,[]},{<0.80.0>,[]}],<0.79.0>,[]},
+ {ship,[{<0.79.0>,
+         [fun aux:user/1,fun aux:psswd/1]}],
+       <0.78.0>,
+       ["map"]}]
+  \end{lstlisting}
+  \caption{Maritime model, resulting of executing the commands, contained within the function \ttt{examples:protocol}}
+  \label{fig:protocolManual}
 \end{figure}

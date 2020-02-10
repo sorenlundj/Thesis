@@ -95,7 +95,12 @@ mmods_handler(cast, {Function_name, Request}, {Type, Relations, Self, Info}=Stat
   case Function_name of
     add_info_call ->
       Add_info = Request,
-      {keep_state, {Type, Relations, Self, [Add_info|Info]}};
+      case lists:member(Add_info, Info) of
+        true ->
+          {keep_state, State};
+        false ->
+          {keep_state, {Type, Relations, Self, [Add_info|Info]}}
+      end;
     remove_info_call ->
       Remove_info = Request,
       case lists:member(Remove_info, Info) of
@@ -125,7 +130,12 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
       To = Request,
       case aux:legal_relation(Type, get_type(To)) of
         true  -> 
-          {keep_state, {Type, [{To, []}|Relations], Self, Info}, [{reply, From, {ok, Self}}]};
+          case aux:relation_exists(To, Relations) of
+            true -> 
+              {keep_state, State, [{reply, From, {error, relation_already_exists}}]};
+            false ->
+              {keep_state, {Type, [{To, []}|Relations], Self, Info}, [{reply, From, {ok, Self}}]}
+          end;
         false ->
           {keep_state, State, [{reply, From, {error, illegal_relation}}]}
       end;

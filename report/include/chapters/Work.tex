@@ -210,6 +210,3 @@ In an Erlang-shell all files can be compiled with \ttt{c(file)}, where after man
 For automatic model generation, the \ttt{main.erl} file gathers the functionality of the parser- and interpreter-modules, which in turn draws upon the mmods-module. From here, the user has the possibilities of parsing an \ttt{xml}-file, interpreting an Erlang term, though the uses of \ttt{main:parse/1}, \ttt{main:interpret/1} or using the combined function \ttt{main:parse\_and\_interpret/1} which fully converts an \ttt{xml}-file to a working maritime model.
 
 Using a model post-creation both possible though the uses of manual and automatic model-creating. 
-\section{Testing}
-Testing of the implementation has been divided into two parts, one of which is detailed here, the other in Chapter \ref{chp:Experiments and Results}. All testing of the mmods module has been contained in the \ttt{tests.erl} file, which includes multiple tests for each API function, exported from the mmods module. After compilation, all tests can be run in an Erlang shell, either as the normal zero-input functions they are, or as the \ttt{main/0} function, which encapsulates all created test cases. All tests are created to return the atom \ttt{true} if they succeed, or the corresponding error message, if they do not.
-

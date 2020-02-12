@@ -19,7 +19,7 @@
 -export([start/1, add_relation/2, add_dependency/3, add_info/2, remove_info/2, transfer_info/3]).
 
 %%% Getter functions         %%%
--export([get_state/1, get_type/1, get_relations/1, get_info/1]).
+-export([get_state/1, get_type/1, get_relations/1, get_self/1, get_info/1]).
 
 %%% Simulation functions     %%%
 -export([request_info/4]).
@@ -55,9 +55,6 @@ remove_info(Id, Info) ->
 transfer_info(From, To, Info) ->
   gen_statem:call(From, {transfer_info_call, {To, Info}}).
 
-request_info(From, To, Info, Answers) -> 
-  gen_statem:call(From, {request_info_call, {To, Info, Answers}}).
-
 get_state(Id) ->
   gen_statem:call(Id, {get_state_call, none}).
 
@@ -67,8 +64,14 @@ get_type(Id) ->
 get_relations(Id) ->
   gen_statem:call(Id, {get_relations_call, none}).
 
+get_self(Id) ->
+  gen_statem:call(Id, {get_self_call, none}).
+
 get_info(Id) ->
   gen_statem:call(Id, {get_info_call, none}).
+
+request_info(From, To, Info, Answers) -> 
+  gen_statem:call(From, {request_info_call, {To, Info, Answers}}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -186,6 +189,7 @@ mmods_handler({call, From}, {Function_name, Request}, {Type, Relations, Self, In
     get_state_call     -> {keep_state, State, [{reply, From, State}]};
     get_type_call      -> {keep_state, State, [{reply, From, Type}]};
     get_relations_call -> {keep_state, State, [{reply, From, Relations}]};
+    get_self_call      -> {keep_state, State, [{reply, From, Self}]};
     get_info_call      -> {keep_state, State, [{reply, From, Info}]};
     _                  -> {keep_state, State, [{reply, From, {error, unhandled_case}}]}
   end.

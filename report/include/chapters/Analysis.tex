@@ -15,7 +15,7 @@ To provide a holistic description of a service instance, three documents are nec
 \end{description}
 Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
 \section{Service Specification grammar}
-The service specification document is constructed using a general xml-format. The majority of the parser grammar of the document can be seen in Listing \ref{fig:sSpecFull} as well as in Listing \ref{fig:sSpecRed}, while the latter is in a severely reduced and generalized form. A minority of the grammar has been cut from Figure \ref{fig:sSpecFull} as it was deemed irrelevant, however the parser grammar in its entirety can be seen in \nameref{chp:Appendix}, Figures \ref{fig:sSpecFull1} and \ref{fig:sSpecFull2}.
+The service specification document is constructed using a general xml-format. The majority of the parser grammar of the document can be seen in Listing \ref{fig:sSpecFull} as well as in Listing \ref{fig:sSpecRed}, while the latter is in a severely reduced and generalized form. A minority of the grammar has been cut from Figure \ref{fig:sSpecFull} as it was deemed irrelevant, however the parser grammar in its entirety can be seen in \nameref{chp:Appendix}, \ref{fig:sSpecFull1} and \ref{fig:sSpecFull2}.
 
 \begin{figure}
 	\centering
@@ -68,7 +68,7 @@ oSpec ::= name
     | returnValueType
     | parameterTypes
 	\end{lstlisting}
-	\caption{Snippets of full parser grammar of Service Specification Schema. (Found in appendix \ref{fig:sSpecFull1}, \ref{fig:sSpecFull2})}
+	\caption{Snippets of full parser grammar of Service Specification Schema. (Found in Appendix \ref{fig:sSpecFull1}, \ref{fig:sSpecFull2})}
 	\label{fig:sSpecFull}
 \end{figure}
 
@@ -92,11 +92,11 @@ spec ::= string
 
 As mentioned above, the service specification is to be used to verify the behavior of the maritime service from a technical stand point. At the moment, the xml-document provides a technical description of its corresponding maritime service, but the most commonly used expression method is free text. As this is a very non-technical design choice, a large portion of the obvious technical advantages, provided by the xml-format are lost. 
 
-As it is possible to utilize free text though the use of natural language processing \cite{nlp}, no modifications are strictly necessary, however even with utilization of such or similar method, implementation hereof would be unstable in terms of usability. This is due to the fact that free language formulation varies at an unforeseeable degree, and as such creating uniform model based on this would add a great layer of complexity.
+As it is possible to utilize free text though the use of natural language processing~\cite{nlp}, no modifications are strictly necessary, however even with utilization of such or similar method, implementation hereof would be unstable in terms of usability. This is due to the fact that free language formulation varies at an unforeseeable degree, and as such creating uniform model based on this would add a great layer of complexity.
 
 For a more sustainable solution to the problem, see Section \ref{sec:Updated Data}.
 
-The xml-version of the service specification can be found in appendix \ref{sec:E2 - NW-NM Service Specification}.
+The xml-version of the service specification can be found in Appendix \ref{sec:E2 - NW-NM Service Specification}.
 
 \section{Testing the MCP}
 
@@ -111,7 +111,7 @@ The core principle in the MCP is to restructure and streamlining maritime softwa
 	\item Increase reliability and efficiency of maritime services.\\
 		Through correct implementation of points 1-3 it is possible to elevate the reliability and efficiency of the maritime services found on the MCP. This is due to the same reasoning that all testing is conducted on the basis of: the need for safe, consistent, and correct code.
 \end{enumerate}
-
+\noindent
 As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.
 
 \section{Example Model Structure}
@@ -204,32 +204,30 @@ The scope of which features the above techniques will be able to test will be de
 \section{Summary: advantages and disadvantages} 
 
 Issues will inevitably present themselves with a project such as this, however the scope and nature of these issues will vary with each approach possible. As different approaches offer tailored advantages to circumvent correlating unique concerns, another set of unique concerns will necessarily present themselves. In this section I will sum up the approaches presented throughout Chapter \ref{chp:Analysis}, along with their corresponding arising advantages and disadvantages.
-\begin{description}
-	\item[Manual model-creation]\ \\
-		\tbf{Advantages}
-		\begin{itemize}
-			\item Manual model creation will have a shorter implementation time, as an arbitrary single model is faster to build than its auto-model-generator counterpart. 
-			\item Built maritime service models can be fully customized at once in order to catch all aspects of its maritime service counterparts.
-			\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following the techniques, described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for more exhaustive tests via manual model-creating than automatic model-creation.
-		\end{itemize}
-		\tbf{Disadvantages}
-		\begin{itemize}
-			\item The time consumption of manually creating each model will expand linearly with each maritime service, that is submitted, and subsequently needs a maritime service model. 
-			\item Having each maritime service model being created individually and manually will inevitable introduce much diversity both in the sense of the available standard actions and implementation style of the model.
-			\item The complexity as well as way of implementing testing techniques explained in Section \ref{sec:Uses of model-based testing of the MCP} varies to an extent, even without consideration of non-uniform models. Elaborating on the case that each maritime service model differs both in purpose, implementation style and exhaustiveness, creating test suites similar to those described in Section \ref{sec:Uses of model-based testing of the MCP} for each new maritime service will become an extensive project
-		\end{itemize}
-	\item[Automatic model-creation]\ \\
-		\tbf{Advantages}
-		\begin{itemize}
-			\item The first and foremost advantage of automatic model generation is the scalability, which it provides. This comes as the implementation of \tit{one} maritime service model generator module, ideally, will be able to automatically assemble each maritime model without further interference, as opposed to manual model generating.
-			\item As an automatic model generator abides by a set collection of rules and metrics, and would create models following the instructions of an xml specification-file, generated models will never deviate from the uniformity of the generator.
-			\item The uniformity in the generated models will further show advantage, as this will streamline test suite generation either because of the fact that similar models promote similar manual test suite generation, or because of the fact that it allows for almost total automation.
-		\end{itemize}
-		\tbf{Disadvantages}
-		\begin{itemize}
-			\item The obvious disadvantage that comes with automatic model generation is the lack of customization in models. As the generator should handle all models, that can be described through the xml specification files it needs to be generalized, which in turn means less specific models, which lowers the ability to custom-fit each model to its maritime specification counterpart.
-			\item Another inevitable downside to having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
-	\end{itemize}
-\end{description}
+\subsection{Manual model-creation}
+\tbf{Advantages}
+\begin{itemize}
+	\item Manual model creation will have a shorter implementation time, as an arbitrary single model is faster to build than its auto-model-generator counterpart. 
+	\item Built maritime service models can be fully customized at once in order to catch all aspects of its maritime service counterparts.
+	\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following the techniques, described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for more exhaustive tests via manual model-creating than automatic model-creation.
+\end{itemize}
+\tbf{Disadvantages}
+\begin{itemize}
+	\item The time consumption of manually creating each model will expand linearly with each maritime service, that is submitted, and subsequently needs a maritime service model. 
+	\item Having each maritime service model being created individually and manually will inevitable introduce much diversity both in the sense of the available standard actions and implementation style of the model.
+	\item The complexity as well as way of implementing testing techniques explained in Section \ref{sec:Uses of model-based testing of the MCP} varies to an extent, even without consideration of non-uniform models. Elaborating on the case that each maritime service model differs both in purpose, implementation style and exhaustiveness, creating test suites similar to those described in Section \ref{sec:Uses of model-based testing of the MCP} for each new maritime service will become an extensive project
+\end{itemize}
+\subsection{Automatic model-creation}
+\tbf{Advantages}
+\begin{itemize}
+	\item The first and foremost advantage of automatic model generation is the scalability, which it provides. This comes as the implementation of \tit{one} maritime service model generator module, ideally, will be able to automatically assemble each maritime model without further interference, as opposed to manual model generating.
+	\item As an automatic model generator abides by a set collection of rules and metrics, and would create models following the instructions of an xml specification-file, generated models will never deviate from the uniformity of the generator.
+	\item The uniformity in the generated models will further show advantage, as this will streamline test suite generation either because of the fact that similar models promote similar manual test suite generation, or because of the fact that it allows for almost total automation.
+\end{itemize}
+\tbf{Disadvantages}
+\begin{itemize}
+	\item The obvious disadvantage that comes with automatic model generation is the lack of customization in models. As the generator should handle all models, that can be described through the xml specification files it needs to be generalized, which in turn means less specific models, which lowers the ability to custom-fit each model to its maritime specification counterpart.
+	\item Another inevitable downside to having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
+\end{itemize}
 
 To sum up, both methods will be advantageous, as they will each allow for extensive testing with the former being more time detailed and exhaustive, while a lot more time consuming in the long run, and the latter being less detailed and a lot less time consuming in the long run.

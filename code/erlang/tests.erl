@@ -21,8 +21,27 @@
               psswd/1,
               get_all_states_wrapper/1]).
 
+-include_lib("eunit/include/eunit.hrl").
+
 -compile(export_all).
 -compile(nowarn_export_all).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                   %
+% Contents:                                                         %
+%   Function-specific tests                                         %
+%     Base-level tests                                              %
+%     Wrapper                                                       %
+%     Master-wrapper                                                %
+%                                                                   %
+%   Scenario tests                                                  %
+%     Base-level tests                                              %
+%     Wrapper                                                       %
+%     Master-wrapper                                                %
+%                                                                   %
+%   Wrapper for all tests                                           %
+%                                                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Base-level tests: Function-specific                               %
@@ -32,18 +51,18 @@
 
 start_ship() ->
   {ok, Entity} = mmods:start(ship),
-  mmods:get_type(Entity) == ship.
+  ?assertEqual(mmods:get_type(Entity), ship).
 
 start_service() ->
   {ok, Entity} = mmods:start(service),
-  mmods:get_type(Entity) == service.
+  ?assertEqual(mmods:get_type(Entity), service).
 
 start_company() ->
   {ok, Entity} = mmods:start(company),
-  mmods:get_type(Entity) == company.
+  ?assertEqual(mmods:get_type(Entity), company).
 
 start_error() ->
-  mmods:start(something_different) == {error, not_an_entity}.
+  ?assertEqual(mmods:start(something_different), {error, not_an_entity}).
 
 %%%%% Add_relation
 
@@ -58,7 +77,7 @@ add_relation_legal() ->
   A             = mmods:get_relations(Ship),
   B             = mmods:get_relations(Service),
   C             = mmods:get_relations(Company),
-  {A, B, C} == {[{Service, []}], [{Company, []}, {Ship, []}], [{Service, []}]}.
+  ?assertEqual({A, B, C}, {[{Service, []}], [{Company, []}, {Ship, []}], [{Service, []}]}).
 
 add_relation_illegal() ->
   {ok, Ship}    = mmods:start(ship),
@@ -67,7 +86,7 @@ add_relation_illegal() ->
   {error, illegal_relation} = mmods:add_relation(Company, Ship),
   A             = mmods:get_relations(Ship),
   B             = mmods:get_relations(Company),
-  {A, B} == {[], []}.
+  ?assertEqual({A, B}, {[], []}).
 
 add_relation_existing() ->
   {ok, Ship}    = mmods:start(ship),
@@ -75,7 +94,7 @@ add_relation_existing() ->
   {ok, Ship}    = mmods:add_relation(Ship, Service),
   {error, relation_already_exists} = mmods:add_relation(Ship, Service),
   A             = mmods:get_relations(Ship),
-  A == [{Service, []}].
+  ?assertEqual(A, [{Service, []}]).
 
 %%%%% Add_dependency
 
@@ -84,13 +103,13 @@ add_dependency_legal() ->
   {ok, Service} = mmods:start(service),
   {ok, Ship}    = mmods:add_relation(Ship, Service), 
   ok = mmods:add_dependency(Ship, Service, fun aux:trivial/1),
-  [{Service, [fun aux:trivial/1]}] == mmods:get_relations(Ship).
+  ?assertEqual([{Service, [fun aux:trivial/1]}], mmods:get_relations(Ship)).
 
 add_dependency_illegal() ->  
   {ok, Ship}    = mmods:start(ship),
   {ok, Service} = mmods:start(service),
   mmods:add_dependency(Ship, Service, fun aux:trivial/1),
-  [] == mmods:get_relations(Ship).
+  ?assertEqual([], mmods:get_relations(Ship)).
 
 %%%%% Add_info
 
@@ -100,14 +119,14 @@ add_info_multiple() ->
   ok         = mmods:add_info(Ship, b),
   ok         = mmods:add_info(Ship, c),
   ok         = mmods:add_info(Ship, d),
-  [d, c, b, a] == mmods:get_info(Ship).
+  ?assertEqual([d, c, b, a], mmods:get_info(Ship)).
 
 add_info_existing() ->
   {ok, Ship} = mmods:start(ship),
   ok         = mmods:add_info(Ship, a),
   ok         = mmods:add_info(Ship, a),
   ok         = mmods:add_info(Ship, a),
-  [a] == mmods:get_info(Ship).
+  ?assertEqual([a], mmods:get_info(Ship)).
 
 %%%%% Remove_info
 
@@ -115,7 +134,7 @@ remove_info_once() ->
   {ok, Ship} = mmods:start(ship),
   ok         = mmods:add_info(Ship, a),
   ok         = mmods:remove_info(Ship, a),
-  [] == mmods:get_info(Ship).
+  ?assertEqual([], mmods:get_info(Ship)).
 
 remove_info_multiple() ->
   {ok, Ship}   = mmods:start(ship),
@@ -127,7 +146,7 @@ remove_info_multiple() ->
   ok           = mmods:remove_info(Ship, b),
   ok           = mmods:remove_info(Ship, c),
   ok           = mmods:remove_info(Ship, d),
-  [a] == mmods:get_info(Ship).
+  ?assertEqual([a], mmods:get_info(Ship)).
 
 %%%%% Request_info
 
@@ -141,7 +160,7 @@ request_info_no_deps() ->
   {ok, Ship}    = mmods:request_info(Ship, Service, a, []),
   A             = mmods:get_info(Service),
   B             = mmods:get_info(Ship),
-  {A, B} == {[b], [a]}.
+  ?assertEqual({A, B}, {[b], [a]}).
 
 request_info_deps() ->
   {ok, Ship}    = mmods:start(ship),
@@ -154,7 +173,7 @@ request_info_deps() ->
   {ok, Ship}    = mmods:request_info(Ship, Service, a, [answer]),
   A             = mmods:get_info(Service),
   B             = mmods:get_info(Ship),
-  {A, B} == {[b], [a]}.
+  ?assertEqual({A, B}, {[b], [a]}).
 
 request_info_non_existent() ->
   {ok, Ship}    = mmods:start(ship),
@@ -165,7 +184,7 @@ request_info_non_existent() ->
   {ok, []}      = mmods:request_info(Ship, Service, b, []),
   A             = mmods:get_info(Service),
   B             = mmods:get_info(Ship),
-  {A, B} == {[a], []}.
+  ?assertEqual({A, B}, {[a], []}).
 
 %%%%% Getter-functions
 
@@ -180,55 +199,56 @@ get_all() ->
   R                   = mmods:get_relations(Ship),
   S                   = mmods:get_self(Ship),
   I                   = mmods:get_info(Ship),
-  TRSI == {ship,[{Serv,[dep_placeholder]}], Ship, [oh_wow]}.
+  ?assertEqual(TRSI, {ship,[{Serv,[dep_placeholder]}], Ship, [oh_wow]}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Wrapper functions: Function-specific                              %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 start() ->
-  true = start_ship(),
-  true = start_service(),
-  true = start_company(),
-  true = start_error().
+  start_ship(),
+  start_service(),
+  start_company(),
+  start_error().
 
 add_relation() ->
-  true = add_relation_legal(),
-  true = add_relation_illegal(),
-  true = add_relation_existing().
+  add_relation_legal(),
+  add_relation_illegal(),
+  add_relation_existing().
 
 add_dependency() ->
-  true = add_dependency_legal(),
-  true = add_dependency_illegal().
+  add_dependency_legal(),
+  add_dependency_illegal().
 
 add_info() ->
-  true = add_info_multiple(),
-  true = add_info_existing().
+  add_info_multiple(),
+  add_info_existing().
 
 remove_info() ->
-  true = remove_info_once(),
-  true = remove_info_multiple().
+  remove_info_once(),
+  remove_info_multiple().
 
 request_info() ->
-  true = request_info_no_deps(),
-  true = request_info_deps(),
-  true = request_info_non_existent().
+  request_info_no_deps(),
+  request_info_deps(),
+  request_info_non_existent().
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Master-wrapper function: Function-specific                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 main_funcs() ->
-  true = start(),
-  true = add_relation(),
-  true = add_dependency(),
-  true = add_info(),
-  true = remove_info(),
-  true = request_info(),
-  true = get_all().
+  start(),
+  add_relation(),
+  add_dependency(),
+  add_info(),
+  remove_info(),
+  request_info(),
+  get_all(),
+  function_wrapper_passed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Scenario tests                                                    %
+% Base-level tests: Scenarios                                       %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% Multiple nodes
@@ -258,7 +278,7 @@ multiple_coms() ->
   {ok, []}   = mmods:request_info(Ship, Serv, correct, []),
   {ok, [correct]} = mmods:request_info(Ship, Serv, is, []),
   {ok, [is, correct]} = mmods:request_info(Ship, Serv, this, []),
-  [this, is, correct] == mmods:get_info(Ship).
+  ?assertEqual([this, is, correct], mmods:get_info(Ship)).
 
 multiple_serv(Order) ->
   {ok, Ship} = mmods:start(ship),
@@ -289,7 +309,7 @@ multiple_serv(Order) ->
 
   req_it(Ship, Order, [Ser1, Ser2, Ser3], [correct, is, this], 1),
 
-  [this,is,correct] == mmods:get_info(Ship).
+  ?assertEqual([this,is,correct], mmods:get_info(Ship)).
 
 req_it(_, [], _, _, _) ->
   ok;
@@ -330,7 +350,7 @@ service_choose_company() ->
 
   {ok, []}   = mmods:request_info(Ship, Serv, c, []),
 
-  [c] == mmods:get_info(Ship).
+  ?assertEqual([c], mmods:get_info(Ship)).
 
 bad_connection_from() ->
   {ok, Shp1} = mmods:start(ship),
@@ -349,7 +369,8 @@ bad_connection_from() ->
 
   {ok, []}   = mmods:request_info(Shp1, Serv, a, []),
   {ok, []}   = mmods:request_info(Shp2, Serv, a, []),
-  [] == mmods:get_info(Shp1) andalso [] == mmods:get_info(Shp2).
+  ?assertEqual([], mmods:get_info(Shp1)),
+  ?assertEqual([], mmods:get_info(Shp2)).
 
 bad_connection_to() ->
   {ok, Shp1} = mmods:start(ship),
@@ -369,7 +390,8 @@ bad_connection_to() ->
   {ok, []}   = mmods:request_info(Shp1, Serv, a, []),
   {ok, []}   = mmods:request_info(Shp2, Serv, a, []),
 
-  [] == mmods:get_info(Shp1) andalso [] == mmods:get_info(Shp2).
+  ?assertEqual([], mmods:get_info(Shp1)),
+  ?assertEqual([], mmods:get_info(Shp2)).
 
 ok_connection_two_ships() ->
   {ok, Shp1} = mmods:start(ship),
@@ -390,7 +412,8 @@ ok_connection_two_ships() ->
   {ok, []}   = mmods:request_info(Shp1, Serv, a, []),
   {ok, []}   = mmods:request_info(Shp2, Serv, a, []),
 
-  [a] == mmods:get_info(Shp1) andalso [a] == mmods:get_info(Shp2).
+  ?assertEqual([a], mmods:get_info(Shp1)),
+  ?assertEqual([a], mmods:get_info(Shp2)).
 
 first_come_first_served() ->
   {ok, Shp1} = mmods:start(ship),
@@ -407,33 +430,36 @@ first_come_first_served() ->
   {ok, Shp1} = mmods:request_info(Shp1, Serv, a_steak, []),
   {ok, []}   = mmods:request_info(Shp2, Serv, a_steak, []),
 
-  [a_steak] == mmods:get_info(Shp1) andalso [] == mmods:get_info(Shp2).
+  ?assertEqual([a_steak], mmods:get_info(Shp1)),
+  ?assertEqual([], mmods:get_info(Shp2)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Scenario tests: wrapper                                           %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 main_scenarios() ->
-  true = multiple_coms(),
-  true = multiple_serv([1,2,3]),
-  true = multiple_serv([1,3,2]),
-  true = multiple_serv([2,1,3]),
-  true = multiple_serv([2,3,1]),
-  true = multiple_serv([3,2,1]),
-  true = multiple_serv([3,1,2]),
-  true = service_choose_company(),
-  true = bad_connection_from(),
-  true = bad_connection_to(),
-  true = ok_connection_two_ships(),
-  true = first_come_first_served().
+  multiple_coms(),
+  multiple_serv([1,2,3]),
+  multiple_serv([1,3,2]),
+  multiple_serv([2,1,3]),
+  multiple_serv([2,3,1]),
+  multiple_serv([3,2,1]),
+  multiple_serv([3,1,2]),
+  service_choose_company(),
+  bad_connection_from(),
+  bad_connection_to(),
+  ok_connection_two_ships(),
+  first_come_first_served(),
+  scenario_wrapper_passed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The one wrapper to rule them all                                          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 main() ->
-  true = main_funcs(),
-  true = main_scenarios().
+  main_funcs(),
+  main_scenarios(),
+  mega_wrapper_passed.
 
 %%%%% Other
 
@@ -446,5 +472,5 @@ test_write_read()->
   A = mmods:get_type(aux:read_v("Sh", NL3, VL3)),
   B = mmods:get_type(aux:read_v("Se", NL3, VL3)),
   C = mmods:get_type(aux:read_v("Co", NL3, VL3)),
-  {A, B, C} == {ship, service, company}.
+  ?assertEqual({A, B, C}, {ship, service, company}).
 

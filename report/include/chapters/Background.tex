@@ -1,27 +1,27 @@
 \chapter{Background}
 
 \section{The Maritime Connectivity Platform}
-The Maritime Connectivity Platform (MCP), which is formally known as the Maritime Cloud is a platform, developed by EfficienSea2 \cite{efficienSea2}, which is led by the Danish Maritime Consortium. MCP is a communication framework, that is to ensure efficient, reliable and secure communication, and exchange of information in the maritime sector.
+The Maritime Connectivity Platform (MCP), formally known as the Maritime Cloud, is a platform, developed by EfficienSea2~\cite{efficienSea2}, which is led by the Danish Maritime Authority\TODOOPT{Danish Maritime Authority according to efficiensea2.org/about}. MCP is a communication framework, that is to ensure efficient, reliable and secure communication, and exchange of information in the maritime sector.
 The goal of the platform is to connect maritime stakeholders with maritime information services.
 \begin{figure}
 	\includegraphics[width=1\textwidth]{figures/MCPStructure}
-	\caption{Diagram, describing the structure of MCP. \cite{efficienSea2}}
+	\caption{Diagram, describing the structure of MCP\cite{efficienSea2}.}
 	\label{fig:MCPStruct}
 \end{figure}\noindent
 A high-level diagram, describing the structure of the MCP can be seen in Figure \ref{fig:MCPStruct}. Here it is shown that maritime stakeholders are connected with the maritime services through the Identity Registry, the Service Registry and the Messaging Service.
 
 \subsection{Identity Registry}
-Here the relevant information regarding maritime stakeholders are stored. This information needs to be authorized and stored at a safe location in order for the security of the MCP to be sufficient. The Identity Registry on the MCP is equivalent to the Central Person Registry of a country. The Identity Registry is vital to the MCP in it ensures the solution's authenticity, integrity, and confidentiality. Maritime stakeholders are, through the Identity Registry provided with a single login to all Maritime Services.\cite{efficienSea2}
+Here the relevant information regarding maritime stakeholders are stored. This information needs to be authorized and stored at a safe location in order for the security of the MCP to be sufficient. The Identity Registry on the MCP is equivalent to the Central Person Registry of a country. The Identity Registry is vital to the MCP in it ensures the solution's authenticity, integrity, and confidentiality. Maritime stakeholders are, through the Identity Registry provided with a single login to all Maritime Services~\cite{efficienSea2}.
 \subsection{Service Registry}
-The Service Registry acts to Maritime Services as the Identity Registry acts to the Maritime Stakeholders. Here all Maritime Services are registered and stored. The Service Registry holds both commercial and non-commercial, as well as authorized and non-authorized services, either free of charge or for a fee. The Service Registry is comparable with the App Store or Google Play in that it distributes services of all kinds to registered users.\cite{efficienSea2}
+The Service Registry acts to Maritime Services as the Identity Registry acts to the Maritime Stakeholders. Here all Maritime Services are registered and stored. The Service Registry holds both commercial and non-commercial, as well as authorized and non-authorized services, either free of charge or for a fee. The Service Registry is comparable with the App Store or Google Play in that it distributes services of all kinds to registered users~\cite{efficienSea2}.
 \subsection{Messaging Service}
-The messaging service in the MCP is an exchange of information, that ties systems, connected to the platform to each other. The messaging service accounts for the available means of communication, as well as the geographical coordinates of the destination as well as origin of the information, being sent \cite{efficienSea2}.
+The messaging service in the MCP is an exchange of information, that ties systems, connected to the platform to each other. The messaging service accounts for the available means of communication, as well as the geographical coordinates of the destination as well as origin of the information, being sent~\cite{efficienSea2}.
 
 \section{Parsing}
 Parsing is a widely known tool in computer science. The term expresses a function, taking a string of input, from which it yields a parse tree that it constructs when applying the specific parser logic upon the input string. The parser performs a lexical analysis, meaning that it converts sections of the string to tokens that are ultimately easier to handle by an interpreter. When using Haskel to write parsers a library family known as parser combinators is very popular, in that it allows the programmer to embed domain specific language directly in the parser. The concept of combinatory parsing is using one or more of these libraries of higher-order functions, known as parser combinators. Parser combinators take in parsers of any kind imaginable as input and returns a new set of parsers as an output.
 
 \subsection{Monadic Parsing}
-Before 1995, implementation of top-down parsing, using parser combinators ran in and used both exponential time and space complexity when applied to ambiguous, context free grammars. At that time Frost and Szydlowski demonstrated that memoization can enhance parser combinators in order to optimize time complexity to polynomial. One year later through the use of monads parser combinators were reconstructed by Frost which introduced systematic and correct threading of memoization throughout execution\cite{memoization}.
+Before 1995, implementation of top-down parsing, using parser combinators ran in and used both exponential time and space complexity when applied to ambiguous, context free grammars. At that time Frost and Szydlowski demonstrated that memoization can enhance parser combinators in order to optimize time complexity to polynomial\cite{memoization}. One year later through the use of monads parser combinators were reconstructed by Frost which introduced systematic and correct threading of memoization throughout execution.
 
 \section{Property-Based Testing}
 
@@ -29,7 +29,7 @@ Property based testing, also known as Automation Testing, is the principle of te
 
 Property-based testing solves this problem by setting up test cases that take into account mathematical models, describing the desired behavior of the code. Once such a test case has been created, semi-random execution instances can be run to the point of literal exhaustion, and thus a relatively small program can test for thousands of occurrences at once.
 
-An example of this can be seen in Listing \ref{fig:pbtEx}, that describe a snippet of Haskell quicksort code. A property of quicksort is that a list, sorted once is equivalent to a list, sorted twice, which is what the function \ttt{prop\_idempotent} validates.
+An example of this can be seen in Listing \ref{fig:pbtEx}, that describe a snippet of Haskell quicksort code. A property of quicksort is that a list, sorted once is equivalent to a list, sorted twice, which is what the function \lstinline{prop_idempotent} validates.
 \TODO{Change to Erlang}
 \begin{figure}
 	\centering
@@ -45,7 +45,7 @@ qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
 
 prop_idempotent xs = qsort (qsort xs) == qsort xs
 	\end{lstlisting}
-	\caption{Example of Property-Based Testing. \cite{realWorldHaskell11}}
+	\caption{Example of Property-Based Testing~\cite{realWorldHaskell11}}.
 	\label{fig:pbtEx}
 \end{figure}
 

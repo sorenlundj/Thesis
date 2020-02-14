@@ -1,32 +1,32 @@
 \chapter{Results}
 
-In this chapter I will provide a layout of the experiments, which I have set up, in order to verify and present the functionality of the implementation as a whole.
-\TODO{More}
+In this chapter I will provide a layout of the experiments, which I have set up, in order to verify and present the functionality of the implementation as a whole. This includes testing of all modules, contained in the implementation, as well as the final demonstration, that a model, generated manually can be replicated automatically.
 
 \section{Testing}
 
 Testing of the implementation has been divided into two parts, one of which is detailed in Subsection \ref{ssec:Testing the Manual Model Creator}, the other in Subsection \ref{ssec:Testing the Automatic Model Creator}.
 
 \subsection{Testing the Manual Model Creator}
-The manual model creator module, contained in the file \ttt{mmods.erl} exports 11 functions, of which 7 are model creation functions\footnote{\ttt{start/1}, \ttt{add\_relation/2}, \ttt{add\_dependency/3}, \ttt{add\_info/2}, \ttt{remove\_info/2}, \ttt{transfer\_info/3}}, 4 are data-fetching functions\footnote{\ttt{get\_state/1}, \ttt{get\_type/1}, \ttt{get\_relations/1}, \ttt{get\_info/1}} and a single one is a simulation function \footnote{\ttt{request\_info/4}}.
+The manual model creator module, contained in the file \ttt{mmods.erl} exports 11 functions, of which 7 are model creation functions\footnote{\lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \lstinline{remove_info/2}, \lstinline{transfer_info/3}}, 4 are data-fetching functions\footnote{\lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, \lstinline{get_info/1}} and a single one is a simulation function\footnote{\lstinline{request_info/4}}.
 
-All testing of the mmods module has been contained in the \ttt{tests.erl} file, which includes multiple function-specific tests for each API function, exported from the mmods module. After compilation, all tests can be run in an Erlang shell, either as the normal zero-input functions they are, or as the \ttt{main\_funcs/0} function, which encapsulates all created function-specific test cases. All tests are created to return the atom \ttt{true} if they succeed, or the corresponding error message, if they do not. All API-function-specific tests returned true, indicating their correctness. The getter functions were only tested with a single case, \ttt{get\_all/0}, due to their implementation being extremely simple.
+All testing of the mmods module has been contained in the \ttt{tests.erl} file, which includes multiple function-specific tests for each API function, exported from the mmods module. After compilation, all tests can be run in an Erlang shell, either as the normal zero-input functions they are, or as the \linebreak \lstinline{main_funcs/0} function, which encapsulates all created function-specific test cases. All tests are created to return the atom \ttt{true} if they succeed, or the corresponding error message, if they do not. All API-function-specific tests returned true, indicating their correctness. The getter functions were only tested with a single case, \lstinline{get_all/0}, due to their implementation being extremely simple.
 
 The remaining part of the \ttt{tests.erl}-file includes the scenario-oriented tests. As the description entails, these tests describe the outcome of seven scenarios; one for every scenario-function test. The tests, contained in this section of the file are:
+
 \begin{description}
-  \item[\ttt{multiple\_coms/0}]\ \\
+  \item[{multiple\_coms/0}]\ \\
     This test case shows that a single service is able to determine which company to draw information from in an information request. The service \ttt{Serv} is connected to the three companies \ttt{Com1}, \ttt{Com2}, and \ttt{Com3}, which hold the atoms \ttt{this}, \ttt{is}, \ttt{correct} respectively. For each request, as \ttt{Ship} requests the same service entity \ttt{Serv} for the three atoms, \ttt{Serv} must select which company to fetch the data from.
-  \item[\ttt{multiple\_serv/1}]\ \\
+  \item[{multiple\_serv/1}]\ \\
     This test case shows that multiple service entities can link a ship entity and a company entity. The ship entity \ttt{Ship} and the company entity \ttt{Comp} are linked thrice by the service entities \ttt{Ser1}, \ttt{Ser2}, and \ttt{Ser3}, and the three atoms \ttt{this}, \ttt{is}, \ttt{correct} are requested. The three atoms are requested one at a time, through each relation, and no matter the order, the right combination is fetched. This function is executed six times; one for each permutation of the order in which to request to the three service entities.
-  \item[\ttt{service\_choose\_company/0}]\ \\
+  \item[{service\_choose\_company/0}]\ \\
     This test case shows that when a service entity is linked to several company entities, each containing different data, it is able to determine which company to fetch data from. Here the ship \ttt{Ship} is mutually linked to \ttt{Serv}, which is then mutually linked to companies \ttt{Com[1..5}. As \ttt{Ship} requests the atom \ttt{c}, \ttt{Serv} will have to determine that \ttt{Com1} holds the relevant information, and thus this is transfered to \ttt{Ship}.
-  \item[\ttt{bad\_connection\_from/0}]\ \\
+  \item[{bad\_connection\_from/0}]\ \\
     This test case shows what happens to a request when the service entity is linked to a company entity, but the connection is not mutual. In this case, as \ttt{Shp1} and \ttt{Shp2} request \ttt{Serv}, \ttt{Serv} passes the requests on to \ttt{Comp}. \ttt{Serv} is able to make the requests, however as no channels of communication are set up from \ttt{Comp} to \ttt{Serv}, no information is able to be returned, and thus no ships receive information.
-  \item[\ttt{bad\_connection\_to/0}]\ \\
+  \item[{bad\_connection\_to/0}]\ \\
     This test case works similar to \ttt{bad\_connection\_from/0}, however now it is the connection from \ttt{Serv} to \ttt{Comp} that is missing. In that case \ttt{Serv} finds none to pass the request on, and thus no ships receive information.
-  \item[\ttt{ok\_connection/0}]\ \\
+  \item[{ok\_connection/0}]\ \\
     This test case works as the last two test cases should ideally have worked. That is, two ship entities request a service entity, which fetches data from a company entity, and thus, data is returned to the ship entities.
-  \item[\ttt{first\_come\_first\_served/0}]\ \\
+  \item[{first\_come\_first\_served/0}]\ \\
     This test case shows that information is removed from a service entity, after it is sent. In this case, the two ship entities \ttt{Shp1}, and \ttt{Shp2} are both mutually connected to the service entity \ttt{Serv}. The service entity holds the atom \ttt{a\_steak}, and when both ship entities request said atom, it will be distributed to whomever requested first. 
 \end{description}
 
@@ -34,7 +34,9 @@ The scenario-oriented test cases are all included in the wrapper-function \ttt{m
 
 \subsection{Testing the Automatic Model Creator}
 
-This example represents the 
+The automatic model creation algorithm makes use of the mmods module, and as this has been tested for correctness in Subsection \ref{ssec:Testing the Manual Model Creator}, it is fair to assume that this module will also function correctly in the context of the automatic model creator. 
+
+The two modules that distinguishes the automatic model creator from its manual counterpart is the parser and the interpreter
 
 \begin{figure}
 	\centering

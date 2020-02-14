@@ -13,13 +13,18 @@
                 get_info/1,
                 request_info/4]).
 
--import(aux, [read_at_index/2,
+-import(aux, [read_val_by_id/3,
+              split_tuple_list/3,
+              read_at_index/2,
               write_v/4,
               read_v/3,
               trivial/1,
               user/1,
               psswd/1,
               get_all_states_wrapper/1]).
+
+-import(main, [sparse/1,
+               interpret/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -29,17 +34,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                   %
 % Contents:                                                         %
-%   Function-specific tests                                         %
-%     Base-level tests                                              %
-%     Wrapper                                                       %
-%     Master-wrapper                                                %
+%   mmods tests:                                                    %
+%     Function-specific tests                                       %
+%       Base-level tests                                            %
+%       Wrapper                                                     %
+%       Master-wrapper                                              %
 %                                                                   %
-%   Scenario tests                                                  %
-%     Base-level tests                                              %
-%     Wrapper                                                       %
-%     Master-wrapper                                                %
+%     Scenario tests                                                %
+%       Base-level tests                                            %
+%       Wrapper                                                     %
+%       Master-wrapper                                              %
 %                                                                   %
-%   Wrapper for all tests                                           %
+%     Wrapper for all mmods tests                                   %
+%                                                                   %
+%   parser tests                                                    %
+%                                                                   %
+%   interpreter tests                                               %
+%                                                                   %
+%   Finite state machine comparer                                   %
+%                                                                   %
+%   other                                                           %
 %                                                                   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -453,15 +467,186 @@ main_scenarios() ->
   scenario_wrapper_passed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% The one wrapper to rule them all                                          %
+% All mmods-tests-wrapper                                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+main_mmods() ->
+  main_funcs(),
+  main_scenarios(),
+  mmods_wrapper_passed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   parser tests                                                    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+parse_tests() ->
+  Emp_tag        = "<a></a>",
+  Num_tag        = "<a>1234</a>",
+  Lis_tag        = "<a>[1,2,3,4]</a>",
+  Let_tag        = "<a>abcde</a>",
+  Mul_tag        = "<a><b>text</b><c>1234</c><d>[1,a,2,b]</d></a>",
+  Sam_tag        = "<a><a></a></a>",
+  Spa_tag        = "<a>1 2 3 4 5</a>",
+  Tag_in_mul_tag = "<a><b><a>hello</a></b><c></c><d></d></a>",
+  ?assertEqual(main:sparse(Emp_tag),{a,[]}),
+  ?assertEqual(main:sparse(Num_tag),{a,"1234"}),
+  ?assertEqual(main:sparse(Lis_tag),{a,"[1,2,3,4]"}),
+  ?assertEqual(main:sparse(Let_tag),{a,"abcde"}),
+  ?assertEqual(main:sparse(Mul_tag),{a,[{b,"text"},{c,"1234"},{d,"[1,a,2,b]"}]}),
+  ?assertEqual(main:sparse(Sam_tag),{a,[{a,[]}]}),
+  ?assertEqual(main:sparse(Spa_tag),{a,"1 2 3 4 5"}),
+  ?assertEqual(main:sparse(Tag_in_mul_tag),{a,[{b,[{a,"hello"}]},{c,[]},{d,[]}]}),
+  parse_tests_passed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   interpreter tests                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+interpreter_tests() ->
+  No_entities = {entities, []},
+  Model       = {entities,
+    [{ent,
+         [{type,"ship"},
+          {name,"Ship"},
+          {relations,[{relation,"Service"}]},
+          {dependencies,
+              [{dependency,[{to,"Service"},{constraint,"fun psswd"}]},
+               {dependency,[{to,"Service"},{constraint,"fun user"}]}]},
+          {information,[]},
+          {requests,
+              [{request,
+                   [{to,"Service"},
+                    {data,"map"},
+                    {answers,[{answer,"anton"},{answer,"1234"}]}]}]}]},
+     {ent,
+         [{type,"service"},
+          {name,"Service"},
+          {relations,[{relation,"Ship"},{relation,"Company"}]},
+          {dependencies,[]},
+          {information,[]},
+          {requests,[]}]},
+     {ent,
+         [{type,"company"},
+          {name,"Company"},
+          {relations,[{relation,"Service"}]},
+          {dependencies,[]},
+          {information,[{info,"map"}]},
+          {requests,[]}]}]},
+  [{_, _, CoId, _}, {_, _, SeId, _}, {_, _, ShId, _}] = main:interpret(Model),
+  ?assertEqual(main:interpret(No_entities), []),
+  [{CoIdRel, _}] = mmods:get_relations(CoId),
+  [{SeIdRel1, _}, {SeIdRel2, _}] = mmods:get_relations(SeId),
+  [{ShIdRel, _}] = mmods:get_relations(ShId),
+
+  ?assertEqual(SeId, CoIdRel),
+  ?assertEqual({CoId, ShId}, {SeIdRel1, SeIdRel2}),
+  ?assertEqual(SeId, ShIdRel),
+
+  erlang:display(mmods:get_type(CoId)),
+  erlang:display(mmods:get_type(SeId)),
+  erlang:display(mmods:get_type(ShId)),
+  interpreter_tests_passed.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The one wrapper to rule them all                                  %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 main() ->
-  main_funcs(),
-  main_scenarios(),
-  mega_wrapper_passed.
+  main_mmods(),
+  parse_tests(),
+  interpreter_tests().
 
-%%%%% Other
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Finite state machine comparer                                     %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+equiv_fsms(L_fsm, R_fsm) ->
+  Length = length(L_fsm),
+  case Length == length(R_fsm) of
+    true ->
+      {L_ids, R_ids} = map_ids(L_fsm, R_fsm, [], []),
+      case check_types(L_fsm, R_fsm) of
+        true ->
+          case check_relations(L_fsm, R_fsm, L_ids, R_ids) of
+            true ->
+              case check_info(L_fsm, R_fsm) of
+                true ->
+                  fsms_are_equivalent;
+                false ->
+                  error_info_mismatch
+              end;
+            false ->
+              error_relation_mismatch
+          end;
+        false ->
+          error_type_mismatch
+      end;
+    false ->
+      error_length_mismatch
+  end.
+
+map_ids([], [], L_res, R_res) ->
+  {L_res, R_res};
+map_ids([L_head|L_fsm], [R_head|R_fsm], L_res, R_res) ->
+  {_, _, L_Id, _} = L_head,
+  {_, _, R_Id, _} = R_head,
+  map_ids(L_fsm, R_fsm, L_res ++ [L_Id], R_res ++ [R_Id]).
+
+check_types([], []) ->
+  true;
+check_types([L_head|L_fsm], [R_head|R_fsm]) ->
+  {L_type, _, _, _} = L_head,
+  {R_type, _, _, _} = R_head,
+  case L_type == R_type of
+    true ->
+      check_types(L_fsm, R_fsm);
+    false ->
+      false
+  end.
+
+check_relations([],[], _, _) ->
+  true;
+check_relations([L_head|L_fsm], [R_head|R_fsm], L_ids, R_ids) ->
+  {_, L_rels, _, _} = L_head,
+  {_, R_rels, _, _} = R_head,
+  {L_r, L_d} = aux:split_tuple_list(L_rels, [], []),
+  {R_r, R_d} = aux:split_tuple_list(R_rels, [], []),
+  case L_d == R_d of
+    true ->
+      case compare_relations(L_r, R_r, L_ids, R_ids) of
+        true ->
+          check_relations(L_fsm, R_fsm, L_ids, R_ids);
+        false ->
+          false
+      end;
+    false ->
+      false
+  end.
+
+compare_relations([], [], _, _) ->
+  true;
+compare_relations([L_head|L_r], [R_head|R_r], L_ids, R_ids) ->
+  R_test = aux:read_val_by_id(L_head, L_ids, R_ids),
+  case R_test == R_head of
+    true ->
+      compare_relations(L_r, R_r, L_ids, R_ids);
+    false ->
+      false
+  end.
+  
+check_info([], []) ->
+  true;
+check_info([L_head|L_fsm], [R_head|R_fsm]) ->
+  {_, _, _, L_info} = L_head,
+  {_, _, _, R_info} = R_head,
+  case L_info == R_info of
+    true ->
+      check_info(L_fsm, R_fsm);
+    false ->
+      false
+  end.
+
+%%%%% other
 
 test_write_read()->
   NL = [],
@@ -473,4 +658,3 @@ test_write_read()->
   B = mmods:get_type(aux:read_v("Se", NL3, VL3)),
   C = mmods:get_type(aux:read_v("Co", NL3, VL3)),
   ?assertEqual({A, B, C}, {ship, service, company}).
-

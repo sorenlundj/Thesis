@@ -1,22 +1,34 @@
 -module(main).
 
--import(parser, [xml_parser/1]).
+-import(parser, [file_parser/1,
+				 string_parser/1]).
 
 -import(interpreter, [interp/1]).
 
--export([parse/1,
+-export([fparse/1,
+         sparse/1,
          interpret/1,
-         parse_and_interpret/1]).
+         fparse_and_interpret/1,
+         sparse_and_interpret/1]).
 
-parse(File) ->
-  Term = parser:xml_parser(File),
+fparse(File) ->
+  Term = parser:file_parser(File),
+  Term.
+
+sparse(File) ->
+  Term = parser:string_parser(File),
   Term.
 
 interpret(Term) ->
   Model = interpreter:interp(Term),
   Model.
 
-parse_and_interpret(File) ->
-  Term  = parse(File),
+fparse_and_interpret(File) ->
+  Term  = fparse(File),
+  Model = interpret(Term),
+  Model.
+
+sparse_and_interpret(File) ->
+  Term  = fparse(File),
   Model = interpret(Term),
   Model.

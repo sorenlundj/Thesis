@@ -31,8 +31,8 @@
       <type>service</type>
       <name>Service</name>
       <relations>
-        <relation>Ship</relation>
         <relation>Company</relation>
+        <relation>Ship</relation>
       </relations>
       <dependencies></dependencies>
       <information></information>

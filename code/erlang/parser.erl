@@ -2,13 +2,20 @@
 
 -include_lib("xmerl/include/xmerl.hrl"). 
 
--export([xml_parser/1]).
+-export([file_parser/1,
+         string_parser/1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % XML parser                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xml_parser(File) ->
+file_parser(File) ->
+  parser(File, file).
+
+string_parser(String) ->
+  parser(String, string).
+
+parser(File, Type) ->
   AccFun = fun(#xmlText{value=V} = _, Acc, GS) -> 
                case re:run(V, "^\\s*$") of
                  {match, _} -> {Acc, GS}; 
@@ -25,6 +32,6 @@ xml_parser(File) ->
                (E, GS) -> 
                     {E, GS} 
             end,
-  {Xml, _} = xmerl_scan:file(File, [{acc_fun, AccFun}, {hook_fun, HookFun}]),
+  {Xml, _} = xmerl_scan:Type(File, [{acc_fun, AccFun}, {hook_fun, HookFun}]),
   Xml.
 

@@ -132,9 +132,9 @@ token(String) ->
     "service" -> service;
     "company" -> company;
     % functions
-    "fun psswd"   -> fun psswd/1;
-    "fun user"    -> fun user/1;
-    "fun trivial" -> fun trivial/1;
+    "fun psswd"   -> fun aux:psswd/1;
+    "fun user"    -> fun aux:user/1;
+    "fun trivial" -> fun aux:trivial/1;
     _             -> error
   end.
 

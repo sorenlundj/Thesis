@@ -38,70 +38,81 @@ The automatic model creation algorithm makes use of the mmods module, and as thi
 
 The two modules that distinguishes the automatic model creator from its manual counterpart is the parser and the interpreter. As the parser is a standardized xml-to-Erlang, there is no need to check for edge-cases, correlating directly to the current implementation, as there are none. Therefore the parser is tested with the function \lstinline{parse_tests/0}, which includes all test cases. The cases tested for are correct handling of strings, integers, lists, multiple sub-tags in one tag, a tag occurring in another tag with the same name, handling of spaces. The test is run with \lstinline{tests:parse_tests().} in an Erlang shell, which will reveal that all tests pass.
 
+\section{Experiments}
 
+The primary goal of the project is to construct maritime models, describing maritime services, in the shape of finite state machines, both manual and automatic, followed by an assessment of the advantages and disadvantages of each type. As summarized in Section \ref{sec:Summary: Advantages and Disadvantages}, manual model-building provides more control to the author, while automatic model building allows for more streamlining in the model-building process. Thus, as each method provides unique advantages to the process, a feasible metric of judging the products of each method is their respective attributes. That is, which FSM is able to describe scenarios to the highest degree. In order to determine this, I will compare the results of each model building method, starting with the example, given in Figure \ref{fig:modelExProtocol}.
 
-\begin{figure}
-	\centering
-	\begin{lstlisting}[keywordstyle={}]
-Term =
-    {entities,
-        [{ent,
-             [{type,"ship"},
-              {name,"Ship"},
-              {relations,[{relation,"Service"}]},
-              {dependencies,
-                  [{dependency,[{to,"Service"},{constraint,"fun psswd"}]},
-                   {dependency,[{to,"Service"},{constraint,"fun user"}]}]},
-              {information,[]},
-              {requests,
-                  [{request,
-                       [{to,"Service"},
-                        {data,"map"},
-                        {answers,[{answer,"anton"},{answer,"1234"}]}]}]}]},
-         {ent,
-             [{type,"service"},
-              {name,"Service"},
-              {relations,[{relation,"Ship"},{relation,"Company"}]},
-              {dependencies,[]},
-              {information,[]},
-              {requests,[]}]},
-         {ent,
-             [{type,"company"},
-              {name,"Company"},
-              {relations,[{relation,"Service"}]},
-              {dependencies,[]},
-              {information,[{info,"map"}]},
-              {requests,[]}]}]}
-	\end{lstlisting}
-	\caption{Erlang term, resulting of parsing the file \ttt{protocol.xml} with \ttt{main:parse('xml/protocol.xml')}}
-	\label{fig:protocolParsed}
-\end{figure}
+\subsection{Model equivalence}
 
+Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic} display the results of manual and automatic model creation respectively. By manually inspecting them, it can be seen that the only variance between the two is the process ids, and despite of this, the relationships between the entities are evidently equal in the two models. Also, from manual inspection, it can be seen that information, types and dependencies, distributed between entities are also equal to that of their manual/automatic counterparts.
 
-\begin{figure}
-	\centering
-	\begin{lstlisting}[keywordstyle={}]
-[{company,[{<0.96.0>,[]}],<0.95.0>,["map"]},
- {service,[{<0.95.0>,[]},{<0.97.0>,[]}],<0.96.0>,[]},
- {ship,[{<0.96.0>,
-         [#Fun<aux.1.64654801>,#Fun<aux.0.64654801>]}],
-       <0.97.0>,
-       ["map"]}]
-	\end{lstlisting}
-	\caption{Maritime model, resulting of interpreting the file \ttt{protocol.xml} with \ttt{main:parse\_and\_interpret('xml/protocol.xml')}}
-	\label{fig:protocolParsedInterpreted}
-\end{figure}
-
-\begin{figure}
-  \centering
+\begin{figure}[h]
   \begin{lstlisting}[keywordstyle={}]
 [{company,[{<0.79.0>,[]}],<0.80.0>,["map"]},
  {service,[{<0.78.0>,[]},{<0.80.0>,[]}],<0.79.0>,[]},
- {ship,[{<0.79.0>,
-         [fun aux:user/1,fun aux:psswd/1]}],
+ {ship,[{<0.79.0>,[fun aux:user/1,fun aux:psswd/1]}],
        <0.78.0>,
        ["map"]}]
   \end{lstlisting}
   \caption{Maritime model, resulting of executing the commands, contained within the function \ttt{examples:protocol}}
   \label{fig:protocolManual}
 \end{figure}
+
+\begin{figure}[h]
+  \begin{lstlisting}[keywordstyle={}]
+[{company,[{<0.84.0>,[]}],<0.83.0>,["map"]},
+ {service,[{<0.85.0>,[]},{<0.83.0>,[]}],<0.84.0>,[]},
+ {ship,[{<0.84.0>,[fun aux:user/1,fun aux:psswd/1]}],
+       <0.85.0>,
+       ["map"]}]
+  \end{lstlisting}
+  \caption{Maritime model, resulting of interpreting the file \ttt{protocol.xml} with \lstinline{main:parse_and_interpret('xml/protocol.xml')}}
+  \label{fig:protocolAutomatic}
+\end{figure}
+
+\noindent
+A visual representation of the points, described are displayed in Figure \ref{fig:protocolVisual}, where Sub-figure \ref{subfig:manual} represents the manually created model, and \ref{subfig:automatic} represents the automatically created model.
+
+\begin{figure}[h]
+  \begin{subfigure}{.48\textwidth}
+    \begin{tikzpicture}[->,>=stealth', node distance=2.5 cm, thick]
+      \tikzstyle{every state}=[draw=black,rectangle,rounded corners]
+  
+      \node[state] (A) [align=center]            {ship\\   $<0.78.0>$\\$["map"]$};
+      \node[state] (B) [align=center,below of=A] {service\\$<0.79.0>$};
+      \node[state] (C) [align=center,below of=B] {company\\$<0.80.0>$\\$["map"]$};
+  
+      \path (A) edge[bend right,left] node[align=left]{fun aux:user/1\\
+                                                       fun aux:psswd/1} (B)
+            (B) edge[bend right,left] node{} (A)
+                edge[bend right,left] node{} (C) 
+            (C) edge[bend right,left] node{} (B);
+    \end{tikzpicture}
+    \caption{}
+    \label{subfig:manual}
+  \end{subfigure}
+  \begin{subfigure}{.48\textwidth}
+    \begin{tikzpicture}[->,>=stealth', node distance=2.5 cm, thick]
+      \tikzstyle{every state}=[draw=black,rectangle,rounded corners]
+
+      \node[state] (A) [align=center]            {ship\\   $<0.85.0>$\\$["map"]$};
+      \node[state] (B) [align=center,below of=A] {service\\$<0.84.0>$};
+      \node[state] (C) [align=center,below of=B] {company\\$<0.83.0>$\\$["map"]$};
+  
+      \path (A) edge[bend right,left] node[align=left]{fun aux:user/1\\
+                                                       fun aux:psswd/1} (B)
+            (B) edge[bend right,left] node{} (A)
+                edge[bend right,left] node{} (C) 
+            (C) edge[bend right,left] node{} (B);
+    \end{tikzpicture}
+    \caption{}
+    \label{subfig:automatic}
+  \end{subfigure}
+  \caption{Visual representation of Figures \ref{fig:protocolManual}, and \ref{fig:protocolAutomatic}.}
+  \label{fig:protocolVisual}
+\end{figure}
+%TODO: write about equiv_fsms here
+Having concluded that the resulting models\footnote{Models are collections of all states in the FSM} are equal, in order for the two FSMs to be equivalent, all available actions must also be equal. The functionality of the automatic implementation is build to utilize the manual model building module, and thus, their functionalities are near identical, only limited by the functionality of the parser and interpreter's ability to feed instructions to \ttt{mmods.erl}.
+%{automatic bruger manual, så funktionaliteten bagved er OGSÅ ens - ergo er samlingerne af states (modellerne) og samlingerne af events (funktionaliteten) ens og så \tit{maa} de to fsms være ens}
+
+

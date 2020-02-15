@@ -179,8 +179,8 @@ get_all_states_wrapper(List) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 trivial(_) -> true.
-user(X)  -> X == "anton".
-psswd(X) -> X == "1234".
+user(X)    -> X == "anton".
+psswd(X)   -> X == "1234".
 
 
 

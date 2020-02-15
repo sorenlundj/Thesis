@@ -560,7 +560,7 @@ main() ->
 % Finite state machine comparer                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-equiv_fsms(L_fsm, R_fsm) ->
+equiv_m_models(L_fsm, R_fsm) ->
   Length = length(L_fsm),
   case Length == length(R_fsm) of
     true ->
@@ -571,7 +571,7 @@ equiv_fsms(L_fsm, R_fsm) ->
             true ->
               case check_info(L_fsm, R_fsm) of
                 true ->
-                  fsms_are_equivalent;
+                  no_inconsistencies_found;
                 false ->
                   error_info_mismatch
               end;

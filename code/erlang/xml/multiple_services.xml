@@ -1,0 +1,52 @@
+<entities>
+  <ent>
+    <type>ship</type>
+    <name>Ship</name>
+    <relations>
+      <relation>Service1</relation>
+      <relation>Service2</relation>
+      <relation>Service3</relation>
+    </relations>
+    <dependencies></dependencies>
+    <information>
+      <info>Ship info</info>
+    </information>
+    <requests></requests>
+  </ent>
+  <ent>
+    <type>service</type>
+    <name>Service1</name>
+    <relations>
+      <relation>Ship</relation>
+    </relations>
+    <dependencies></dependencies>
+    <information>
+      <info>S1 info</info>
+    </information>
+    <requests></requests>
+  </ent>
+  <ent>
+    <type>service</type>
+    <name>Service2</name>
+    <relations>
+      <relation>Ship</relation>
+    </relations>
+    <dependencies></dependencies>
+    <information>
+      <info>S2 info</info>
+    </information>
+    <requests></requests>
+  </ent>
+  <ent>
+    <type>service</type>
+    <name>Service3</name>
+    <relations>
+      <relation>Ship</relation>
+    </relations>
+    <dependencies></dependencies>
+    <information>
+      <info>S3 info</info>
+    </information>
+    <requests></requests>
+  </ent>
+</entities>

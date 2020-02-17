@@ -226,6 +226,9 @@ Submitted: & \@date \\%
   \refstepcounter{todoCounterAll}
   \refstepcounter{todoCounterWrite}
 }
+\newcommand{\TODONO}[1]{
+  \todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,inline]{#1}
+}
 \newcommand{\TODO}[1]{\ifthenelse{{\equal{#1}{ }}}{
     \TODOWRITE
   }{

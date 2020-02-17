@@ -29,6 +29,6 @@ fparse_and_interpret(File) ->
   Model.
 
 sparse_and_interpret(File) ->
-  Term  = fparse(File),
+  Term  = sparse(File),
   Model = interpret(Term),
   Model.

@@ -24,7 +24,14 @@
               get_all_states_wrapper/1]).
 
 -import(main, [sparse/1,
-               interpret/1]).
+               interpret/1,
+               sparse_and_interpret/1,
+               fparse_and_interpret/1]).
+
+-import(examples, [protocol/0,
+                   empty_entity/0,
+                   multiple_services/0,
+                   non_connected_ents/0]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -560,7 +567,24 @@ main() ->
 % Finite state machine comparer                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-equiv_m_models(L_fsm, R_fsm) ->
+equiv_models_tests() ->
+  PM = examples:protocol(),
+  EM = examples:empty_entity(),
+  MM = examples:multiple_services(),
+  NM = examples:non_connected_ents(),
+
+  PA = main:fparse_and_interpret('xml/protocol.xml'),
+  EA = main:fparse_and_interpret('xml/empty_entity.xml'),
+  MA = main:fparse_and_interpret('xml/multiple_services.xml'),
+  NA = main:fparse_and_interpret('xml/non_connected_ents.xml'),
+
+  ?assertEqual(equiv_models(PM, PA), no_inconsistencies_found),
+  ?assertEqual(equiv_models(EM, EA), no_inconsistencies_found),
+  ?assertEqual(equiv_models(MM, MA), no_inconsistencies_found),
+  ?assertEqual(equiv_models(NM, NA), no_inconsistencies_found).
+
+
+equiv_models(L_fsm, R_fsm) ->
   Length = length(L_fsm),
   case Length == length(R_fsm) of
     true ->
@@ -658,3 +682,33 @@ test_write_read()->
   B = mmods:get_type(aux:read_v("Se", NL3, VL3)),
   C = mmods:get_type(aux:read_v("Co", NL3, VL3)),
   ?assertEqual({A, B, C}, {ship, service, company}).
+
+test_interp_anonymous_function() ->
+  S ="<entities>
+  <ent>
+    <type>ship</type>
+    <name>Ship</name>
+    <relations>
+      <relation>Service</relation>
+    </relations>
+    <dependencies>
+      <dependency>
+        <to>Service</to>
+        <constraint>fun (_) -> true end</constraint>
+      </dependency>
+    </dependencies>
+    <information></information>
+    <requests></requests>
+  </ent>
+  <ent>
+      <type>service</type>
+      <name>Service</name>
+      <relations>
+        <relation>Ship</relation>
+      </relations>
+      <dependencies></dependencies>
+      <information></information>
+      <requests></requests>
+  </ent>
+</entities>",
+  ?assertError({badmatch, error}, main:sparse_and_interpret(S), "Interpreter translates anonymous functions to error").

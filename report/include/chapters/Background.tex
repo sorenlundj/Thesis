@@ -1,7 +1,8 @@
 \chapter{Background}
 
 \section{The Maritime Connectivity Platform}
-The Maritime Connectivity Platform (MCP), formally known as the Maritime Cloud, is a platform, developed by EfficienSea2~\cite{efficienSea2}, which is led by the Danish Maritime Authority\TODOOPT{Danish Maritime Authority according to efficiensea2.org/about}. MCP is a communication framework, that is to ensure efficient, reliable and secure communication, and exchange of information in the maritime sector.
+The Maritime Connectivity Platform (MCP), formally known as the Maritime Cloud, is a platform, developed by EfficienSea2~\cite{efficienSea2}, which is led by the Danish Maritime Authority. %Danish Maritime Authority according to efficiensea2.org/about
+MCP is a communication framework, that is to ensure efficient, reliable and secure communication, and exchange of information in the maritime sector.
 The goal of the platform is to connect maritime stakeholders with maritime information services.
 \begin{figure}
 	\includegraphics[width=1\textwidth]{figures/MCPStructure}
@@ -19,7 +20,7 @@ The messaging service in the MCP is an exchange of information, that ties system
 
 \section{Parsing}
 Parsing is a widely known tool in computer science. The term expresses a function, taking a string of input, from which it yields a parse tree that it constructs when applying the specific parser logic upon the input string. The parser performs a lexical analysis, meaning that it converts sections of the string to tokens that are ultimately easier to handle by an interpreter. When using Haskel to write parsers a library family known as parser combinators is very popular, in that it allows the programmer to embed domain specific language directly in the parser. The concept of combinatory parsing is using one or more of these libraries of higher-order functions, known as parser combinators. Parser combinators take in parsers of any kind imaginable as input and returns a new set of parsers as an output.
-
+\newpage
 \subsection{Monadic Parsing}
 Before 1995, implementation of top-down parsing, using parser combinators ran in and used both exponential time and space complexity when applied to ambiguous, context free grammars. At that time Frost and Szydlowski demonstrated that memoization can enhance parser combinators in order to optimize time complexity to polynomial\cite{memoization}. One year later through the use of monads parser combinators were reconstructed by Frost which introduced systematic and correct threading of memoization throughout execution.
 
@@ -30,7 +31,6 @@ Property based testing, also known as Automation Testing, is the principle of te
 Property-based testing solves this problem by setting up test cases that take into account mathematical models, describing the desired behavior of the code. Once such a test case has been created, semi-random execution instances can be run to the point of literal exhaustion, and thus a relatively small program can test for thousands of occurrences at once.
 
 An example of this can be seen in Listing \ref{fig:pbtEx}, that describe a snippet of Haskell quicksort code. A property of quicksort is that a list, sorted once is equivalent to a list, sorted twice, which is what the function \lstinline{prop_idempotent} validates.
-\TODO{Change to Erlang}
 \begin{figure}
 	\centering
 	\begin{lstlisting}
@@ -53,96 +53,96 @@ prop_idempotent xs = qsort (qsort xs) == qsort xs
 
 The principle of Model-based testing is to check behavior of software against predictions made by a model. Behavior can be described in a variety of manners, including data flow, control flow, dependencies, decision trees/cycles, and state transition machines. Model-based testing is good at describing the behavior of a system, when it reacts to a specific action, which is determined by another specific model. Using this technique, the behavior of a system can easily be determined and validated. Currently there are two main types of model-based testing-techniques:
 
+\TODONO{This [description] will be changed}
 \begin{description}
 	\item[Serial model building- and testing]
-	is a way of implementing model-based testing that involves predefined models, upon which a number of tests are executed. Creating the model ahead of execution allows the tester to implement an additional layer of complexity to the created models. Depending on the amount of models, this is, however, a significantly slower process than the alternative, in that each model requires a similar amount of time to construct. Figure \ref{fig:serialMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.\\
-	\begin{figure}
-		\centering
-		\begin{tikzpicture}
-			% horizontal axis
-			\draw	(0,0) -- (6,0)
-			% vertical axis
-					(0,0) -- (0,4);
-
-			% horizontal labels
-			\draw	(0,0)	node[anchor=north]	{0}
-					(1,0)	node[anchor=north]	{1}
-					(2,0)	node[anchor=north]	{2}
-					(3,0)	node[anchor=north]	{3}
-					(4,0)	node[anchor=north]	{4}
-					(5,0)	node[anchor=north]	{5}
-			% vertical labels
-					(0,1)	node[anchor=east]	{1}
-					(0,2)	node[anchor=east]	{2}
-					(0,3)	node[anchor=east]	{3};
-			
-			% legend
-			\draw	(6,2)	node[anchor=west] {\scriptsize $M_x$=model complexities}
-					(6,1.5)	node[anchor=west] {\scriptsize\color{red} {Cumulative time consumption}}
-					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
-			
-			% models
-			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$}
-					(2,0) -- (2,1) node[anchor=north west]	{$M_2$}
-					(3,0) -- (3,2) node[anchor=north west]	{$M_3$}
-					(4,0) -- (4,3) node[anchor=north west]	{$M_4$}
-					(5,0) -- (5,3) node[anchor=west]		{$M_5$};
-
-			% cumulative time consumption
-			\draw[dashed, red, thick]	(0,0) -- (4,4);
-			% complexity constraint
-			\draw[dashed, blue, thick]	(1,2) -- (2,1) -- (3,2) -- (4,3) -- (5,3);
-		\end{tikzpicture}
-		\caption{Time consumption and complexity restraint of serial model building and testing.}
-		\label{fig:serialMBT}
-	\end{figure}
+	is a way of implementing model-based testing that involves predefined models, upon which a number of tests are executed. Creating the tests manually ahead of execution allows the tester to implement an additional layer of complexity to the created models. Furthermore, implementing model testing, following this technique allows for custom-tailored testing, suited to fit issues, unique to the corresponding model. Depending on the amount of models, this is, however, a significantly slower process than the alternative, in that each model requires a similar amount of time to construct. Figure \ref{fig:serialMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.\\
+%	\begin{figure}
+%		\centering
+%		\begin{tikzpicture}
+%			% horizontal axis
+%			\draw	(0,0) -- (6,0)
+%			% vertical axis
+%					(0,0) -- (0,4);
+%
+%			% horizontal labels
+%			\draw	(0,0)	node[anchor=north]	{0}
+%					(1,0)	node[anchor=north]	{1}
+%					(2,0)	node[anchor=north]	{2}
+%					(3,0)	node[anchor=north]	{3}
+%					(4,0)	node[anchor=north]	{4}
+%					(5,0)	node[anchor=north]	{5}
+%			% vertical labels
+%					(0,1)	node[anchor=east]	{1}
+%					(0,2)	node[anchor=east]	{2}
+%					(0,3)	node[anchor=east]	{3};
+%			
+%			% legend
+%			\draw	(6,2)	node[anchor=west] {\scriptsize $M_x$=model complexities}
+%					(6,1.5)	node[anchor=west] {\scriptsize\color{red} {Cumulative time consumption}}
+%					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
+%			
+%			% models
+%			\draw	(1,0) -- (1,2) node[anchor=west]		{$M_1$}
+%					(2,0) -- (2,1) node[anchor=north west]	{$M_2$}
+%					(3,0) -- (3,2) node[anchor=north west]	{$M_3$}
+%					(4,0) -- (4,3) node[anchor=north west]	{$M_4$}
+%					(5,0) -- (5,3) node[anchor=west]		{$M_5$};
+%
+%			% cumulative time consumption
+%			\draw[dashed, red, thick]	(0,0) -- (4,4);
+%			% complexity constraint
+%			\draw[dashed, blue, thick]	(1,2) -- (2,1) -- (3,2) -- (4,3) -- (5,3);
+%		\end{tikzpicture}
+%		\caption{Time consumption and complexity restraint of serial model building and testing.}
+%		\label{fig:serialMBT}
+%	\end{figure}
 	Figure \ref{fig:serialMBT} shows the time consumption increasing for every model built, while the model complexity is directly matching the requirement, set by each specific model.
 	\item[Sequential model building- and testing:]
-	is a way of implementing model-based testing that involves on-the-fly model creation- and testing. Here a program is designed to take in arguments, describing different model behaviors, upon the basis of which the program tests the models immediately after they are generated. Compared with the implementation described above, this technique scales to a much better degree, as the program will only need to be written once in order to create a virtually infinite amount of models. The created models are, however, constrained to the lowest common complexity level, shared across all of the generated models. Figure \ref{fig:sequenceMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.
-	\begin{figure}
-		\centering
-		\begin{tikzpicture}
-			% horizontal axis
-			\draw	(0,0)	--	(6,0)
-			% vertical axis
-					(0,0)	--	(0,4);
-
-			% horizontal labels
-			\draw	(0,0)	node[anchor=north]	{0}
-					(1,0)	node[anchor=north]	{1}
-					(2,0)	node[anchor=north]	{2}
-					(3,0)	node[anchor=north]	{3}
-					(4,0)	node[anchor=north]	{4}
-					(5,0)	node[anchor=north]	{5}
-			% vertical labels
-					(0,1)	node[anchor=east]	{1}
-					(0,2)	node[anchor=east]	{2}
-					(0,3)	node[anchor=east]	{3};
-			
-			% legend
-			\draw	(6,2)	node[anchor=west] {\scriptsize $M_x$=model complexities}
-					(6,1.5)	node[anchor=west] {\scriptsize\color{red} {Cumulative time consumption}}
-					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
-			
-			% models
-			\draw	(1,0)	--	(1,2)	node[anchor=west]		{$M_1$}
-					(2,0)	--	(2,1)	node[anchor=north west]	{$M_2$}
-					(3,0)	--	(3,2)	node[anchor=north west]	{$M_3$}
-					(4,0)	--	(4,3)	node[anchor=north west]	{$M_4$}
-					(5,0)	--	(5,3)	node[anchor=west]		{$M_5$};
-
-			% cumulative time consumption
-			\draw[dashed, red, thick]	(0,0)	--	(1,1)	--	(5,1);
-			% complexity constraint
-			\draw[dashed, blue, thick]	(1,1)	--	(5,1);
-		\end{tikzpicture}
-		\caption{Time consumption and complexity restraint of sequential model building and testing.}
-		\label{fig:sequenceMBT}
-	\end{figure}
+	is a way of implementing model-based testing that involves on-the-fly model creation- and testing. Here a program is designed to take in arguments, describing different model behaviors, upon the basis of which the program tests the models immediately after they are generated. Compared with the implementation described above, this technique scales to a much better degree, as the program will only need to be written once in order to create a virtually infinite amount of models. The functionality, creating the models, does still need some input, that holds all information, that would otherwise be entered manually. Figure \ref{fig:sequenceMBT} provides a high-level diagram, describing this principle, using arbitrary units of measurement along it's $x$- and $y$-axis.
+%	\begin{figure}
+%		\centering
+%		\begin{tikzpicture}
+%			% horizontal axis
+%			\draw	(0,0)	--	(6,0)
+%			% vertical axis
+%					(0,0)	--	(0,4);
+%
+%			% horizontal labels
+%			\draw	(0,0)	node[anchor=north]	{0}
+%					(1,0)	node[anchor=north]	{1}
+%					(2,0)	node[anchor=north]	{2}
+%					(3,0)	node[anchor=north]	{3}
+%					(4,0)	node[anchor=north]	{4}
+%					(5,0)	node[anchor=north]	{5}
+%			% vertical labels
+%					(0,1)	node[anchor=east]	{1}
+%					(0,2)	node[anchor=east]	{2}
+%					(0,3)	node[anchor=east]	{3};
+%			
+%			% legend
+%			\draw	(6,2)	node[anchor=west] {\scriptsize $M_x$=model complexities}
+%					(6,1.5)	node[anchor=west] {\scriptsize\color{red} {Cumulative time consumption}}
+%					(6,1)	node[anchor=west] {\scriptsize\color{blue} Complexity constraint};
+%			
+%			% models
+%			\draw	(1,0)	--	(1,2)	node[anchor=west]		{$M_1$}
+%					(2,0)	--	(2,1)	node[anchor=north west]	{$M_2$}
+%					(3,0)	--	(3,2)	node[anchor=north west]	{$M_3$}
+%					(4,0)	--	(4,3)	node[anchor=north west]	{$M_4$}
+%					(5,0)	--	(5,3)	node[anchor=west]		{$M_5$};
+%
+%			% cumulative time consumption
+%			\draw[dashed, red, thick]	(0,0)	--	(1,1)	--	(5,1);
+%			% complexity constraint
+%			\draw[dashed, blue, thick]	(1,1)	--	(5,1);
+%		\end{tikzpicture}
+%		\caption{Time consumption and complexity restraint of sequential model building and testing.}
+%		\label{fig:sequenceMBT}
+%	\end{figure}
 	Figure \ref{fig:sequenceMBT} shows that the time consumption halts to a stop when one model is built with the drawback that the model complexity constraint is set to the lowest common model.
 \end{description}
-
-
+\newpage
 \subsection{Finite State Machines (FSM)}
 A finite state machine is, as the name suggests, a mathematical machine, consisting of a collection of states. An arbitrary FSM has a start state along with a collection of states that are accessed through various status- and/or input-combinations. An example of this can be seen in Figure \ref{fig:fsmEx} as well as Table \ref{tab:fsmEx}. These describe the control flow of a turnstile, which allows for one pass through, after which it prompts for a coin before allowing another pass through.
 

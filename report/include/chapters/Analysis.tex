@@ -208,14 +208,14 @@ Issues will inevitably present themselves with a project such as this, however t
 \subsection{Manual model-creation}
 \tbf{Advantages}
 \begin{itemize}
-	\item Manual model creation will have a shorter implementation time, as an arbitrary single model is faster to build than its auto-model-generator counterpart. 
-	\item Built maritime service models can be fully customized at once in order to catch all aspects of its maritime service counterparts.
-	\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following the techniques, described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for more exhaustive tests via manual model-creating than automatic model-creation.
+	\item Manual model creation will have a shorter initial implementation time, as an arbitrary single model is faster to build than its auto-model-generator counterpart. 
+	\item Built maritime service models can be fully customized at once in order to describe all aspects of its maritime service counterparts.
+	\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following the techniques, described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for exhaustive tests via manual model-creating.
 \end{itemize}
 \tbf{Disadvantages}
 \begin{itemize}
-	\item The time consumption of manually creating each model will expand linearly with each maritime service, that is submitted, and subsequently needs a maritime service model. 
-	\item Having each maritime service model being created individually and manually will inevitable introduce much diversity both in the sense of the available standard actions and implementation style of the model.
+	\item The time consumption of manually creating each model will expand near-linearly with each maritime service, that is submitted, and subsequently needs a maritime service model. 
+	\item Having each maritime service model being created individually and manually will inevitably introduce much diversity both in the sense of the available standard actions and implementation style of the model.
 	\item The complexity as well as way of implementing testing techniques explained in Section \ref{sec:Uses of model-based testing of the MCP} varies to an extent, even without consideration of non-uniform models. Elaborating on the case that each maritime service model differs both in purpose, implementation style and exhaustiveness, creating test suites similar to those described in Section \ref{sec:Uses of model-based testing of the MCP} for each new maritime service will become an extensive project
 \end{itemize}
 \subsection{Automatic model-creation}
@@ -231,4 +231,4 @@ Issues will inevitably present themselves with a project such as this, however t
 	\item Another inevitable downside to having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
 \end{itemize}
 
-To sum up, both methods will be advantageous, as they will each allow for extensive testing with the former being more time detailed and exhaustive, while a lot more time consuming in the long run, and the latter being less detailed and a lot less time consuming in the long run.
+To sum up, both methods will be advantageous, as they will each allow for extensive testing with the former being more custom-tailored, while a lot more time consuming in the long run, and the latter being more generic, but a lot less time consuming in the long run.

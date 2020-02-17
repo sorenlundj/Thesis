@@ -10,7 +10,7 @@ One way to implement these changes is make the user able to assign variables, ba
 \begin{description}
 	\item[Entity]\ \\
 	An entity is the most basic component of the models, without which, the models be devoid of all data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occurs throughout execution of a model. At the moment, three entities exist, however implementation of support for additional models is possible.
-	Multiple instances of each entity is allowed in a model.
+	Multiple instances of each entity is allowed in a model.\newpage
 	\begin{description}
 		\item[Ship]\ \\
 			If comparing the MCP to the App Store or Google Play, a ship would undertake the role of the user. The user can be the one utilizing the maritime service.
@@ -32,8 +32,8 @@ One way to implement these changes is make the user able to assign variables, ba
 	\item[Information]\ \\
 		All entities are able to store information, which is able to be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
 \end{description}
-
-Figure \ref{fig:entities} describe which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure \ref{fig:entities} coincides with \ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
+\noindent
+Figure \ref{fig:entities} describes which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure \ref{fig:entities} coincides with \ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
 
 \begin{figure}
 	\centering
@@ -98,7 +98,32 @@ Figure \ref{fig:entities} describe which options are excluded at selections of e
 
 The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{fig:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{fig:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{fig:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. The parser grammar abides by the rules, presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
 
+\subsection{Updated General Grammar}
+The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Listing \ref{fig:sSpecUpd}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
+
+Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpecUpd}. It can be seen that Listing \ref{fig:sSpecUpdRed} includes all information, stored in Listing \ref{fig:sSpecRed}, which indicates that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser, given the generalized format of the xml-specification files.
+
+\begin{figure}[h]
+	\centering
+	\begin{lstlisting}[keywordstyle={}]
+ServiceSpecificationSchema ::= specifications
+
+specifications ::= spec specifications
+    | $\e$
+     
+spec ::= specifications
+    | spec
+    | $\e$
+
+spec ::= string
+	\end{lstlisting}
+	\caption{Reduced parser grammar of the updated Service Specification Schema}
+	\label{fig:sSpecUpdRed}
+\end{figure}
+
 \subsection{Updated Service Specification Grammar}
+
+Figure \ref{fig:sSpecUpd} displays the updated parser grammar, and subsequently shows the newly added information, which the service specification file will need to include. The added information fields are designed to represent the fields, displayed in Section \ref{sec:Updated Data}.
 
 \begin{figure}
 	\centering
@@ -155,31 +180,8 @@ answer ::= variant
 	\caption{Updated parser grammar of Service Specification Schema}
 	\label{fig:sSpecUpd}
 \end{figure}
-\subsection{Updated General Grammar}
-The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Listing \ref{fig:sSpecUpd}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
-
-Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpecUpd}. It can be seen that Listing \ref{fig:sSpecUpdRed} is identical to Listing \ref{fig:sSpecRed}, which proves that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser.
-
-\begin{figure}
-	\centering
-	\begin{lstlisting}[keywordstyle={}]
-ServiceSpecificationSchema ::= specifications
-
-specifications ::= spec specifications
-    | $\e$
-     
-spec ::= specifications
-    | spec
-    | $\e$
-
-spec ::= string
-	\end{lstlisting}
-	\caption{Reduced parser grammar of the updated Service Specification Schema}
-	\label{fig:sSpecUpdRed}
-\end{figure}
-
-\section{Implementation in the MCP}
-As described in Chapter \ref{chp:Analysis}, the choice between the two model creation plays a vital role in the utilization
+%\section{Implementation in the MCP}
+%As described in Chapter \ref{chp:Analysis}, the choice between the two model creation techniques plays a vital %role in the utilization hereof. 
 
 \section{Technical Implementation}
 The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
@@ -190,13 +192,16 @@ The core of the project is contained in the \ttt{mmods.erl} file, which contains
 	\item[\ttt{Type}]\ \\
 		This field is described by a single atom, which is only able to take the forms of either \ttt{ship}, \ttt{service}, or \ttt{company}. This is used to check the legality of relations, when adding these.
 	\item[\ttt{Relations}]\ \\
-		The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well of its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, evaluating to \ttt{true} or \ttt{false}.
+		The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well of its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, each evaluating to \ttt{true} or \ttt{false}.
 	\item[\ttt{Self}]\ \\
 		The \ttt{Self} field is made up of the corresponding process id.
 	\item[\ttt{Info}]\ \\
 		The \ttt{Info} field consists of all data representation, which can take any form.
 \end{description}
 The functions \lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \linebreak \lstinline{remove_info/2}, \lstinline{transfer_info/3}, and \lstinline{request_info/4}, all add their corresponding self-descriptive functionality through the use of the \lstinline{gen_statem} (generic state machine) module. The getter-functions \lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, and \lstinline{get_info/1}, perform the simple task of retrieving relevant informations for the provided process id.
+
+Having implemented this functionality, creating a model is a matter of simply using the functions as building blocks to create the desired maritime models. For examples of how to do this, see files \ttt{examples.erl} and \ttt{tests.erl}.
+
 \subsection{The parser and interpreter modules}
 
 \begin{description}
@@ -208,5 +213,33 @@ The functions \lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_de
 \subsection{Executing Instructions}
 In an Erlang-shell all files can be compiled with \lstinline{c(file)}, where after manual model generation can be run from the \ttt{mmods.erl} file \footnote{See \ttt{tests.erl} and \ttt{examples.erl} for examples}.
 For automatic model generation, the \ttt{main.erl} file gathers the functionality of the parser- and interpreter-modules, which in turn draws upon the mmods-module. From here, the user has the possibilities of parsing an \ttt{xml}-file, interpreting an Erlang term, though the uses of \lstinline{main:parse/1}, \lstinline{main:interpret/1} or using the combined function \lstinline{main:parse_and_interpret/1} which fully converts an \ttt{xml}-file to a working maritime model.
+\newpage
+If a model is to be generated directly in an Erlang-shell, the same rules apply, that would, if it was run from a file, or compiled from an xml-file. For efficient, exception-free use of the model generators, its functions should be used following this precedence:
 
-Using a model post-creation both possible though the uses of manual and automatic model-creating. 
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[thick]
+		\node (S)   at (5,8) {\lstinline{start/1}};
+    \node (AR)  at (2,7) {\lstinline{add_relation/2}};
+    \node (AI)  at (8,7) {\lstinline{add_info/2}};
+    \node (AD)  at (1,6) {\lstinline{add_dependency/3}};
+    \node (RI)  at (6,6) {\lstinline{remove_info/2}};
+    \node (TI)  at (9,6) {\lstinline{transfer_info/3}};
+    \node (Req) at (4,4) {\lstinline{request_info/4}};
+
+    \path [] (S)  edge (AR);
+    \path [] (S)  edge (AI);
+    \path [] (AR) edge (AD);
+    \path [] (AI) edge (RI);
+    \path [] (AI) edge (TI);
+    \path [out=0, in=90] (AR) edge (Req);
+	\end{tikzpicture}
+	\caption{Function precedence, when using \ttt{mmods.erl}.}
+	\label{fig:mmodsPrec}
+\end{figure}
+
+Figure \ref{fig:mmodsPrec} displays the order that needs to be followed when using the mmods module. The reason for this requirement is the fact that a number of the API functions rely on information, given in an earlier function.
+A relation cannot exist without at least two entities being added to the model beforehand, just as well as a dependency needs a relation, in order to exist. Likewise, information cannot be added to a nonexistent entity, and that same information cannot be removed or transfered, without it having been added first.
+
+An information request, as per the API function \lstinline{request_info/4}, carries the four arguments, \ttt{from(entity)}, \ttt{to(entity)}, \ttt{requested(information)}, and \ttt{answers(list)}. Despite the fact that it would seem like this action would require at least one dependency to be satisfied by \ttt{answers}, and that the information needs to exist, neither is the case. As dependency is a (possibly empty) list of constraints, none of these \tit{need} to be added for a request to be made. Likewise, a request can be made for nonexistent information, or information, not stored in the the \ttt{to}-argument entity, in which case no information will be returned to the requester. This, in turn means that no information needs to be added to a model before a request can be made.\\[0.1cm]
+Using a model post-creation both possible though the uses of manual and automatic model-creating, by interacting directly with the Erlang shell, in which the model has been created. 

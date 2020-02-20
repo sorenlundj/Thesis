@@ -30,7 +30,7 @@ The remaining part of the \ttt{tests.erl}-file includes the scenario-oriented te
     This test case shows that information is removed from a service entity, after it is sent. In this case, the two ship entities \ttt{Shp1}, and \ttt{Shp2} are both mutually connected to the service entity \ttt{Serv}. The service entity holds the atom \ttt{a\_steak}, and when both ship entities request said atom, it will be distributed to whomever requested first. 
 \end{description}
 
-The scenario-oriented test cases are all included in the wrapper-function \ttt{main\_scenarios/0}, and when run, it yields that all cases pass. The scenarios wrapper function is included in the top-level wrapper-function, and thus, to execute \tit{all} tests, function-oriented or scenario-oriented, simply execute \command{tests:main().}
+The scenario-oriented test cases are all included in the wrapper-function \ttt{main\_scenarios/0} which, when run, yields that all cases pass. The scenarios wrapper function is included in the top-level wrapper-function, and thus, to execute \tit{all} tests, function-oriented or scenario-oriented, simply execute \command{tests:main().}
 
 \subsection{Testing the Automatic Model Creator}
 
@@ -38,7 +38,7 @@ The automatic model creation algorithm makes use of the mmods module, and as thi
 
 The two modules that distinguishes the automatic model creator from its manual counterpart is the parser and the interpreter. As the parser is a standardized xml-to-Erlang, there is no need to check for edge-cases, correlating directly to the current implementation, as there are none. Therefore the parser is tested with the function \lstinline{parse_tests/0}, which includes all test cases. The cases tested for are correct handling of strings, integers, lists, multiple sub-tags in one tag, a tag occurring in another tag with the same name, handling of spaces. The test is run with \lstinline{tests:parse_tests().} in an Erlang shell, which will reveal that all tests pass.
 
-One tests, that does not pass is \lstinline{test_interp_anonymous_function/0}. This is due to the fact that handling of anonymous functions is not implemented at the time of writing. Support hereof would need to be handled in the \lstinline{aux:token/1}-function, as this is the mechanism that translates functions in the Erlang-term, resulting from \lstinline{fparse/1}.
+One tests, that does not pass is \lstinline{test_interp_anonymous_function/0}. This is due to the fact that handling of anonymous functions is not implemented at the time of writing. Support hereof would need to be handled in the \linebreak \lstinline{aux:token/1}-function, as this is the mechanism that translates functions in the Erlang-term, resulting from \lstinline{fparse/1}.
 
 \section{Experiments}
 

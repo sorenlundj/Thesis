@@ -219,20 +219,21 @@ If a model is to be generated directly in an Erlang-shell, the same rules apply,
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[thick]
-		\node (S)   at (5,8) {\lstinline{start/1}};
-    \node (AR)  at (2,7) {\lstinline{add_relation/2}};
-    \node (AI)  at (8,7) {\lstinline{add_info/2}};
-    \node (AD)  at (1,6) {\lstinline{add_dependency/3}};
-    \node (RI)  at (6,6) {\lstinline{remove_info/2}};
-    \node (TI)  at (9,6) {\lstinline{transfer_info/3}};
-    \node (Req) at (4,4) {\lstinline{request_info/4}};
+		\node (S)   at (5,8)   {\lstinline{start/1}};
+    \node (AR)  at (2,7)   {\lstinline{add_relation/2}};
+    \node (AI)  at (8,7)   {\lstinline{add_info/2}};
+    \node (AD)  at (1,4.9) {\lstinline{add_dependency/3}};
+    \node (TI)  at (9,4.5) {\lstinline{transfer_info/3}};
+    \node (RI)  at (6,4.9) {\lstinline{remove_info/2}};
+    \node (Req) at (4,4.5) {\lstinline{request_info/4}};
+    \node [anchor=south east, rotate=20]   at (3.9,7.55) {2};
 
     \path [] (S)  edge (AR);
     \path [] (S)  edge (AI);
     \path [] (AR) edge (AD);
     \path [] (AI) edge (RI);
     \path [] (AI) edge (TI);
-    \path [out=0, in=90] (AR) edge (Req);
+    \path [] (AR) edge (Req);
 	\end{tikzpicture}
 	\caption{Function precedence, when using \ttt{mmods.erl}.}
 	\label{fig:mmodsPrec}

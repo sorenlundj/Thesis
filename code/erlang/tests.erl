@@ -188,7 +188,7 @@ request_info_deps() ->
   {ok, Service} = mmods:start(service),
   {ok, Ship}    = mmods:add_relation(Ship, Service),
   {ok, Service} = mmods:add_relation(Service, Ship),
-  ok            = mmods:add_dependency(Ship, Service, fun aux:trivial/1),
+  ok            = mmods:add_dependency(Ship, Service, fun (_) -> true end),
   ok            = mmods:add_info(Service, a),
   ok            = mmods:add_info(Service, b),
   {ok, Ship}    = mmods:request_info(Ship, Service, a, [answer]),
@@ -548,10 +548,6 @@ interpreter_tests() ->
   ?assertEqual(SeId, CoIdRel),
   ?assertEqual({CoId, ShId}, {SeIdRel1, SeIdRel2}),
   ?assertEqual(SeId, ShIdRel),
-
-  erlang:display(mmods:get_type(CoId)),
-  erlang:display(mmods:get_type(SeId)),
-  erlang:display(mmods:get_type(ShId)),
   interpreter_tests_passed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -561,7 +557,8 @@ interpreter_tests() ->
 main() ->
   main_mmods(),
   parse_tests(),
-  interpreter_tests().
+  interpreter_tests(),
+  all_tests_passed.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Finite state machine comparer                                     %
@@ -578,15 +575,36 @@ equiv_models_tests() ->
   MA = main:fparse_and_interpret('xml/multiple_services.xml'),
   NA = main:fparse_and_interpret('xml/non_connected_ents.xml'),
 
+  ?assertEqual(equiv_models(PM, PM), no_inconsistencies_found),
+  ?assertEqual(equiv_models(EM, EM), no_inconsistencies_found),
+  ?assertEqual(equiv_models(MM, MM), no_inconsistencies_found),
+  ?assertEqual(equiv_models(NM, NM), no_inconsistencies_found),
+
   ?assertEqual(equiv_models(PM, PA), no_inconsistencies_found),
   ?assertEqual(equiv_models(EM, EA), no_inconsistencies_found),
   ?assertEqual(equiv_models(MM, MA), no_inconsistencies_found),
-  ?assertEqual(equiv_models(NM, NA), no_inconsistencies_found).
+  ?assertEqual(equiv_models(NM, NA), no_inconsistencies_found),
 
+  ?assertEqual(equiv_models(PM, EM), error_length_mismatch),
+  ?assertEqual(equiv_models(PM, MM), error_length_mismatch),
+  ?assertEqual(equiv_models(PM, NM), error_length_mismatch),
+  
+  ?assertEqual(equiv_models(EM, PM), error_length_mismatch),
+  ?assertEqual(equiv_models(EM, MM), error_length_mismatch),
+  ?assertEqual(equiv_models(EM, NM), error_length_mismatch),
+
+  ?assertEqual(equiv_models(MM, PM), error_length_mismatch),
+  ?assertEqual(equiv_models(MM, EM), error_length_mismatch),
+  ?assertEqual(equiv_models(MM, NM), error_length_mismatch),
+
+  ?assertEqual(equiv_models(NM, PM), error_length_mismatch),
+  ?assertEqual(equiv_models(NM, EM), error_length_mismatch),
+  ?assertEqual(equiv_models(NM, MM), error_length_mismatch).
 
 equiv_models(L_fsm, R_fsm) ->
-  Length = length(L_fsm),
-  case Length == length(R_fsm) of
+  L_Length = length(L_fsm),
+  R_Length = length(R_fsm),
+  case L_Length == R_Length of
     true ->
       {L_ids, R_ids} = map_ids(L_fsm, R_fsm, [], []),
       case check_types(L_fsm, R_fsm) of

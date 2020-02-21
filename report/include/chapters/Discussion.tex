@@ -2,5 +2,16 @@
 \section{Implementation in the MCP}
 
 \section{Future Use}
+%Kan man bruge manuel, hvis man ikke har styr på erlang forinden? Kan man bruge automatisk?
+% ref til læringskurvefigurer
 
- 
+\subsection{Expanding Model Functionality}
+Embedded in the nature of the project is the need for future expansion of functionality, following increased demands from maritime service providers. The modularity that the solution has been implemented with will aid in this, as it allows for less complicated employment hereof. As described in Section \ref{sec:Technical Implementation}, the complete solution has been divided into three fields, and thus these are the areas, where further implementation is needed if additional model functionality is desired.
+\begin{itemize}
+  \item \ttt{mmods.erl}
+    The primary functionality will need to be implemented here. This entails the main API call to the finite state machine, along with it's following desired result and side effects. Altering the implementation of this file will subsequently alter the manual as well as the automatic model generator.
+  \item \ttt{parser.erl}
+    This file will \tit{not} need any adjustments in order to handle new functionality.
+  \item \ttt{interpreter.erl}
+    This file will need to be altered in order to handle additional information, picked up by the parser. In the case that support for model functionality has been implemented in \ttt{mmods.erl}, but not \ttt{interpreter.erl}, said functionality will not be included in the resulting model, and no error or exception will be raised. This is true, even if the additional design information is included in the xml-specification file.
+\end{itemize}

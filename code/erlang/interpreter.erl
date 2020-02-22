@@ -66,9 +66,9 @@ loop_add_relations(C, Entities, Name_list, Val_list) ->
 add_relation_helper(_, [], _, _) ->
   ok;
 add_relation_helper(From, [R_head|Relations], Name_list, Val_list) ->
-  {relation, Relation} = R_head,
-  To = aux:read_v(Relation, Name_list, Val_list),
-  {ok, From} = mmods:add_relation(From, To),
+  {relation, R} = R_head,
+  To            = aux:read_v(R, Name_list, Val_list),
+  {ok, From}    = mmods:add_relation(From, To),
   add_relation_helper(From, Relations, Name_list, Val_list).
 
 loop_add_dependency(0, _, _, _) ->

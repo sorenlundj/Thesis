@@ -180,8 +180,6 @@ answer ::= variant
 	\caption{Updated parser grammar of Service Specification Schema}
 	\label{fig:sSpecUpd}
 \end{figure}
-%\section{Implementation in the MCP}
-%As described in Chapter \ref{chp:Analysis}, the choice between the two model creation techniques plays a vital %role in the utilization hereof. 
 
 \section{Technical Implementation}
 The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
@@ -206,7 +204,7 @@ Having implemented this functionality, creating a model is a matter of simply us
 
 \begin{description}
 	\item[The parser module]\ \\
-		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl} and an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures \ref{fig:sSpecUpd} and \ref{fig:sSpecUpdRed}.
+		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl} and an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures \ref{fig:sSpecUpdRed} and \ref{fig:sSpecUpd}.
 	\item[The interpreter module]\ \\
 		The interpreter module exports the single function \lstinline{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \lstinline{interp/1} function adds builds maritime models in the order that is adding entities, info, relations, dependencies, and lastly performing information requests. Each adder function dynamically searches its corresponding keyword rather than retrieving by index in the xml term, which allows for variation in the the structure of the xml along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally the interpreter shows the states of all entities, as is after addition of all data.
 \end{description}
@@ -219,13 +217,13 @@ If a model is to be generated directly in an Erlang-shell, the same rules apply,
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[thick]
-		\node (S)   at (5,8)   {\lstinline{start/1}};
-    \node (AR)  at (2,7)   {\lstinline{add_relation/2}};
-    \node (AI)  at (8,7)   {\lstinline{add_info/2}};
-    \node (AD)  at (1,4.9) {\lstinline{add_dependency/3}};
-    \node (TI)  at (9,4.5) {\lstinline{transfer_info/3}};
-    \node (RI)  at (6,4.9) {\lstinline{remove_info/2}};
-    \node (Req) at (4,4.5) {\lstinline{request_info/4}};
+	\node (S)  at (5,8)   {\lstinline{start/1}};
+    \node (AR) at (2,7)   {\lstinline{add_relation/2}};
+    \node (AI) at (8,7)   {\lstinline{add_info/2}};
+    \node (AD) at (1,4.9) {\lstinline{add_dependency/3}};
+    \node (TI) at (9,4.5) {\lstinline{transfer_info/3}};
+    \node (RI) at (6,4.9) {\lstinline{remove_info/2}};
+    \node (RQ) at (4,4.5) {\lstinline{request_info/4}};
     \node [anchor=south east, rotate=20]   at (3.9,7.55) {2};
 
     \path [] (S)  edge (AR);
@@ -233,7 +231,7 @@ If a model is to be generated directly in an Erlang-shell, the same rules apply,
     \path [] (AR) edge (AD);
     \path [] (AI) edge (RI);
     \path [] (AI) edge (TI);
-    \path [] (AR) edge (Req);
+    \path [] (AR) edge (RQ);
 	\end{tikzpicture}
 	\caption{Function precedence, when using \ttt{mmods.erl}.}
 	\label{fig:mmodsPrec}

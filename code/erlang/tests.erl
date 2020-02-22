@@ -675,7 +675,7 @@ compare_relations([L_head|L_r], [R_head|R_r], L_ids, R_ids) ->
     false ->
       false
   end.
-  
+
 check_info([], []) ->
   true;
 check_info([L_head|L_fsm], [R_head|R_fsm]) ->

@@ -1,9 +1,12 @@
 \chapter{Discussion}
-\section{Implementation in the MCP}
+Following the successful development of the solution, described in the preceding chapters, arises problem statements dealing with integration into the MCP, use, future use and the balancing of the compromise that is choosing which model generator to utilize. The following chapter will deal with these topics. Section \ref{sec:Launch and Integration into the MCP} will describe potential approaches to initial integration, while Section \ref{sec:Future Use} will subsequent future use, both practical and technical, following the inevitable need for further development. Section \ref{sec:Manual versus Automatic Model Generation}, will contain an assessment of which model generating functionality is most likely to be widely used, going forth. Eventually, Section \ref{sec:Results Related to Use} will provide a recap of the results, obtained in Chapter \ref{chp:Results}, in relation to what is described in sections \ref{sec:Launch and Integration into the MCP} through \ref{sec:Results Related to Use}.
 
+\section{Launch and Integration into the MCP}
+For the solution, described throughout this thesis to be integrated, various changes need to be made with regards to the infrastructure of the Maritime Connectivity Platform. The first, and most obvious, change that should be implemented is the technical implementation of the new functionality. Next comes the need for educating the user-group, as these will have no preceding knowhow as to make the system work in accordance with their needs. This will be necessary, whether use of manual or automatic model generating is utilized.
+
+A soft launch strategy should be used, when inaugurating the functionality, as described in a blog-post on LiveChatInc~\cite{hardoSoft}. Launching the solution gradually will let the user-base to get acquainted with its use, while simultaneously allowing for necessary feedback towards the functionality. This will, in turn, decrease the risk of the project succumbing to any of the launch failures, as described in an article on Harvard Business Review~\cite{hbr}, all of which are often connected with a hard product launch.
 \section{Future Use}
-%Kan man bruge manuel, hvis man ikke har styr på erlang forinden? Kan man bruge automatisk?
-% ref til læringskurvefigurer
+Post-launch of the model-building component is a continuous development process. User-submitted feedback should be regularly implemented in order to ensure optimal user friendliness, and intuitiveness. Furthermore as, the functionality, described in Chapter \ref{chp:Work/Design} is only the initial functionality, and ideally, as described in Subsection \ref{ssec:Expanding Model Functionality} below, future development is deeply rooted in the project.
 
 \subsection{Expanding Model Functionality}
 Embedded in the nature of the project is the need for future expansion of functionality, following increased demands from maritime service providers. The modularity that the solution has been implemented with will aid in this, as it allows for less complicated employment hereof. As described in Section \ref{sec:Technical Implementation}, the complete solution has been divided into three fields, and thus these are the areas, where further implementation is needed if additional model functionality is desired.
@@ -15,3 +18,11 @@ Embedded in the nature of the project is the need for future expansion of functi
   \item \ttt{interpreter.erl}
     This file will need to be altered in order to handle additional information, picked up by the parser. In the case that support for model functionality has been implemented in \ttt{mmods.erl}, but not \ttt{interpreter.erl}, said functionality will not be included in the resulting model, and no error or exception will be raised. This is true, even if the additional design information is included in the xml-specification file.
 \end{itemize}
+
+\section{Manual versus Automatic Model Generation}
+A fundamental obstacle throughout the project is the learning curves, described in Figures \ref{fig:serialMBT} and \ref{fig:sequenceMBT}, along with their corresponding sections. This obstacle is present in both scenarios, however, the learning curve is significantly steeper, using sequential\footnote{Manual} model based testing/model generating. A soft launch and extensive user-guide, as described in Section \ref{sec:Launch and Integration into the MCP} will reduce the effects of the learning curve for both development techniques, however not to the extend that this is completely negated.
+
+Automatic model generation is, however, both the most user-friendly method and the one most suited for a visual builder interface. A visual builder interface could be in a style, similar to the Eclipse Visual Editor, Vex~\cite{vex} for XML. Such an XML-builder should be implemented to always show the user which options are available to add to the xml and subsequent model, which would in turn ease work flow, placed on all other aspects of the solution.
+
+\section{Results Related to Use}
+\TODOWRITE

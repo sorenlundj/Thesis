@@ -73,7 +73,7 @@ Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic} display the res
 \end{figure}
 
 \noindent
-A visual representation of the points, described are displayed in Figure \ref{fig:protocolVisual}, where \ref{subfig:protocolManualVisual} represents the manually created model, and \ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figure, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique id, with the third representing the information, held by the entity. All edges in the figures are oriented, symbolizing relations, from one entity to another. Functions, displayed beside a relation represents a dependency, associated with that relation. If not evident in Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic}, Figure \ref{fig:protocolVisual} shows clearly how the collection of entities' states are uniform in relation to their counterparts'.
+A visual representation of the points, described are displayed in Figure \ref{fig:protocolVisual}, where \ref{subfig:protocolManualVisual} represents the manually created model, and \ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique id, with the third representing the information, held by the entity. All edges in the figures are oriented, symbolizing relations, from one entity to another. Functions, displayed beside a relation represents a dependency, associated with that relation. If not evident in Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic}, Figure \ref{fig:protocolVisual} shows clearly how the collection of entities' states are uniform in relation to their counterparts'.
 
 \begin{figure}[h]
   \begin{subfigure}{.48\textwidth}
@@ -116,7 +116,7 @@ A visual representation of the points, described are displayed in Figure \ref{fi
 \newpage
 Having concluded that the models\footnote{Collections of all states in the FSM}, described in Figures \ref{fig:protocolManual}, and \ref{fig:protocolAutomatic} are equal, in order for their FSMs to be equivalent, all available \tit{actions}, correlating to the states must also be equal. To determine if this is the case, I will look to the functionality of the manual, as well as the automatic model creator. 
 
-The functionality of the automatic implementation is built to directly utilize the manual model building module, and thus their functionalities are near identical. The only limited by the functionality of the parser and interpreter's ability to feed instructions to \ttt{mmods.erl}, such as the example given in Section \ref{ssec:Testing the Automatic Model Creator}.
+The functionality of the automatic implementation is built to directly utilize the manual model building module, and thus their functionalities are near identical. They are only limited by the functionality of the parser and interpreter's ability to feed instructions to \ttt{mmods.erl}, such as the example given in Section \ref{ssec:Testing the Automatic Model Creator}.
 
 \subsubsection{Further Examples of Model Equivalence}
 

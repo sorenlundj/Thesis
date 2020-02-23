@@ -4,19 +4,19 @@ In this chapter, I will conclude the results of my analysis and work. This inclu
 In Chapter \ref{chp:Background}, an assessment was provided of methods, which could be utilized to implement a solution to the problem that was also described in Chapter \ref{chp:Introduction}. Specifically, the methods, that were utilized in the solution were the combination of a parser and an interpreter, which would feed commands to a finite state machine, thereby creating the maritime models. This process of implementing this was described in Chapter \ref{chp:Work/Design}, and the process of determining this design is described in Chapter \ref{chp:Analysis}.
 
 In Chapter \ref{chp:Results}, I verified the validity of the operations, performed in the implementation through extensive testing. That is, the testing, performed in Section \ref{sec:Testing}, concluded that the model creators, described throughout Chapter \ref{chp:Work/Design} could create working models, which adhered to the set of rules and descriptions, described in Chapter \ref{chp:Analysis}. Furthermore, in Section \ref{sec:Experiments}, I have concluded that models, generated through the manual method, have the ability to be equivalent to ones, generated automatically, and vice verse.
-\TODO{\refNumName{chp:Discussion}}
+
+Chapter \ref{chp:Discussion} contains an assessment of the derived results, and relates this to the intended use of the application. This includes launch strategy, integration into the MCP, and future use, both from a user-perspective, and from a technical standpoint. Strategies for future development are laid out for both the automatic and the manual model generator, and it is concluded that, while the automatic component may hold more immediate relevance towards integration in the MCP, both bring valuable functionality to the table.
 \section{Future Work}
 The project, described throughout the thesis has been concluded, featuring satisfying results, however, this does not mean that no additional functionality is able to improve upon the implemented solution. Subsections \ref{ssec:Model Functionality} through \ref{ssec:Improved Model-Testing} displays a list of areas, that through continued work, could be shifted from compromises to all-embracing solutions.
-%lazy evaluation
-%modularity
 \subsection{Model Functionality}
-As mentioned in Section \ref{ssec:Expanding Model Functionality}, expandability has been a top priority throughout the implementation process, as this leads the way for the entire basis of future use, however,  mentioned in the same section is how, support hereof is entirely possible, due to the style in which the solution has been developed. 
+As mentioned in Sections \ref{ssec:Expanding Automatic Model Functionality} and \ref{ssec:Expanding Manual Model Functionality}, expandability has been a top priority throughout the implementation process, as this leads the way for the entire basis of future use, however,  mentioned in the same section is how, support hereof is entirely possible, due to the style in which the solution has been developed. 
 \subsection{Improved XML-Parsing}
 In Subsection \ref{ssec:Monadic Parsing}, monadic parsing was described as a means to parse text, using more efficient procedures, compared to the technique's predecessor, described in Section \ref{sec:Parsing}. The implementation of the parser module associated with this thesis features a \tit{non}-monadic parser, which could potentially introduce scalability issues on the side of automatic model generation. Scalability is, in this case, only affected concerning the size of the xml specification-files, which will rarely reach sizes, where this will pose anything but minor inconveniences, yet introducing the power of the monad is the best solution in the long run.
 \subsection{Ignored Parsing}
 Another parser-related improvement is support for field-selection. At the time of writing, the parser module has no way of distinguishing relevant fields in the xml specification files from the irrelevant. Contained in this project, this has been bypassed, by writing specifications in the correct form. The interpretation module will fail unless the argument it receives is on the form \ttt{\{entities,Content\}}. Unexpected values, contained in the \ttt{Content} variable will be ignored, as the interpreter looks up values by identifier, and not by index, however, if the outermost tag, returned by the parser is on the wrong form, automatic model generation will not return an error.
+\newpage
 \subsection{Expanded Constraint Support}
-Subsection \ref{ssec:Testing the Automatic Model Creator} describes missing support for anonymous functions in the automatic model generator, while Subsection \ref{ssec:Testing the Manual Model Creator}, as well as \ttt{tests.erl} display this functionality in the manual model generator. It is concluded that the auxiliary function \lstinline{token/1} is what comes up short. The shortcoming can be rectified with improved tokenization, in this function.\newpage
+Subsection \ref{ssec:Testing the Automatic Model Creator} describes missing support for anonymous functions in the automatic model generator, while Subsection \ref{ssec:Testing the Manual Model Creator}, as well as \ttt{tests.erl} display this functionality in the manual model generator. It is concluded that the auxiliary function \lstinline{token/1} is what comes up short. The shortcoming can be rectified with improved tokenization, in this function.
 \subsection{Improved Model-Testing}
 Section \ref{sec:Property-Based Testing} describes a method of software testing that outperforms regular, unit-based testing. Albeit usually utilized in development testing and function-performance testing, if applied to this field, property-based testing can contribute powerful additional functionalities to the solution as a whole. 
 \subsubsection{Implementation}
@@ -32,7 +32,9 @@ The functionality and features of the maritime model generator and its result ar
 \begin{itemize}
   \item The ability to generate Finite State Machines, manually and automatically, the latter with the ability to be inserted directly in the structure of the already-integrated and used xml-specification files.
   \item Both methods of generating models introduce the same functionality, also featuring similar support of additional functionality.
-  \item \TODO{ }
+  \item Support for further model-based testing through the automatic model generator.
+  \item Support for further functionality through the manual model generator.
+  \item An updated service specification structure, that allows for a more direct implementation of the automatic model generator into the infrastructure of the Maritime Connectivity Platform.
 \end{itemize}
 
 

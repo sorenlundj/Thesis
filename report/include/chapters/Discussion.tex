@@ -6,18 +6,21 @@ For the solution, described throughout this thesis to be integrated, various cha
 
 A soft launch strategy should be used, when inaugurating the functionality, as described in a blog-post on LiveChatInc~\cite{hardoSoft}. Launching the solution gradually will let the user-base to get acquainted with its use, while simultaneously allowing for necessary feedback towards the functionality. This will, in turn, decrease the risk of the project succumbing to any of the launch failures, as described in an article on Harvard Business Review~\cite{hbr}, all of which are often connected with a hard product launch.
 \section{Future Use}
-Post-launch of the model-building component is a continuous development process. User-submitted feedback should be regularly implemented in order to ensure optimal user friendliness, and intuitiveness. Furthermore as, the functionality, described in Chapter \ref{chp:Work/Design} is only the initial functionality, and ideally, as described in Subsection \ref{ssec:Expanding Model Functionality} below, future development is deeply rooted in the project.
+Post-launch of the model-building component is a continuous development process. User-submitted feedback should be regularly implemented in order to ensure optimal user friendliness, and intuitiveness. Furthermore as, the functionality, described in Chapter \ref{chp:Work/Design} is only the initial functionality, and ideally, as described in Section \ref{ssec:Expanding Automatic Model Functionality} below, future development is deeply rooted in the project.
 
-\subsection{Expanding Model Functionality}
+\subsection{Expanding Automatic Model Functionality}
 Embedded in the nature of the project is the need for future expansion of functionality, following increased demands from maritime service providers. The modularity that the solution has been implemented with will aid in this, as it allows for less complicated employment hereof. As described in Section \ref{sec:Technical Implementation}, the complete solution has been divided into three fields, and thus these are the areas, where further implementation is needed if additional model functionality is desired.
 \begin{itemize}
   \item \ttt{mmods.erl}
-    The primary functionality will need to be implemented here. This entails the main API call to the finite state machine, along with it's following desired result and side effects. Altering the implementation of this file will subsequently alter the manual as well as the automatic model generator.
+    The primary functionality will need to be implemented here. This entails the main API call to the finite state machine, along with its following desired result and side effects. Altering the implementation of this file will subsequently alter the manual as well as the automatic model generator.
   \item \ttt{parser.erl}
     This file will \tit{not} need any adjustments in order to handle new functionality.
   \item \ttt{interpreter.erl}
     This file will need to be altered in order to handle additional information, picked up by the parser. In the case that support for model functionality has been implemented in \ttt{mmods.erl}, but not \ttt{interpreter.erl}, said functionality will not be included in the resulting model, and no error or exception will be raised. This is true, even if the additional design information is included in the xml-specification file.
 \end{itemize}
+
+\subsection{Expanding Manual Model Functionality}
+As explained in Section \ref{ssec:The parser and interpreter modules} the manual component, provides all core functionality of the automatic component. The fact that this module is underdeveloped, in comparison to its automatic counterpart does in no way rule it out for future use, as having only the core functionality encapsulated in a module, providing an all-inclusive API allows for virtually limitless further development. The automatic component is \tit{one} example out of a virtually endless pool of additional functionality, based on the functionality, provided in the manual component. Expanding upon this, will be confined to future work, as potential solutions can scope to an extent similar to this project.
 
 \section{Manual versus Automatic Model Generation}
 A fundamental obstacle throughout the project is the learning curves, described in Figures \ref{fig:serialMBT} and \ref{fig:sequenceMBT}, along with their corresponding sections. This obstacle is present in both scenarios, however, the learning curve is significantly steeper, using sequential\footnote{Manual} model based testing/model generating. A soft launch and extensive user-guide, as described in Section \ref{sec:Launch and Integration into the MCP} will reduce the effects of the learning curve for both development techniques, however not to the extend that this is completely negated.
@@ -25,4 +28,10 @@ A fundamental obstacle throughout the project is the learning curves, described 
 Automatic model generation is, however, both the most user-friendly method and the one most suited for a visual builder interface. A visual builder interface could be in a style, similar to the Eclipse Visual Editor, Vex~\cite{vex} for XML. Such an XML-builder should be implemented to always show the user which options are available to add to the xml and subsequent model, which would in turn ease work flow, placed on all other aspects of the solution.
 
 \section{Results Related to Use}
-\TODOWRITE
+Taking the findings of Chapter \ref{chp:Results} into consideration, when comparing the usefulness of the two methods, one model-generating technique clearly stands out, as being the most useful. Recognizing that automatic model-generation will provide more immediate user-friendliness, more scalability and, according to Section \ref{ssec:Model Equivalence}, functionality equivalent to that of manual model-generation.
+
+Manual model generation, in it's basic state, as described in Section \ref{ssec:Expanding Manual Model Functionality} allows for limitless new functionality, and, as proven by the implementation of the automatic component, said new functionality does not necessarily need to be manual.
+
+In conclusion, both components add relevant functionality to the MCP, and while automatic model generating provides the more present, needed, service, the manual component provides a broad foundation for development of new ideas.
+
+

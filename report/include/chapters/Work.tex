@@ -20,7 +20,7 @@ One way to implement these changes is to make the user able to assign variables,
 			Company entities serve as nodes, which hold data or similar goods, which can be desired by ship entities for a variety of reasons. If multiple company entities exist at one time, they will not necessarily need a service entity to connect them. 
 	\end{description}
 	\item[Relation]\ \\
-		A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between 'Ship' and 'Service' as well as 'Service' and 'Company'.
+		A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service} as well as \ttt{Service} and '\ttt{Company}.
 
 		A ship entity can share a relation with service entities, as they would have no way of communicating with company or other ship entities without any prior software. In the case that a ship communicates with another ship, it will need an intermediate service entity to handle communication.
 
@@ -28,7 +28,9 @@ One way to implement these changes is to make the user able to assign variables,
 
 		A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, when communicating with companies and citizens.
 	\item[Dependency]\ \\
-		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation, that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function, that describes what the entities require from each other. If two entities co-depend on each other a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
+		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation, that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure \ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
+
+		If two entities co-depend on each other a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
 	\item[Information]\ \\
 		All entities are able to store information, which is able to be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
 \end{description}
@@ -185,7 +187,7 @@ answer ::= variant
 The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
 
 \subsection{The mmods module}
-The core of the project is contained in the \ttt{mmods.erl} file, which contains the functionality, that creates the finite state machine models. This module creates processes which includes the following fields:
+The core of the project is contained in the \ttt{mmods.erl} file, which contains the functionality, that creates the finite state machine models. This module creates processes which include the following fields:
 \begin{description}
 	\item[\ttt{Type}]\ \\
 		This field is described by a single atom, which is only able to take the forms of either \ttt{ship}, \ttt{service}, or \ttt{company}. This is used to check the legality of relations, when adding these.
@@ -212,7 +214,7 @@ Having implemented this functionality, creating a model is a matter of simply us
 In an Erlang-shell all files can be compiled with \lstinline{c(file)}, where after manual model generation can be run from the \ttt{mmods.erl} file \footnote{See \ttt{tests.erl} and \ttt{examples.erl} for examples}.
 For automatic model generation, the \ttt{main.erl} file gathers the functionality of the parser- and interpreter-modules, which in turn draws upon the mmods-module. From here, the user has the possibilities of parsing an \ttt{xml}-file, interpreting an Erlang term, though the uses of \lstinline{main:fparse/1}, \lstinline{main:interpret/1} or using the combined function \lstinline{main:fparse_and_interpret/1} which fully converts an \ttt{xml}-file to a working maritime model.
 \newpage
-If a model is to be generated directly in an Erlang-shell, the same rules apply, that would, if it was run from a file, or compiled from an xml-file. For efficient, exception-free use of the model generators, its functions should be used following this precedence:
+If a model is to be generated directly in an Erlang-shell, the same rules apply, as if it was run from a file, or compiled from an xml-file. For efficient, exception-free use of the model generators, its functions should be used following this precedence:
 
 \begin{figure}[h]
 	\centering
@@ -240,5 +242,5 @@ If a model is to be generated directly in an Erlang-shell, the same rules apply,
 Figure \ref{fig:mmodsPrec} displays the order that needs to be followed when using the mmods module. The reason for this requirement is the fact that a number of the API functions rely on information, given in earlier functions.
 A relation cannot exist without at least two entities being added to the model beforehand, just as well as a dependency needs a relation, in order to exist. Likewise, information cannot be added to a nonexistent entity, and that same information cannot be removed or transfered, without it having been added first.
 
-An information request, as per the API function \lstinline{request_info/4}, carries the four arguments, \ttt{from(entity)}, \ttt{to(entity)}, \ttt{requested(information)}, and \ttt{answers(list)}. Despite the fact that it would seem like this action would require at least one dependency to be satisfied by \ttt{answers}, and that the information needs to exist, neither is the case. As dependency is a (possibly empty) list of constraints, none of these \tit{need} to be added for a request to be made. Likewise, a request can be made for nonexistent information, or information, not stored in the the \ttt{to}-argument entity, in which case no information will be returned to the requester. This, in turn means that no information needs to be added to a model before a request can be made.\\[0.1cm]
+An information request, as per the API function \lstinline{request_info/4}, carries the four arguments, \ttt{from(entity)}, \ttt{to(entity)}, \ttt{requested(information)}, and \ttt{answers(list)}. Despite the fact that it would seem like this action would require at least one dependency to be satisfied by \ttt{answers}, and that the information needs to exist, neither is the case. As dependency is a (possibly empty) list of constraints, none of these \tit{need} to be added for a request to be made. Likewise, a request can be made for nonexistent information, or information, not stored in the \ttt{to}-argument entity, in which case no information will be returned to the requester. This in turn means that no information needs to be added to a model before a request can be made.\\[0.1cm]
 Using a model post-creation both possible though the uses of manual and automatic model-creating, by interacting directly with the Erlang shell, in which the model has been created. 

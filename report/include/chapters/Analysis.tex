@@ -115,7 +115,7 @@ The core principle in the MCP is to restructure and streamline maritime software
 As stated in Section \ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.\newpage
 
 \section{Example Model Structure}
-Throughout this report, I will use a map requesting service as an example. In this example the maritime service will act as an intermediate, broking between a ship and a company, where the map is being held. The ship will have to submit authentication information to the maritime service in order to get a the requested map. The model, which has been built upon the example protocol has been illustrated in Figure \ref{fig:modelExProtocol}. The lines numbered 1-6 illustrate interaction between the three entities \ttt{Ship}, \ttt{Service}, and \ttt{Company}, where *1 and *2, respectively illustrate a submitting of authentication information, to the service, and the service accepts the information and sends a response. *3 and *4 illustrates the service's request of the requested map, and its subsequent receiving hereof. *5 illustrates the forwarding of requested information to the ship.
+Throughout this report, I will use a map requesting service as an example. In this example the maritime service will act as an intermediate, broking between a ship and a company, where the map is being held. The ship will have to submit authentication information to the maritime service in order to get a the requested map. The model, which has been built upon the example protocol has been illustrated in Figure \ref{fig:modelExProtocol}. The lines numbered 1-6 illustrate interaction between the three entities \ttt{Ship}, \ttt{Service}, and \ttt{Company}, where *1 and *2, respectively illustrate a submitting of authentication information to the service, and the service accepts the information and sends a response. *3 and *4 illustrates the service's request of the requested map, and its subsequent receiving hereof. *5 illustrates the forwarding of requested information to the ship.
 
 \begin{figure}[h]
 	\centering
@@ -184,7 +184,7 @@ Figure \ref{fig:fsmExService} represents a FSM, illustrating the \ttt{service} e
 \end{figure}
 
 \section{Uses of model-based testing of the MCP}
-The main advantage that comes from model-based testing is the large variety in testing algorithms which it produces. If a model to be machine readable the techniques which are listed below can be implemented fully automatic - and if not they can still be utilized manually. The following techniques can be applied to true and fair maritime service-models in the MCP: \newpage
+The main advantage that comes from model-based testing is the large variety in testing algorithms which it produces. If a model is to be machine readable the techniques which are listed below can be implemented fully automatic, and if not they can still be utilized manually. The following techniques can be applied to true and fair maritime service-models in the MCP: \newpage
 \begin{description}
 	\item[Finite state machines]\ \\
 		As mentioned in Subsection \ref{ssec:Finite State Machines (FSM)}, a FSM is made up of states, and the ability of a simulating program to change state through a collection of actions. Executable paths are determined, which can be used to create test cases, as well as illustrate the behavior of the system. Furthermore FSMs are closely related to the further techniques, that will be explained below.
@@ -205,7 +205,7 @@ Issues will inevitably present themselves with a project such as this, however t
 \begin{itemize}
 	\item Manual model creation will have a shorter initial implementation time, as an arbitrary single model is faster to build than its auto-model-generator counterpart. 
 	\item Built maritime service models can be fully customized at once in order to describe all aspects of its maritime service counterparts.
-	\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following the techniques, described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for exhaustive tests via manual model-creating.
+	\item Having customized each maritime service model to its corresponding maritime service counterpart allows for an equally customized test suite. Following this, the techniques described in Section \ref{sec:Uses of model-based testing of the MCP} will allow for exhaustive tests via manual model-creating.
 \end{itemize}
 \tbf{Disadvantages}
 \begin{itemize}
@@ -223,7 +223,7 @@ Issues will inevitably present themselves with a project such as this, however t
 \tbf{Disadvantages}
 \begin{itemize}
 	\item The obvious disadvantage that comes with automatic model generation is the lack of customization in models. As the generator should handle all models, that can be described through the xml specification files it needs to be generalized, which in turn means less specific models, which lowers the ability to custom-fit each model to its maritime specification counterpart.
-	\item Another inevitable downside to having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
+	\item Another inevitable downside of having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
 \end{itemize}
 
 To sum up, both methods will be advantageous, as they will each allow for extensive testing with the former being more custom-tailored, while a lot more time consuming in the long run, and the latter being more generic, but a lot less time consuming in the long run.

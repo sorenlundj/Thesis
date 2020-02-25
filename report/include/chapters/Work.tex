@@ -10,7 +10,7 @@ One way to implement these changes is to make the user able to assign variables,
 \begin{description}
 	\item[Entity]\ \\
 	An entity is the most basic component of the models, without which, they would be devoid of any data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occur throughout execution of a model. At the moment, three entities exist, however implementation of support for additional entities is possible.
-	Multiple instances of each entity is allowed in a model.\newpage
+	Multiple instances of each entity type is allowed in a model.\newpage
 	\begin{description}
 		\item[Ship]\ \\
 			If comparing the MCP to the App Store or Google Play, a ship would undertake the role of the user. The user can be the one utilizing the maritime service.
@@ -200,7 +200,7 @@ The core of the project is contained in the \ttt{mmods.erl} file, which contains
 \end{description}
 The functions \lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \linebreak \lstinline{remove_info/2}, \lstinline{transfer_info/3}, and \lstinline{request_info/4}, all add their corresponding self-descriptive functionality through the use of the \lstinline{gen_statem} (generic state machine) module. The getter-functions \lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, and \lstinline{get_info/1}, perform the simple task of retrieving relevant informations for the provided process id.
 
-Having implemented this functionality, creating a model is a matter of simply using the functions as building blocks to create the desired maritime models. For examples of how to do this, see files \ttt{examples.erl} and \ttt{tests.erl}.\newpage
+Having implemented this functionality, creating a model is a matter of simply using the functions as building blocks to create the desired maritime models. For examples of how to do this, see files \ttt{examples.erl} and \ttt{tests.erl}.
 
 \subsection{The parser and interpreter modules}
 

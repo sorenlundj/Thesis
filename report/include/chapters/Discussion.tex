@@ -30,8 +30,90 @@ Automatic model generation is, however, both the most user-friendly method and t
 \section{Results Related to Use}
 Taking the findings of Chapter \ref{chp:Results} into consideration, when comparing the usefulness of the two methods, one model-generating technique clearly stands out, as being the most useful. Recognizing that automatic model-generation will provide more immediate user-friendliness, more scalability and, according to Section \ref{ssec:Model Equivalence}, functionality equivalent to that of manual model-generation.
 
-Manual model generation, in it's basic state, as described in Section \ref{ssec:Expanding Manual Model Functionality} allows for limitless new functionality, and, as proven by the implementation of the automatic component, said new functionality does not necessarily need to be manual.
+A central perk of the solution is to, through model-based testing, visualize and predict intended behavior of maritime services. Being able to do this, will not only be advantageous in the ability to create software, more in the likes of what is desired; it will also speed up the process of doing so. Most development processes are implemented, using the much praised Scrum~\cite{scrum} framework. Developing software, using the Scrum framework entails a circular approach to the way the process plays out. Typically, such a process starts with the basic idea of the application. After this step, the loop starts with planning and analysis of intended functionality and behavior, followed by implementation, functionality and behavioral testing, and lastly, revision. After revision, the process initiates once again, starting with planning and analysis.
+\newpage
+\noindent
+Figure \ref{fig:scrumBig} visualizes a standard scrum framework, which can be followed, when developing a maritime service. The scrum method in question, although agile, can be a lengthy process, partly because of the 'testing' sequences. Furthermore 'Implementation' and 'Revision' may, in the worst cases, be performed to little benefit, if implemented on the basis of a faulty design.
+\begin{figure}[h]
+  \centering
+  \smartdiagramset{
+    set color list={gray!50,gray!50,gray!50,gray!50,gray!50},
+    arrow line width=2 pt
+  }
+    \begin{tikzpicture}[thick]
+    \node at (0,0)   {\smartdiagram[circular diagram:clockwise]{
+      Planning \& Analysis,
+      Design,
+      Implementation,
+      Functionality Testing,
+      Revision}
+    };
 
-In conclusion, both components add relevant functionality to the MCP, and while automatic model generating provides the more present, needed, service, the manual component provides a broad foundation for development of new ideas.
+    \node [rectangle,
+           draw=gray,
+           rounded corners=0.12 cm,
+           inner sep=0.3 cm,
+           top color=white,
+           bottom color=gray!50]
+          (S)  at (-4,3)  {Idea};
 
+    \node (DevI) at (-1.7,3) {};
+    \node (StaO) at (-3.2,3) {};
+
+    \path [->,line width=2 pt,gray!50,>=stealth] (StaO) edge (DevI);
+  \end{tikzpicture}
+  \caption{Scrum development cycle without automated model-based testing.}
+  \label{fig:scrumBig}
+\end{figure}
+
+The automatic model-generator, described in Section \ref{sec:Technical Implementation}, can aid in the issue, defined above. The tool will allow users to visualize the an intended version of their maritime service instance, before starting implementation, which will enable them to skip the steps 'Implementation', 'Revision', and 'Planning \& Analysis' in a given scrum cycle. In an ideal use case scenario, such as the one, described in %TODO
+, as crucial information is given before advancement, a user can, thus, skip large portions of cycles, thereby saving time by not follow dead design ends.
+
+This principle is described by Figure \ref{fig:scrumSmall}, where 'Functionality Testing' is removed from the cycle, and only connected with 'Design', thereby creating a much smaller, and considerably faster, sprint.
+\newpage
+\begin{figure}[h]
+  \centering
+  \smartdiagramset{arrow line width=2 pt}
+  \begin{tikzpicture}[thick]
+    \node at (0,0) {\smartdiagram[circular diagram:clockwise]{
+      Planning \& Analysis,
+      Design,
+      Implementation,
+      Revision}
+    };
+
+    \node [rectangle,
+           draw=gray,
+           rounded corners=0.09 cm,
+           inner sep=0.3 cm,
+           top color=white,
+           bottom color=gray!50]
+          (S)  at (-4,3)  {Idea};
+
+    \node [rectangle,
+           draw=gray,
+           rounded corners=0.09 cm,
+           inner sep=0.3 cm,
+           top color=white,
+           bottom color=gray!50]
+          (FT)  at (5,-2.5)  {Functionality Testing};
+
+    \node (DevI) at (-1.1,3) {};
+    \node (StaO) at (-3.2,3) {};
+
+    \node (DI)  at (3.8,-0.5) {};
+    \node (DO)  at (3.4,-0.5) {};
+    \node (FTI) at (4.2,-2) {};
+    \node (FTO) at (4.6,-2) {};
+
+    \path [->,line width=2 pt,gray!50,>=stealth] (StaO) edge (DevI);
+    \path [<-,line width=2 pt,gray!50,>=stealth,bend left] (DI) edge (FTO);
+    \path [<-,line width=2 pt,gray!50,>=stealth,bend left] (FTI) edge (DO);
+  \end{tikzpicture}
+  \caption{Scrum development cycle with automated model-based testing.}
+  \label{fig:scrumSmall}
+\end{figure}
+
+Manual model generation, in it's basic state, as described in Section \ref{ssec:Expanding Manual Model Functionality} allows for limitless new functionality, and, as proven by the implementation of the automatic component, said new functionality does not necessarily need to be manual.\\[0.5cm]
+In conclusion, both components add relevant functionality to the MCP, and while automatic model generating provides the more present, needed, utility, the manual component provides a broad foundation for development of new ideas.
 

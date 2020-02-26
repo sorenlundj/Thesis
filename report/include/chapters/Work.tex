@@ -4,35 +4,35 @@ In this chapter I will describe the work I have done in order to implement model
 
 \section{Updated Data}
 
-As discussed in Section \ref{sec:Data}, in order to create uniform models, upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language, for reliable model-generation.
+As discussed in Section \ref{sec:Data}, in order to create uniform models upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language for reliable model-generation.
 
-One way to implement these changes is to make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generation as well as give maximum flexibility in future model design.
+One way to implement these changes is to make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generating, as well as give maximum flexibility in future model design.
 \begin{description}
 	\item[Entity]\ \\
-	An entity is the most basic component of the models, without which, they would be devoid of any data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occur throughout execution of a model. At the moment, three entities exist, however implementation of support for additional entities is possible.
+	An entity is the most basic component of the models, without which, they would be devoid of any data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occur throughout execution of a model. At the moment support for three entities exist, however, implementation of support for additional entities is possible.
 	Multiple instances of each entity type is allowed in a model.\newpage
 	\begin{description}
 		\item[Ship]\ \\
-			If comparing the MCP to the App Store or Google Play, a ship would undertake the role of the user. The user can be the one utilizing the maritime service.
+			If comparing the MCP to the App Store or Google Play, a ship would undertake the role of a user. The user can be the one utilizing the maritime service or symbolize other users, however, no distinctions are naturally implemented between those two types.
 		\item[Service]\ \\
 			The Service entity represents a maritime service, which is being modeled. If multiple instances of a service entity occurs, this will correspond to cross app interaction, using the same comparison as above.
 		\item[Company]\ \\
 			Company entities serve as nodes, which hold data or similar goods, which can be desired by ship entities for a variety of reasons. If multiple company entities exist at one time, they will not necessarily need a service entity to connect them. 
 	\end{description}
 	\item[Relation]\ \\
-		A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service} as well as \ttt{Service} and '\ttt{Company}.
+		A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service}, as well as \ttt{Service} and '\ttt{Company}.
 
 		A ship entity can share a relation with service entities, as they would have no way of communicating with company or other ship entities without any prior software. In the case that a ship communicates with another ship, it will need an intermediate service entity to handle communication.
 
 		A service entity needs to be able to share a relation with all other entities in order to act as an intermedium between ship entities and company entities, while also being able to interact with other service entities.
 
-		A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels, when communicating with companies and citizens.
+		A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels when communicating with companies and citizens.
 	\item[Dependency]\ \\
-		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation, that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure \ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
+		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure \ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
 
-		If two entities co-depend on each other a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
+		If two entities co-depend on each other, a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
 	\item[Information]\ \\
-		All entities are able to store information, which is able to be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
+		All entities are able to store information, which can be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
 \end{description}
 \noindent
 Figure \ref{fig:entities} describes which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure \ref{fig:entities} coincides with \ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
@@ -98,12 +98,12 @@ Figure \ref{fig:entities} describes which options are excluded at selections of 
 
 \section{Updated Parser Grammars}
 
-The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{fig:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar, described in Listing \ref{fig:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version}, that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{fig:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-patterns, and security precautions. The parser grammar abides by the rules, presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
+The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{fig:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar described in Listing \ref{fig:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version} that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{fig:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-pattern, and security precautions. The parser grammar abides by the rules presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
 
 \subsection{Updated General Grammar}
-The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Listing \ref{fig:sSpecUpd}, however the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
+The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Figure \ref{fig:sSpecUpd}, however, the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
 
-Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpecUpd}. It can be seen that Listing \ref{fig:sSpecUpdRed} includes all information, stored in Listing \ref{fig:sSpecRed}, which indicates that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser, given the generalized format of the xml-specification files.
+Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpecUpd}. It can be seen that Listing \ref{fig:sSpecUpdRed} includes all information stored in Listing \ref{fig:sSpecRed}, which indicates that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser, given the generalized format of the xml-specification files.
 
 \begin{figure}[h]
 	\centering
@@ -184,15 +184,15 @@ answer ::= variant
 \end{figure}
 
 \section{Technical Implementation}
-The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder, containing models and simulations in xml-format.
+The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder containing models and simulations in xml-format.
 
 \subsection{The mmods module}
-The core of the project is contained in the \ttt{mmods.erl} file, which contains the functionality, that creates the finite state machine models. This module creates processes which include the following fields:
+The core of the project is contained in the \ttt{mmods.erl} file, which contains the functionality that creates the finite state machine models. This module creates processes which include the following fields:
 \begin{description}
 	\item[\ttt{Type}]\ \\
 		This field is described by a single atom, which is only able to take the forms of either \ttt{ship}, \ttt{service}, or \ttt{company}. This is used to check the legality of relations, when adding these.
 	\item[\ttt{Relations}]\ \\
-		The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well of its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, each evaluating to \ttt{true} or \ttt{false}.
+		The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well as its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, each evaluating to \ttt{true} or \ttt{false}.
 	\item[\ttt{Self}]\ \\
 		The \ttt{Self} field is made up of the process id, corresponding to the entity.
 	\item[\ttt{Info}]\ \\
@@ -206,26 +206,26 @@ Having implemented this functionality, creating a model is a matter of simply us
 
 \begin{description}
 	\item[The parser module]\ \\
-		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl} and an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures \ref{fig:sSpecUpdRed} and \ref{fig:sSpecUpd}.
+		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl}, an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures \ref{fig:sSpecUpdRed} and \ref{fig:sSpecUpd}.
 	\item[The interpreter module]\ \\
-		The interpreter module exports the single function \lstinline{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \lstinline{interp/1} function builds maritime models by adding entities, info, relations, dependencies, and lastly performing information requests, all in said order. Each adder function dynamically searches its corresponding keyword rather than retrieving by index in the xml term, which allows for variation in the the structure of the xml along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally the interpreter shows the states of all entities, as is after addition of all data.
+		The interpreter module exports the single function \lstinline{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \lstinline{interp/1} function builds maritime models by adding entities, info, relations, dependencies, and lastly performing information requests, all in said order. Each adder function dynamically searches its corresponding keyword, rather than retrieving by index in the xml term, which allows for variation in the structure of the xml, along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally, the interpreter shows a snapshot of all entities' states, as is after addition of all data.
 \end{description}
 \subsection{Executing Instructions}
-In an Erlang-shell all files can be compiled with \lstinline{c(file)}, where after manual model generation can be run from the \ttt{mmods.erl} file \footnote{See \ttt{tests.erl} and \ttt{examples.erl} for examples}.
-For automatic model generation, the \ttt{main.erl} file gathers the functionality of the parser- and interpreter-modules, which in turn draws upon the mmods-module. From here, the user has the possibilities of parsing an \ttt{xml}-file, interpreting an Erlang term, though the uses of \lstinline{main:fparse/1}, \lstinline{main:interpret/1} or using the combined function \lstinline{main:fparse_and_interpret/1} which fully converts an \ttt{xml}-file to a working maritime model.
-\newpage
-If a model is to be generated directly in an Erlang-shell, the same rules apply, as if it was run from a file, or compiled from an xml-file. For efficient, exception-free use of the model generators, its functions should be used following this precedence:
+In an Erlang-shell, all files can be compiled with \lstinline{c(file)}, where after manual model generation can be run from the \ttt{mmods.erl} file \footnote{See \ttt{tests.erl} and \ttt{examples.erl} for examples}.
+For automatic model generation, the \ttt{main.erl} file gathers the functionality of the parser- and interpreter-modules, which in turn draws upon the mmods-module. From here, the user has the possibilities of parsing an \ttt{xml}-file, interpreting an Erlang term though the uses of \lstinline{main:fparse/1}, \lstinline{main:interpret/1} or using the combined function \lstinline{main:fparse_and_interpret/1}, which fully converts an \ttt{xml}-file to a working maritime model.
+
+For efficient, exception-free use of the model generators, its functions should be used following this precedence:
 
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}[thick]
 	\node (S)  at (5,8)   {\lstinline{start/1}};
-    \node (AR) at (2,7)   {\lstinline{add_relation/2}};
-    \node (AI) at (8,7)   {\lstinline{add_info/2}};
-    \node (AD) at (1,4.9) {\lstinline{add_dependency/3}};
-    \node (TI) at (9,4.5) {\lstinline{transfer_info/3}};
-    \node (RI) at (6,4.9) {\lstinline{remove_info/2}};
-    \node (RQ) at (4,4.5) {\lstinline{request_info/4}};
+    \node (AR) at (2,6)   {\lstinline{add_relation/2}};
+    \node (AI) at (8,6)   {\lstinline{add_info/2}};
+    \node (AD) at (1,3.9) {\lstinline{add_dependency/3}};
+    \node (TI) at (9,3.2) {\lstinline{transfer_info/3}};
+    \node (RI) at (6,3.9) {\lstinline{remove_info/2}};
+    \node (RQ) at (4,3.2) {\lstinline{request_info/4}};
     \node [anchor=south east, rotate=20]   at (3.9,7.55) {2};
 
     \path [] (S)  edge (AR);
@@ -240,7 +240,12 @@ If a model is to be generated directly in an Erlang-shell, the same rules apply,
 \end{figure}
 
 Figure \ref{fig:mmodsPrec} displays the order that needs to be followed when using the mmods module. The reason for this requirement is the fact that a number of the API functions rely on information, given in earlier functions.
-A relation cannot exist without at least two entities being added to the model beforehand, just as well as a dependency needs a relation, in order to exist. Likewise, information cannot be added to a nonexistent entity, and that same information cannot be removed or transfered, without it having been added first.
+A relation cannot exist without at least two entities being added to the model beforehand, just as a dependency needs a relation in order to exist. Likewise, information cannot be added to a nonexistent entity, and that same information cannot be removed or transfered without it having been added first.
 
-An information request, as per the API function \lstinline{request_info/4}, carries the four arguments, \ttt{from(entity)}, \ttt{to(entity)}, \ttt{requested(information)}, and \ttt{answers(list)}. Despite the fact that it would seem like this action would require at least one dependency to be satisfied by \ttt{answers}, and that the information needs to exist, neither is the case. As dependency is a (possibly empty) list of constraints, none of these \tit{need} to be added for a request to be made. Likewise, a request can be made for nonexistent information, or information, not stored in the \ttt{to}-argument entity, in which case no information will be returned to the requester. This in turn means that no information needs to be added to a model before a request can be made.\\[0.1cm]
-Using a model post-creation both possible though the uses of manual and automatic model-creating, by interacting directly with the Erlang shell, in which the model has been created. 
+\newpage
+\noindent
+
+An information request, as per the API function \lstinline{request_info/4}, carries the four arguments, \ttt{from(entity)}, \ttt{to(entity)}, \ttt{requested(information)} and \ttt{answers(list)}. Despite the fact that it would seem like this action would require at least one dependency to be satisfied by \ttt{answers}, and that the information needs to exist, neither is the case. As dependency is a (possibly empty) list of constraints, none of these \tit{need} to be added for a request to be made. Likewise, a request can be made for nonexistent information, or information not stored in the \ttt{to}-argument entity, in which case no information will be returned to the requester. This in turn, means that no information needs to be added to a model before a request can be made.\\[0.1cm]
+Using a model post-creation is both possible though the uses of manual and automatic model-creating, by interacting directly with the variables in the Erlang shell, in which the model has been created. 
+
+If a model is to be generated directly in an Erlang-shell, the same rules apply, as if it was run from a file, or compiled from an xml-file.

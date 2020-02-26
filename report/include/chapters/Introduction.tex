@@ -1,5 +1,5 @@
 \chapter{Introduction}
-The Maritime Connectivity Platform \cite{mcp} (MCP) is, as the name suggests, a platform that connects maritime services, functioning as a common infrastructure by offering safe and reliable information exchange between various maritime actors. A particular way of utilizing this, is that a user of the MCP is able to develop his or her own software, and distribute it across the world. Such digital maritime components, however, need to be thoroughly tested, which often is not done adequately through simple unit testing. Thus, software components, distributed through the MCP need a thorough test-suite, for which the obvious solution is to implement model-based testing.
+The Maritime Connectivity Platform~\cite{mcp} (MCP) is, as the name suggests, a platform that connects maritime services, functioning as a common infrastructure by offering safe and reliable information exchange between various maritime actors. A particular way of utilizing this, is that a user of the MCP is able to develop his or her own software, and distribute it across the world. Such digital maritime components, however, need to be thoroughly tested, which often is not done adequately through simple unit testing. Thus, software components, distributed through the MCP need a thorough test-suite, for which the obvious solution is to implement model-based testing.
 The MCP has provided specifications, which describe rules that software needs to adhere to. These specifications will be used to create the model, that will verify the software. The specifications are provided in \ttt{xml}-format, and are, as of now, not used in any formal degree. Ideally, the provided specifications should be used to automatically generate models, which in turn, can be used to verify that a certain piece of software adheres to the specification. 
 \section{Description of the Project}
 In this project, model-based testing will be utilized, in order to verify that instances fulfills the requirements, set by specifications in the MCP. Model-based testing is a technique that allows for verification of overall \tit{model behavior}, rather than \tit{function correctness}. The idea behind this method is, as the term \tit{model}-based testing suggests, to create models which describe the properties that given test-cases need to reflect. 
@@ -22,7 +22,7 @@ This thesis will go into means of creating true and fair representations of mode
 Methods of improvement upon both manual and automatic model-creation modules will be present, however not all will be utilized. This includes monadic parsers, and model verification through quickcheck, however in future work, these topics are relevant to be elaborated upon.
 
 \section{Structure}
-The remainder of the thesis will consist of \ref{chp:Conclusion} chapters, covering the following topics:
+The remainder of the thesis will consist of~\ref{chp:Conclusion} chapters, covering the following topics:
 \begin{description}
 	\item[Chapter \refNumName{chp:Introduction}]\ \\
 	This chapter provides a description of the problem statement, the learning objectives and the project itself, as well as containing this list.
@@ -35,7 +35,7 @@ The remainder of the thesis will consist of \ref{chp:Conclusion} chapters, cover
 	\item[Chapter \refNumName{chp:Results}]\ \\
 	This chapter includes the results that came from the implementation, described in the previous chapters.
 	\item[Chapter \refNumName{chp:Discussion}]\ \\
-	This chapter contains a discussion of the results, described in Chapter \ref{chp:Results}.
+	This chapter contains a discussion of the results, described in Chapter~\ref{chp:Results}.
 	\item[Chapter \refNumName{chp:Conclusion}]\ \\
 	This chapter concludes the thesis and compiles a short summary, highlighting the key takeaways.
 \end{description}

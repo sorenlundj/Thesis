@@ -4,7 +4,7 @@ In this chapter I will provide a layout of the experiments, which I have set up,
 
 \section{Testing}
 
-Testing of the implementation has been divided into two parts, one of which is detailed in Subsection \ref{ssec:Testing the Manual Model Creator}, the other in Subsection \ref{ssec:Testing the Automatic Model Creator}.
+Testing of the implementation has been divided into two parts, one of which is detailed in Section~\ref{ssec:Testing the Manual Model Creator}, the other in Section~\ref{ssec:Testing the Automatic Model Creator}.
 
 \subsection{Testing the Manual Model Creator}
 The manual model creator module contained in the file \ttt{mmods.erl}, exports 11 functions, of which 7 are model creation functions\footnote{\lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \lstinline{remove_info/2}, \lstinline{transfer_info/3}}, 4 are data-fetching functions\footnote{\lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, \lstinline{get_info/1}} and a single one is a simulation function\footnote{\lstinline{request_info/4}}.
@@ -34,7 +34,7 @@ The scenario-oriented test cases are all included in the wrapper-function \ttt{m
 
 \subsection{Testing the Automatic Model Creator}
 
-The automatic model creation algorithm makes use of the mmods module, and as this has been tested for correctness in Subsection \ref{ssec:Testing the Manual Model Creator}, it is fair to assume that this module will also function correctly in the context of the automatic model creator. 
+The automatic model creation algorithm makes use of the mmods module, and as this has been tested for correctness in Section~\ref{ssec:Testing the Manual Model Creator}, it is fair to assume that this module will also function correctly in the context of the automatic model creator. 
 
 The two modules that distinguish the automatic model creator from its manual counterpart is the parser and the interpreter. As the parser is a standardized xml-to-Erlang, there is no need to check for edge-cases, correlating directly to the current implementation, as there are none. Therefore the parser is tested with the function \lstinline{parse_tests/0}, which includes all test cases. The cases tested for are correct handling of strings, integers, lists, multiple sub-tags in one tag, a tag occurring in another tag with the same name, and handling of spaces. The test is run with \lstinline{tests:parse_tests().} in an Erlang shell, which will reveal that all tests pass.
 
@@ -42,11 +42,11 @@ One test that does not pass, is \lstinline{test_interp_anonymous_function/0}. Th
 
 \section{Experiments}
 
-The primary goal of the project is to construct maritime models, describing maritime services, in the shape of finite state machines, both manual and automatic, followed by an assessment of the advantages and disadvantages of each type. As summarized in Section \ref{sec:Summary: Advantages and Disadvantages}, manual model-building provides more control to the author, while automatic model building allows for more streamlining in the model-building process. Thus, as each method provides unique advantages to the process, a feasible metric of judging the products of each method is their respective attributes. That is, which FSM is able to describe scenarios to the highest degree. In order to determine this, I will compare the results of each model building method, starting with the example, given in Figure \ref{fig:modelExProtocol}.
+The primary goal of the project is to construct maritime models, describing maritime services, in the shape of finite state machines, both manual and automatic, followed by an assessment of the advantages and disadvantages of each type. As summarized in Section~\ref{sec:Summary: Advantages and Disadvantages}, manual model-building provides more control to the author, while automatic model building allows for more streamlining in the model-building process. Thus, as each method provides unique advantages to the process, a feasible metric of judging the products of each method is their respective attributes. That is, which FSM is able to describe scenarios to the highest degree. In order to determine this, I will compare the results of each model building method, starting with the example, given in Figure~\ref{fig:modelExProtocol}.
 
 \subsection{Model Equivalence}
 
-Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic} display the results of manual and automatic model creation respectively. By manually inspecting them, it can be seen that the only variance between the two is the process ids, and despite of this, the relationships between the entities, are evidently equal in the two models. Also, from manual inspection, it can be seen that information, types and dependencies, distributed between entities are also equal to that of their manual/automatic counterparts.
+Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the results of manual and automatic model creation respectively. By manually inspecting them, it can be seen that the only variance between the two is the process ids, and despite of this, the relationships between the entities, are evidently equal in the two models. Also, from manual inspection, it can be seen that information, types and dependencies, distributed between entities are also equal to that of their manual/automatic counterparts.
 
 \begin{figure}[h]
   \begin{lstlisting}[keywordstyle={}]
@@ -73,7 +73,7 @@ Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic} display the res
 \end{figure}
 
 \noindent
-A visual representation of the points described is displayed in Figure \ref{fig:protocolVisual}, where \ref{subfig:protocolManualVisual} represents the manually created model, and \ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique id, with the third representing the information held by the entity. All edges in the figures are oriented, symbolizing relations from one entity to another. Functions displayed beside a relation, represents a dependency, associated with that relation. If not evident in Figures \ref{fig:protocolManual} and \ref{fig:protocolAutomatic}, Figure \ref{fig:protocolVisual} shows clearly how the collection of entities' states are uniform in relation to their counterparts'.
+A visual representation of the points described is displayed in Figure~\ref{fig:protocolVisual}, where~\ref{subfig:protocolManualVisual} represents the manually created model, and~\ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique id, with the third representing the information held by the entity. All edges in the figures are oriented, symbolizing relations from one entity to another. Functions displayed beside a relation, represents a dependency, associated with that relation. If not evident in Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic}, Figure~\ref{fig:protocolVisual} shows clearly how the collection of entities' states are uniform in relation to their counterparts'.
 
 \begin{figure}[h]
   \begin{subfigure}{.48\textwidth}
@@ -110,14 +110,14 @@ A visual representation of the points described is displayed in Figure \ref{fig:
     \caption{}
     \label{subfig:protocolAutomaticVisual}
   \end{subfigure}
-  \caption{Visual representation of Figures \ref{fig:protocolManual}, and \ref{fig:protocolAutomatic}.}
+  \caption{Visual representation of Figures~\ref{fig:protocolManual}, and~\ref{fig:protocolAutomatic}.}
   \label{fig:protocolVisual}
 \end{figure}
 \newpage
-Having concluded that the models\footnote{Collections of all states in the FSM}, described in Figures \ref{fig:protocolManual}, and \ref{fig:protocolAutomatic}, are equal, in order for their FSMs to be equivalent, all available \tit{actions} correlating to the states must also be equal. To determine if this is the case, I will look to the functionality of the manual, as well as the automatic model creator. 
+Having concluded that the models\footnote{Collections of all states in the FSM}, described in Figures~\ref{fig:protocolManual}, and~\ref{fig:protocolAutomatic}, are equal, in order for their FSMs to be equivalent, all available \tit{actions} correlating to the states must also be equal. To determine if this is the case, I will look to the functionality of the manual, as well as the automatic model creator. 
 
-The functionality of the automatic implementation is built to directly utilize the manual model building module, and thus their functionalities are near identical. They are only limited by the functionality of the parser and interpreter's ability to feed instructions to \ttt{mmods.erl}, such as the example given in Section \ref{ssec:Testing the Automatic Model Creator}.
+The functionality of the automatic implementation is built to directly utilize the manual model building module, and thus their functionalities are near identical. They are only limited by the functionality of the parser and interpreter's ability to feed instructions to \ttt{mmods.erl}, such as the example given in Section~\ref{ssec:Testing the Automatic Model Creator}.
 
 \subsubsection{Further Examples of Model Equivalence}
 
-In order to verify that the example, described above in Section \ref{ssec:Model Equivalence} is not a unique occurrence, the function \lstinline{equiv_models/2} has been created. This function compares two maritime models, according to the metrics used, when comparing models in Figure \ref{fig:protocolVisual}; Types, constraint functions, and information have to exactly match, while relations have to match mapped values. The function \lstinline{equiv_models_tests/0} utilizes the model comparer function, in order to test that the protocol example holds true with other examples as well. The examples given to \lstinline{equiv_models_tests/0}, are all models created manually in the file \ttt{examples.erl}, as well as their automatic counterparts, created in the 'xml' folder. All test cases passed, further proving the implementation's ability to create equivalent maritime models.
+In order to verify that the example, described above in Section~\ref{ssec:Model Equivalence} is not a unique occurrence, the function \lstinline{equiv_models/2} has been created. This function compares two maritime models, according to the metrics used, when comparing models in Figure~\ref{fig:protocolVisual}; Types, constraint functions, and information have to exactly match, while relations have to match mapped values. The function \lstinline{equiv_models_tests/0} utilizes the model comparer function, in order to test that the protocol example holds true with other examples as well. The examples given to \lstinline{equiv_models_tests/0}, are all models created manually in the file \ttt{examples.erl}, as well as their automatic counterparts, created in the 'xml' folder. All test cases passed, further proving the implementation's ability to create equivalent maritime models.

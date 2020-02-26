@@ -4,7 +4,7 @@ In this chapter I will describe the work I have done in order to implement model
 
 \section{Updated Data}
 
-As discussed in Section \ref{sec:Data}, in order to create uniform models upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language for reliable model-generation.
+As discussed in Section~\ref{sec:Data}, in order to create uniform models upon which to execute tests, the structure of the xml-specification files needs to be altered in a manner that adds uniformity to the xml-specification files. This rules out the use of natural language for reliable model-generation.
 
 One way to implement these changes is to make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generating, as well as give maximum flexibility in future model design.
 \begin{description}
@@ -20,7 +20,7 @@ One way to implement these changes is to make the user able to assign variables,
 			Company entities serve as nodes, which hold data or similar goods, which can be desired by ship entities for a variety of reasons. If multiple company entities exist at one time, they will not necessarily need a service entity to connect them. 
 	\end{description}
 	\item[Relation]\ \\
-		A relation symbolizes a bond between two entities. In the case of Figure \ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service}, as well as \ttt{Service} and '\ttt{Company}.
+		A relation symbolizes a bond between two entities. In the case of Figure~\ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service}, as well as \ttt{Service} and '\ttt{Company}.
 
 		A ship entity can share a relation with service entities, as they would have no way of communicating with company or other ship entities without any prior software. In the case that a ship communicates with another ship, it will need an intermediate service entity to handle communication.
 
@@ -28,14 +28,14 @@ One way to implement these changes is to make the user able to assign variables,
 
 		A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels when communicating with companies and citizens.
 	\item[Dependency]\ \\
-		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure \ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
+		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure~\ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
 
 		If two entities co-depend on each other, a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
 	\item[Information]\ \\
 		All entities are able to store information, which can be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
 \end{description}
 \noindent
-Figure \ref{fig:entities} describes which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure \ref{fig:entities} coincides with \ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
+Figure~\ref{fig:entities} describes which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure~\ref{fig:entities} coincides with~\ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
 
 \begin{figure}
 	\centering
@@ -98,12 +98,12 @@ Figure \ref{fig:entities} describes which options are excluded at selections of 
 
 \section{Updated Parser Grammars}
 
-The fields described in Section \ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing \ref{fig:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar described in Listing \ref{fig:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version} that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing \ref{fig:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-pattern, and security precautions. The parser grammar abides by the rules presented in Section \ref{sec:Updated Data} and Figure \ref{fig:entities}.
+The fields described in Section~\ref{sec:Updated Data} furthermore need to be translated into parsable xml, and an example of this is given in Listing~\ref{fig:sSpecUpd}. This parser grammar serves as an updated version of the parser grammar described in Listing~\ref{fig:sSpecFull}, however shaved for information\footnote{aSpec, authorInfo, authorInfos, contactInfo, dataExchangePattern, definitionAsXSD, description, isSpatialExclusive, keywords, oSpec, operation, operations, parameterType, parameterTypes, ptSpec, rSpec, requirement, requirements, returnValueType, serviceDataModel, serviceInterface, serviceInterfaces, siSpec, spec, specifications, status, text, typeReference, version} that is irrelevant to the model-generating process. While this information can of course be included in the xml-specification file, it will be deemed irrelevant after parsing, and thus not included further in the model-generating process. The parser grammar presented in Listing~\ref{fig:sSpecUpd} is designed to form a clear and unambiguous collection of entities, along with a similarly unambiguous description of relations, exchange-pattern, and security precautions. The parser grammar abides by the rules presented in Section~\ref{sec:Updated Data} and Figure~\ref{fig:entities}.
 
 \subsection{Updated General Grammar}
-The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Figure \ref{fig:sSpecUpd}, however, the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
+The updated xml-specification files will be limiting the flexibility of the models in some aspects, as not all maritime services would follow the structure given in Figure~\ref{fig:sSpecUpd}, however, the example given is the earliest version of the domain-specific language. Following complex structures of various maritime services, the domain-specific language of the specification files can scale in complexity with the requirements set up by the maritime services.
 
-Listing \ref{fig:sSpecUpdRed} describes a reduced form of Listing \ref{fig:sSpecUpd}. It can be seen that Listing \ref{fig:sSpecUpdRed} includes all information stored in Listing \ref{fig:sSpecRed}, which indicates that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser, given the generalized format of the xml-specification files.
+Listing~\ref{fig:sSpecUpdRed} describes a reduced form of Listing~\ref{fig:sSpecUpd}. It can be seen that Listing~\ref{fig:sSpecUpdRed} includes all information stored in Listing~\ref{fig:sSpecRed}, which indicates that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser, given the generalized format of the xml-specification files.
 
 \begin{figure}[h]
 	\centering
@@ -125,7 +125,7 @@ spec ::= string
 
 \subsection{Updated Service Specification Grammar}
 
-Figure \ref{fig:sSpecUpd} displays the updated parser grammar, and subsequently shows the newly added information, which the service specification file will need to include. The added information fields are designed to represent the fields, displayed in Section \ref{sec:Updated Data}.
+Figure~\ref{fig:sSpecUpd} displays the updated parser grammar, and subsequently shows the newly added information, which the service specification file will need to include. The added information fields are designed to represent the fields, displayed in Section~\ref{sec:Updated Data}.
 
 \begin{figure}
 	\centering
@@ -206,7 +206,7 @@ Having implemented this functionality, creating a model is a matter of simply us
 
 \begin{description}
 	\item[The parser module]\ \\
-		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl}, an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures \ref{fig:sSpecUpdRed} and \ref{fig:sSpecUpd}.
+		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl}, an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures~\ref{fig:sSpecUpdRed} and~\ref{fig:sSpecUpd}.
 	\item[The interpreter module]\ \\
 		The interpreter module exports the single function \lstinline{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \lstinline{interp/1} function builds maritime models by adding entities, info, relations, dependencies, and lastly performing information requests, all in said order. Each adder function dynamically searches its corresponding keyword, rather than retrieving by index in the xml term, which allows for variation in the structure of the xml, along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally, the interpreter shows a snapshot of all entities' states, as is after addition of all data.
 \end{description}
@@ -239,7 +239,7 @@ For efficient, exception-free use of the model generators, its functions should 
 	\label{fig:mmodsPrec}
 \end{figure}
 
-Figure \ref{fig:mmodsPrec} displays the order that needs to be followed when using the mmods module. The reason for this requirement is the fact that a number of the API functions rely on information, given in earlier functions.
+Figure~\ref{fig:mmodsPrec} displays the order that needs to be followed when using the mmods module. The reason for this requirement is the fact that a number of the API functions rely on information, given in earlier functions.
 A relation cannot exist without at least two entities being added to the model beforehand, just as a dependency needs a relation in order to exist. Likewise, information cannot be added to a nonexistent entity, and that same information cannot be removed or transfered without it having been added first.
 
 \newpage

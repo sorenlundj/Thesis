@@ -194,11 +194,11 @@ The core of the project is contained in the \ttt{mmods.erl} file, which contains
 	\item[\ttt{Relations}]\ \\
 		The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well as its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, each evaluating to \ttt{true} or \ttt{false}.
 	\item[\ttt{Self}]\ \\
-		The \ttt{Self} field is made up of the process id, corresponding to the entity.
+		The \ttt{Self} field is made up of the process ID, corresponding to the entity.
 	\item[\ttt{Info}]\ \\
 		The \ttt{Info} field consists of all data representation, which can take any form.
 \end{description}
-The functions \lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \linebreak \lstinline{remove_info/2}, \lstinline{transfer_info/3}, and \lstinline{request_info/4}, all add their corresponding self-descriptive functionality through the use of the \lstinline{gen_statem} (generic state machine) module. The getter-functions \lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, and \lstinline{get_info/1}, perform the simple task of retrieving relevant informations for the provided process id.
+The functions \lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \linebreak \lstinline{remove_info/2}, \lstinline{transfer_info/3}, and \lstinline{request_info/4}, all add their corresponding self-descriptive functionality through the use of the \lstinline{gen_statem} (generic state machine) module. The getter-functions \lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, and \lstinline{get_info/1}, perform the simple task of retrieving relevant informations for the provided process ID.
 
 Having implemented this functionality, creating a model is a matter of simply using the functions as building blocks to create the desired maritime models. For examples of how to do this, see files \ttt{examples.erl} and \ttt{tests.erl}.
 

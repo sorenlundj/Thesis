@@ -74,7 +74,7 @@
 \let\orisubsubsectionmark\subsubsectionmark
 \renewcommand\subsubsectionmark[1]{\label{sssec:#1}\orisubsubsectionmark{sssec:#1}}
 
-\newcommand{\command}[1]{\centerline{\ttt{\$ #1}}}
+\newcommand{\command}[1]{\\ \centerline{\ttt{\$ #1}}}
 
 % Where graphic files are located
 \graphicspath{{figures/}}

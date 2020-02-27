@@ -27,7 +27,7 @@ specifications ::= spec specifications
      
 spec ::= name
     | status
-    | id
+    | ID
     | version
     | description
     | keywords
@@ -43,7 +43,7 @@ authorInfos ::= authorInfo authorInfos
 authorInfo ::= aSpec authorInfo
     | $\e$
 
-aSpec ::= id
+aSpec ::= ID
     | name
     | description
     | contactInfo
@@ -54,7 +54,7 @@ requirements ::= requirement requirements
 requirement ::= rSpec requirement
     | $\e$
 
-rSpec ::= id
+rSpec ::= ID
     | name
     | text
 

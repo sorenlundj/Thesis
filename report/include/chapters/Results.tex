@@ -19,18 +19,18 @@ The remaining part of the \ttt{tests.erl}-file includes the scenario-oriented te
   \item[{multiple\_serv/1}]\ \\
     This test case shows that multiple service entities can link a ship entity and a company entity. The ship entity \ttt{Ship} and the company entity \ttt{Comp} are linked thrice by the service entities \ttt{Ser1}, \ttt{Ser2}, and \ttt{Ser3}, and the three atoms \ttt{this}, \ttt{is}, and \ttt{correct} are requested. The three atoms are requested one at a time, through each relation, and no matter the order, the right combination is fetched. This function is executed six times; one for each permutation of the order in which to request to the three service entities.
   \item[{service\_choose\_company/0}]\ \\
-    This test case shows that when a service entity is linked to several company entities, each containing different data, it is able to determine which company to fetch data from. Here the ship \ttt{Ship} is mutually linked to \ttt{Serv}, which is then mutually linked to companies \ttt{Com[1..5}. As \ttt{Ship} requests the atom \ttt{c}, \ttt{Serv} will have to determine that \ttt{Com1} holds the relevant information, and thus this is transfered to \ttt{Ship}.
+    This test case shows that when a service entity is linked to several company entities, each containing different data, it is able to determine which company to fetch data from. Here the ship \ttt{Ship} is mutually linked to \ttt{Serv}, which is then mutually linked to companies \ttt{Com[1,..,5]}. As \ttt{Ship} requests the atom \ttt{c}, \ttt{Serv} will have to determine that \ttt{Com1} holds the relevant information, and thus this is transfered to \ttt{Ship}.
   \item[{bad\_connection\_from/0}]\ \\
-    This test case shows what happens to a request when the service entity is linked to a company entity, but the connection is not mutual. In this case, as \ttt{Shp1} and \ttt{Shp2} request \ttt{Serv}, \ttt{Serv} passes the requests on to \ttt{Comp}. \ttt{Serv} is able to make the requests, however, as no channels of communication are set up from \ttt{Comp} to \ttt{Serv}, no information is able to be returned, and thus no ships receive information.
+    This test case shows what happens to a request when the service entity is linked to a company entity, without the connection being mutual. In this case, as \ttt{Shp1} and \ttt{Shp2} request \ttt{Serv}, \ttt{Serv} passes the requests on to \ttt{Comp}. \ttt{Serv} is able to make the requests, however, as no channels of communication are set up from \ttt{Comp} to \ttt{Serv}, no information is able to be returned, and thus no ships receive information.
   \item[{bad\_connection\_to/0}]\ \\
-    This test case works similar to \ttt{bad\_connection\_from/0}, however, in this case, the connection from \ttt{Serv} to \ttt{Comp} is missing. Thus, \ttt{Serv} finds none to pass the request on, and thus no ships receive information.
+    This test case works similar to \ttt{bad\_connection\_from/0}, however, in this case, the connection from \ttt{Serv} to \ttt{Comp} is missing. Thus, \ttt{Serv} cannot find the correct entity to pass the request on to, and thus no ships receive information.
   \item[{ok\_connection/0}]\ \\
     This test case works as the last two test cases should ideally have worked. That is, two ship entities request a service entity, which fetches data from a company entity, and thus, data is returned to the ship entities.
   \item[{first\_come\_first\_served/0}]\ \\
     This test case shows that information is removed from a service entity, after it is sent. In this case, the two ship entities, \ttt{Shp1} and \ttt{Shp2} are both mutually connected to the service entity \ttt{Serv}. The service entity holds the atom \ttt{a\_steak}, and when both ship entities request said atom, it will be distributed to whomever requested first. 
 \end{description}
-
-The scenario-oriented test cases are all included in the wrapper-function \ttt{main\_scenarios/0}, which, when run, yields that all cases pass. The scenarios wrapper function is included in the top-level wrapper-function, and thus, to execute \tit{all} tests, function-oriented or scenario-oriented, simply execute \command{tests:main().}
+\noindent
+The scenario-oriented test cases are all included in the wrapper function \ttt{main\_scenarios/0}, which, when run, yields that all cases pass. The scenarios wrapper function is included in the top-level wrapper function, and thus, to execute \tit{all} tests, function-oriented or scenario-oriented, simply execute \command{tests:main().}
 
 \subsection{Testing the Automatic Model Creator}
 
@@ -42,12 +42,11 @@ One test that does not pass, is \lstinline{test_interp_anonymous_function/0}. Th
 
 \section{Experiments}
 
-The primary goal of the project is to construct maritime models, describing maritime services, in the shape of finite state machines, both manual and automatic, followed by an assessment of the advantages and disadvantages of each type. As summarized in Section~\ref{sec:Summary: Advantages and Disadvantages}, manual model-building provides more control to the author, while automatic model building allows for more streamlining in the model-building process. Thus, as each method provides unique advantages to the process, a feasible metric of judging the products of each method is their respective attributes. That is, which FSM is able to describe scenarios to the highest degree. In order to determine this, I will compare the results of each model building method, starting with the example, given in Figure~\ref{fig:modelExProtocol}.
+The primary goal of the project is to construct maritime models, describing maritime services, in the shape of finite state machines, both manually and automatically, followed by an assessment of the advantages and disadvantages of each type. As summarized in Section~\ref{sec:Summary: Advantages and Disadvantages}, manual model-building provides more control to the author, while automatic model building allows for more streamlining in the model-building process. Thus, as each method provides unique advantages to the process, a feasible metric of judging the products of each method is their respective attributes. That is, which FSM is able to describe scenarios to the highest degree. In order to determine this, I will compare the results of each model building method, starting with the example, given in Figure~\ref{fig:modelExProtocol}.
 
 \subsection{Model Equivalence}
 
-Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the results of manual and automatic model creation respectively. By manually inspecting them, it can be seen that the only variance between the two is the process ids, and despite of this, the relationships between the entities, are evidently equal in the two models. Also, from manual inspection, it can be seen that information, types and dependencies, distributed between entities are also equal to that of their manual/automatic counterparts.
-
+Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the results of manual and automatic model creation respectively. By manually inspecting them, it can be seen that the only variance between the two is the process IDs, and despite of this, the relationships between the entities, are evidently equal in the two models. Also, from manual inspection, it can be seen that information, types and dependencies, distributed between entities are also equal to that of their manual/automatic counterparts.\\[0.25 cm]
 \begin{figure}[h]
   \begin{lstlisting}[keywordstyle={}]
 [{company,[{<0.79.0>,[]}],<0.80.0>,["map"]},
@@ -59,7 +58,7 @@ Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the res
   \caption{Maritime model, resulting of executing the commands, contained within the function \ttt{examples:protocol}}
   \label{fig:protocolManual}
 \end{figure}
-
+\ \\[0.25 cm]
 \begin{figure}[h]
   \begin{lstlisting}[keywordstyle={}]
 [{company,[{<0.84.0>,[]}],<0.83.0>,["map"]},
@@ -71,9 +70,9 @@ Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the res
   \caption{Maritime model, resulting of interpreting the file \ttt{protocol.xml} with \lstinline{main:parse_and_interpret('xml/protocol.xml')}}
   \label{fig:protocolAutomatic}
 \end{figure}
-
+\newpage
 \noindent
-A visual representation of the points described is displayed in Figure~\ref{fig:protocolVisual}, where~\ref{subfig:protocolManualVisual} represents the manually created model, and~\ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique id, with the third representing the information held by the entity. All edges in the figures are oriented, symbolizing relations from one entity to another. Functions displayed beside a relation, represents a dependency, associated with that relation. If not evident in Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic}, Figure~\ref{fig:protocolVisual} shows clearly how the collection of entities' states are uniform in relation to their counterparts'.
+A visual representation of the points described is displayed in Figure~\ref{fig:protocolVisual}, where~\ref{subfig:protocolManualVisual} represents the manually created model, and~\ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique ID, with the third representing the information held by the entity. All edges in the figures are oriented, symbolizing relations from one entity to another. Functions displayed beside a relation, represents a dependency, associated with that relation. If not evident in Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic}, Figure~\ref{fig:protocolVisual} clearly show how the collection of entities' states are uniform in relation to their counterparts'.
 
 \begin{figure}[h]
   \begin{subfigure}{.48\textwidth}
@@ -113,11 +112,10 @@ A visual representation of the points described is displayed in Figure~\ref{fig:
   \caption{Visual representation of Figures~\ref{fig:protocolManual}, and~\ref{fig:protocolAutomatic}.}
   \label{fig:protocolVisual}
 \end{figure}
-\newpage
 Having concluded that the models\footnote{Collections of all states in the FSM}, described in Figures~\ref{fig:protocolManual}, and~\ref{fig:protocolAutomatic}, are equal, in order for their FSMs to be equivalent, all available \tit{actions} correlating to the states must also be equal. To determine if this is the case, I will look to the functionality of the manual, as well as the automatic model creator. 
 
 The functionality of the automatic implementation is built to directly utilize the manual model building module, and thus their functionalities are near identical. They are only limited by the functionality of the parser and interpreter's ability to feed instructions to \ttt{mmods.erl}, such as the example given in Section~\ref{ssec:Testing the Automatic Model Creator}.
-
+\newpage
 \subsubsection{Further Examples of Model Equivalence}
 
 In order to verify that the example, described above in Section~\ref{ssec:Model Equivalence} is not a unique occurrence, the function \lstinline{equiv_models/2} has been created. This function compares two maritime models, according to the metrics used, when comparing models in Figure~\ref{fig:protocolVisual}; Types, constraint functions, and information have to exactly match, while relations have to match mapped values. The function \lstinline{equiv_models_tests/0} utilizes the model comparer function, in order to test that the protocol example holds true with other examples as well. The examples given to \lstinline{equiv_models_tests/0}, are all models created manually in the file \ttt{examples.erl}, as well as their automatic counterparts, created in the 'xml' folder. All test cases passed, further proving the implementation's ability to create equivalent maritime models.

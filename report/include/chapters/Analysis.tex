@@ -121,22 +121,23 @@ Throughout this report, I will use a map-requesting service as an example. In th
   \begin{tikzpicture}[thick]
     % timelines
     \draw [dashed]  (0,5) --  (0,0)
-        [dashed]  (3,5) --  (3,0)
-        [dashed]  (6,5) --  (6,0);
+          [dashed]  (3,5) --  (3,0)
+          [dashed]  (6,5) --  (6,0)
+    
     % entity labels
-    \draw (0,5.15)  node  {Ship}
-        (3,5.15)  node  {Service}
-        (6,5.15)  node  {Company};
+          (0,5.15)  node  {Ship}
+          (3,5.15)  node  {Service}
+          (6,5.15)  node  {Company}
 
     % interaction labels
-    \draw (1.5,4.75)  node  {*1}
-        (1.5,3.75)  node  {*2}
-        (4.5,3.75)  node  {*3}
-        (4.5,2.75)  node  {*4}
-        (1.5,1.75)  node  {*5};
+          (1.5,4.75)  node  {*1}
+          (1.5,3.75)  node  {*2}
+          (4.5,3.75)  node  {*3}
+          (4.5,2.75)  node  {*4}
+          (1.5,1.75)  node  {*5};
     % interaction lines
-    \draw (0,5) --  (3,4) --  (0,3) % API call (request/response)
-        (3,4) --  (6,3) --  (0,1);  % Service requests/recieves data from company/data center and Information is forwarded to the ship.
+    \draw (0,5) --  (3,4) --  (0,3)  % API call (request/response)
+          (3,4) --  (6,3) --  (0,1); % Service requests/recieves data from company/data center and Information is forwarded to the ship.
   \end{tikzpicture}
   \caption{Early draft of a model example, where a ship requests information from a service.}
   \label{fig:modelExProtocol}
@@ -156,17 +157,17 @@ Figure~\ref{fig:fsmExService} represents an FSM, illustrating the \ttt{service} 
                        bottom color=gray!50]
     \tikzstyle{every path}=[->,gray!150,>=stealth,text=black]
 
-    \node[state, initial] (A) []          {No map loaded};
-    \node[state]      (B) [below left of=A] {Awaiting Map};
-    \node[state]      (C) [below right of=A]  {Map loaded};
+    \node[state, initial] (A) []                {No map loaded};
+    \node[state]          (B) [below left of=A] {Awaiting Map};
+    \node[state]          (C) [below right of=A]{Map loaded};
 
-    \path (A) edge[bend right,left]                 node{Request Map} (B)
-          edge[loop above,left,   out=130,in=100, looseness=7]node{Trash Map}   (A)
-        (B) edge[loop above,below left, out=130,in=100, looseness=7]node{Request Map} (B)
-          edge[loop below,below,    out=240,in=270, looseness=7]node{Trash Map}   (B)
-          edge[bend right,below]                  node{Await Response}(C)
-        (C) edge[bend right,above]                  node{Request Map} (B)
-          edge[bend right,right]                  node{Trash Map}   (A);
+    \path (A) edge[bend right,left]                                   node{Request Map}   (B)
+              edge[loop above,left,       out=130,in=100, looseness=7]node{Trash Map}     (A)
+          (B) edge[loop above,below left, out=130,in=100, looseness=7]node{Request Map}   (B)
+              edge[loop below,below,      out=240,in=270, looseness=7]node{Trash Map}     (B)
+              edge[bend right,below]                                  node{Await Response}(C)
+          (C) edge[bend right,above]                                  node{Request Map}   (B)
+              edge[bend right,right]                                  node{Trash Map}     (A);
   \end{tikzpicture}
   \caption{FSM, describing the \ttt{Ship} entity in Figure~\ref{fig:modelExProtocol}.}
   \label{fig:fsmExShip}
@@ -184,9 +185,9 @@ Figure~\ref{fig:fsmExService} represents an FSM, illustrating the \ttt{service} 
     \node[state, initial] (A) []      {Idle};
     \node[state]      (B) [right of=A]{Active};
 
-    \path (A) edge[loop above,left, align=center, out=130,in=100, looseness=7]node{Process Request\\(Invalid Request)}(A)
-          edge[bend left, above,  align=center]               node{Process Request\\(Valid Request)}  (B)
-        (B) edge[bend left, below]                        node{Respond}             (A);
+    \path (A) edge[loop above,left,  align=center, out=130,in=100, looseness=7]node{Process Request\\(Invalid Request)}(A)
+              edge[bend left, above, align=center]                             node{Process Request\\(Valid Request)}  (B)
+          (B) edge[bend left, below]                                           node{Respond}                           (A);
   \end{tikzpicture}
   \caption{FSM, describing the \ttt{Service} entity in Figure~\ref{fig:modelExProtocol}.}
   \label{fig:fsmExService}
@@ -213,7 +214,7 @@ In this section, I will present the utilization of the desired tool, that is imp
   \centering
   \begin{tabular}{l|l} \toprule
     Use Case   & System verifies model, first iteration \\ \midrule
-    Actors     & Service Instance designer (SD) \\ \midrule
+    Actors     & Service Instance Designer (SD) \\ \midrule
     Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
                               2. SD submits all information as per the old service\\
                               \ \ \ \ specification syntax.\\
@@ -228,8 +229,8 @@ In this section, I will present the utilization of the desired tool, that is imp
   \centering
   \begin{tabular}{l|l} \toprule
     Use Case   & System verifies model, second iteration \\ \midrule
-    Actors     & Service Instance designer (SD) \\ \midrule
-    Basic Flow & \makecell[l]{1. SD designer will submit a service specification.\\
+    Actors     & Service Instance Designer (SD) \\ \midrule
+    Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
                               2. SD submits all information as per the old service\\
                               \ \ \ \ specification syntax.\\
                               3. SD submits all information to generate maritime model. \\
@@ -249,8 +250,8 @@ In the case of Figure~\ref{fig:useCaseIncorrect} a model is created, using the s
   \centering
   \begin{tabular}{l|l} \toprule
     Use Case   & User ignores model warnings \\ \midrule
-    Actors     & Service Instance designer (SD) \\ \midrule
-    Basic Flow & \makecell[l]{1. SD designer will submit a service specification.\\
+    Actors     & Service Instance Designer (SD) \\ \midrule
+    Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
                               2. SD submits all information as per the old service\\
                               \ \ \ \ specification syntax.\\
                               3. SD submits all information to generate maritime model. \\

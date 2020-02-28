@@ -8,91 +8,91 @@ As discussed in Section~\ref{sec:Data}, in order to create uniform models upon w
 
 One way to implement these changes is to make the user able to assign variables, based on a fixed collection of available options. I will now present three fields, which are designed to be used in order to maximize uniformity in model generating, as well as give maximum flexibility in future model design.
 \begin{description}
-	\item[Entity]\ \\
-	An entity is the most basic component of the models, without which, they would be devoid of any data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occur throughout execution of a model. At the moment support for three entities exist, however, implementation of support for additional entities is possible.
-	Multiple instances of each entity type is allowed in a model.\newpage
-	\begin{description}
-		\item[Ship]\ \\
-			If comparing the MCP to the App Store or Google Play, a ship would undertake the role of a user. The user can be the one utilizing the maritime service or symbolize other users, however, no distinctions are naturally implemented between those two types.
-		\item[Service]\ \\
-			The Service entity represents a maritime service, which is being modeled. If multiple instances of a service entity occurs, this will correspond to cross app interaction, using the same comparison as above.
-		\item[Company]\ \\
-			Company entities serve as nodes, which hold data or similar goods, which can be desired by ship entities for a variety of reasons. If multiple company entities exist at one time, they will not necessarily need a service entity to connect them. 
-	\end{description}
-	\item[Relation]\ \\
-		A relation symbolizes a bond between two entities. In the case of Figure~\ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service}, as well as \ttt{Service} and '\ttt{Company}.
+  \item[Entity]\ \\
+  An entity is the most basic component of the models, without which, they would be devoid of any data. These describe the physical real-world objects, which the model is to simulate, and these are also the subjects of all transactions, which occur throughout execution of a model. At the moment support for three entities exist, however, implementation of support for additional entities is possible.
+  Multiple instances of each entity type is allowed in a model.\newpage
+  \begin{description}
+    \item[Ship]\ \\
+      If comparing the MCP to the App Store or Google Play, a ship would undertake the role of a user. The user can be the one utilizing the maritime service or symbolize other users, however, no distinctions are naturally implemented between those two types.
+    \item[Service]\ \\
+      The Service entity represents a maritime service, which is being modeled. If multiple instances of a service entity occurs, this will correspond to cross app interaction, using the same comparison as above.
+    \item[Company]\ \\
+      Company entities serve as nodes, which hold data or similar goods, which can be desired by ship entities for a variety of reasons. If multiple company entities exist at one time, they will not necessarily need a service entity to connect them. 
+  \end{description}
+  \item[Relation]\ \\
+    A relation symbolizes a bond between two entities. In the case of Figure~\ref{fig:modelExProtocol}, relations can be seen between \ttt{Ship} and \ttt{Service}, as well as \ttt{Service} and '\ttt{Company}.
 
-		A ship entity can share a relation with service entities, as they would have no way of communicating with company or other ship entities without any prior software. In the case that a ship communicates with another ship, it will need an intermediate service entity to handle communication.
+    A ship entity can share a relation with service entities, as they would have no way of communicating with company or other ship entities without any prior software. In the case that a ship communicates with another ship, it will need an intermediate service entity to handle communication.
 
-		A service entity needs to be able to share a relation with all other entities in order to act as an intermedium between ship entities and company entities, while also being able to interact with other service entities.
+    A service entity needs to be able to share a relation with all other entities in order to act as an intermedium between ship entities and company entities, while also being able to interact with other service entities.
 
-		A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels when communicating with companies and citizens.
-	\item[Dependency]\ \\
-		A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure~\ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
+    A company entity can share a relation with a service entity as well as other company entities. Two company entities do not necessarily need service entities in order to be able to share information similarly to the real world, where companies use different communication channels when communicating with companies and citizens.
+  \item[Dependency]\ \\
+    A dependency is, as the name suggests, a dependency from one entity to another, and so the first argument of a dependency must be a relation that describes which two entities are in question, as well as which entity depends on the other. The second argument that a dependency must receive is a constraint function. This function's purpose is to describe what one entities require from the other entity in order to proceed with a given execution. In the case of Figure~\ref{fig:modelExProtocol}, \ttt{Service} has the two constraint functions \ttt{user/1}, and \ttt{psswd/1}, declaring that a correct user and password must be provided in order to make a request. 
 
-		If two entities co-depend on each other, a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
-	\item[Information]\ \\
-		All entities are able to store information, which can be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
+    If two entities co-depend on each other, a relation must be made from the first to the second, as well as from the second to the first. As only the constraint function limits what the dependency entails, an entity \tit{can} depend on itself.
+  \item[Information]\ \\
+    All entities are able to store information, which can be requested, transfered, and deleted. This is meant to represent various data, be it maps, keys, messages or other.
 \end{description}
 \noindent
 Figure~\ref{fig:entities} describes which options are excluded at selections of entities, relations, and dependencies. As can be seen, Figure~\ref{fig:entities} coincides with~\ref{fig:sSpecUpd}, and therefor the description given in this section describe both figures. 
 
 \begin{figure}
-	\centering
-	\begin{tikzpicture}[->,>=stealth', node distance=5 cm]
-		\node[]	(A)	[]	
-			{\begin{tabular}{|l|}\hline{1}
-				Entity         \\ \hline{2.5}
-				Ship            \\ \hline{1}
-				Service          \\ \hline{1}
-				Company	          \\ \hline{1}
-			\end{tabular}};
-		\node[]	(B)	[above right of=A]
-			{\begin{tabular}{|l|}\hline{1}
-				Relation       \\ \hline{2.5}
-				Service         \\ \hline{1}
-			\end{tabular}};
-		\node[]	(C)	[right of=A]
-			{\begin{tabular}{|l|}\hline{1}
-				Relation       \\ \hline{2.5}
-				Ship            \\ \hline{1}
-				Service          \\ \hline{1}
-				Company           \\ \hline{1}
-			\end{tabular}};
-		\node[]	(D)	[below right of=A]
-			{\begin{tabular}{|l|}\hline{1}
-				Relation       \\ \hline{2.5}
-				Service         \\ \hline{1}
-				Company          \\ \hline{1}
-			\end{tabular}};
-		\node[]	(E)	[right of=B]
-			{\begin{tabular}{|l|}\hline{1}
-				Dependency     \\ \hline{2.5}
-				Ship            \\ \hline{1}
-				Service          \\ \hline{1}
-			\end{tabular}};
-		\node[]	(F)	[right of=C]
-			{\begin{tabular}{|l|}\hline{1}
-				Dependency     \\ \hline{2.5}
-				Ship            \\ \hline{1}
-				Service          \\ \hline{1}
-				Company           \\ \hline{1}
-			\end{tabular}};
-		\node[]	(G)	[right of=D]
-			{\begin{tabular}{|l|}\hline{1}
-				Dependency     \\ \hline{2.5}
-				Service         \\ \hline{1}
-				Company          \\ \hline{1}
-			\end{tabular}};
-		\path	(A)	edge	[out=10]	node	{}	(B)
-					edge	[out=345]	node	{}	(C)
-					edge	[out=325]	node	{}	(D)
-				(B)	edge	[out=30]	node	{}	(E)
-				(C)	edge	[out=30]	node	{}	(F)
-				(D)	edge	[out=30]	node	{}	(G);
-	\end{tikzpicture}
-	\caption{Available relations and dependencies for ships, services, and companies}
-	\label{fig:entities}
+  \centering
+  \begin{tikzpicture}[->,>=stealth', node distance=5 cm]
+    \node[] (A) []  
+      {\begin{tabular}{|l|}\hline{1}
+        Entity         \\ \hline{2.5}
+        Ship            \\ \hline{1}
+        Service          \\ \hline{1}
+        Company           \\ \hline{1}
+      \end{tabular}};
+    \node[] (B) [above right of=A]
+      {\begin{tabular}{|l|}\hline{1}
+        Relation       \\ \hline{2.5}
+        Service         \\ \hline{1}
+      \end{tabular}};
+    \node[] (C) [right of=A]
+      {\begin{tabular}{|l|}\hline{1}
+        Relation       \\ \hline{2.5}
+        Ship            \\ \hline{1}
+        Service          \\ \hline{1}
+        Company           \\ \hline{1}
+      \end{tabular}};
+    \node[] (D) [below right of=A]
+      {\begin{tabular}{|l|}\hline{1}
+        Relation       \\ \hline{2.5}
+        Service         \\ \hline{1}
+        Company          \\ \hline{1}
+      \end{tabular}};
+    \node[] (E) [right of=B]
+      {\begin{tabular}{|l|}\hline{1}
+        Dependency     \\ \hline{2.5}
+        Ship            \\ \hline{1}
+        Service          \\ \hline{1}
+      \end{tabular}};
+    \node[] (F) [right of=C]
+      {\begin{tabular}{|l|}\hline{1}
+        Dependency     \\ \hline{2.5}
+        Ship            \\ \hline{1}
+        Service          \\ \hline{1}
+        Company           \\ \hline{1}
+      \end{tabular}};
+    \node[] (G) [right of=D]
+      {\begin{tabular}{|l|}\hline{1}
+        Dependency     \\ \hline{2.5}
+        Service         \\ \hline{1}
+        Company          \\ \hline{1}
+      \end{tabular}};
+    \path (A) edge  [out=10]  node  {}  (B)
+          edge  [out=345] node  {}  (C)
+          edge  [out=325] node  {}  (D)
+        (B) edge  [out=30]  node  {}  (E)
+        (C) edge  [out=30]  node  {}  (F)
+        (D) edge  [out=30]  node  {}  (G);
+  \end{tikzpicture}
+  \caption{Available relations and dependencies for ships, services, and companies}
+  \label{fig:entities}
 \end{figure}
 
 
@@ -106,8 +106,8 @@ The updated xml-specification files will be limiting the flexibility of the mode
 Listing~\ref{fig:sSpecUpdRed} describes a reduced form of Listing~\ref{fig:sSpecUpd}. It can be seen that Listing~\ref{fig:sSpecUpdRed} includes all information stored in Listing~\ref{fig:sSpecRed}, which indicates that, after implementation of the model-generating process, there is no direct, urgent need to improve or change the parser, given the generalized format of the xml-specification files.
 
 \begin{figure}[h]
-	\centering
-	\begin{lstlisting}[keywordstyle={}]
+  \centering
+  \begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= spec specifications
@@ -118,9 +118,9 @@ spec ::= specifications
     | $\e$
 
 spec ::= string
-	\end{lstlisting}
-	\caption{Reduced parser grammar of the updated Service Specification Schema}
-	\label{fig:sSpecUpdRed}
+  \end{lstlisting}
+  \caption{Reduced parser grammar of the updated Service Specification Schema}
+  \label{fig:sSpecUpdRed}
 \end{figure}
 
 \subsection{Updated Service Specification Grammar}
@@ -128,8 +128,8 @@ spec ::= string
 Figure~\ref{fig:sSpecUpd} displays the updated parser grammar, and subsequently shows the newly added information, which the service specification file will need to include. The added information fields are designed to represent the fields, displayed in Section~\ref{sec:Updated Data}.
 
 \begin{figure}
-	\centering
-	\begin{lstlisting}[keywordstyle={}]
+  \centering
+  \begin{lstlisting}[keywordstyle={}]
 ServiceSpecificationSchema ::= specifications
 
 specifications ::= entities specifications
@@ -178,25 +178,25 @@ answers ::= answer answers
     | $\e$
 
 answer ::= variant
-	\end{lstlisting}
-	\caption{Updated parser grammar of Service Specification Schema}
-	\label{fig:sSpecUpd}
+  \end{lstlisting}
+  \caption{Updated parser grammar of Service Specification Schema}
+  \label{fig:sSpecUpd}
 \end{figure}
-
+\newpage
 \section{Technical Implementation}
 The project is implemented in Erlang, and contained in the files \ttt{aux.erl}, \ttt{interpreter.erl}, \ttt{mmods.erl}, (maritime models) \ttt{parser.erl}, \ttt{tests.erl}, and \ttt{main.erl}, along with the \ttt{xml}-folder containing models and simulations in xml-format.
 
 \subsection{The mmods module}
 The core of the project is contained in the \ttt{mmods.erl} file, which contains the functionality that creates the finite state machine models. This module creates processes which include the following fields:
 \begin{description}
-	\item[\ttt{Type}]\ \\
-		This field is described by a single atom, which is only able to take the forms of either \ttt{ship}, \ttt{service}, or \ttt{company}. This is used to check the legality of relations, when adding these.
-	\item[\ttt{Relations}]\ \\
-		The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well as its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, each evaluating to \ttt{true} or \ttt{false}.
-	\item[\ttt{Self}]\ \\
-		The \ttt{Self} field is made up of the process ID, corresponding to the entity.
-	\item[\ttt{Info}]\ \\
-		The \ttt{Info} field consists of all data representation, which can take any form.
+  \item[\ttt{Type}]\ \\
+    This field is described by a single atom, which is only able to take the forms of either \ttt{ship}, \ttt{service}, or \ttt{company}. This is used to check the legality of relations, when adding these.
+  \item[\ttt{Relations}]\ \\
+    The \ttt{Relations} field is described by a tuple list, containing a set of relations, as well as its corresponding dependencies, if any exist. Dependencies are represented by a list of functions, each evaluating to \ttt{true} or \ttt{false}.
+  \item[\ttt{Self}]\ \\
+    The \ttt{Self} field is made up of the process ID, corresponding to the entity.
+  \item[\ttt{Info}]\ \\
+    The \ttt{Info} field consists of all data representation, which can take any form.
 \end{description}
 The functions \lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \linebreak \lstinline{remove_info/2}, \lstinline{transfer_info/3}, and \lstinline{request_info/4}, all add their corresponding self-descriptive functionality through the use of the \lstinline{gen_statem} (generic state machine) module. The getter-functions \lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, and \lstinline{get_info/1}, perform the simple task of retrieving relevant informations for the provided process ID.
 
@@ -205,10 +205,10 @@ Having implemented this functionality, creating a model is a matter of simply us
 \subsection{The parser and interpreter modules}
 
 \begin{description}
-	\item[The parser module]\ \\
-		The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl}, an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures~\ref{fig:sSpecUpdRed} and~\ref{fig:sSpecUpd}.
-	\item[The interpreter module]\ \\
-		The interpreter module exports the single function \lstinline{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \lstinline{interp/1} function builds maritime models by adding entities, info, relations, dependencies, and lastly performing information requests, all in said order. Each adder function dynamically searches its corresponding keyword, rather than retrieving by index in the xml term, which allows for variation in the structure of the xml, along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally, the interpreter shows a snapshot of all entities' states, as is after addition of all data.
+  \item[The parser module]\ \\
+    The parser module utilizes the \lstinline{xmerl} library of functions to standardly perform well formed parsing of xml files. Additionally, the \lstinline{xml_parser/1}-function uses the accumulator function \lstinline{accFun}, which accumulates all field values, that are \tit{not} purely whitespace and/or newline. Along with the hook function \lstinline{hookFun} that binds the parser output to a tuple, consisting of an atom, describing the parsed node, along with its contents. Furthermore, \lstinline{hookFun} dictates that pure text contents are just that - not a list, consisting of one string, which it would be otherwise. The parser module is created, following both the xmerl reference manual~\cite{xmerl}, an example posted online~\cite{xmerlEx}, and the parser grammar, described in Figures~\ref{fig:sSpecUpdRed} and~\ref{fig:sSpecUpd}.
+  \item[The interpreter module]\ \\
+    The interpreter module exports the single function \lstinline{interp/1}. This function takes in an Erlang term of the form, described above \footnote{A tuple} and recursively loops the content value in order to exhaust the information, stored in the term. The \lstinline{interp/1} function builds maritime models by adding entities, info, relations, dependencies, and lastly performing information requests, all in said order. Each adder function dynamically searches its corresponding keyword, rather than retrieving by index in the xml term, which allows for variation in the structure of the xml, along with interchangeability in the order of the adder functions. Two constraints do exist in the order of which components are added to the model, the first being that entity addition must always come first, as no data can be bound to nonexistent entities. The other constraint is that dependencies must be added \tit{after} relations, as a dependency can only be placed on top of an existing relation. Finally, the interpreter shows a snapshot of all entities' states, as is after addition of all data.
 \end{description}
 \subsection{Executing Instructions}
 In an Erlang-shell, all files can be compiled with \lstinline{c(file)}, where after manual model generation can be run from the \ttt{mmods.erl} file \footnote{See \ttt{tests.erl} and \ttt{examples.erl} for examples}.
@@ -217,9 +217,9 @@ For automatic model generation, the \ttt{main.erl} file gathers the functionalit
 For efficient, exception-free use of the model generators, its functions should be used following this precedence:
 
 \begin{figure}[h]
-	\centering
-	\begin{tikzpicture}[thick]
-	\node (S)  at (5,8)   {\lstinline{start/1}};
+  \centering
+  \begin{tikzpicture}[thick]
+  \node (S)  at (5,8)   {\lstinline{start/1}};
     \node (AR) at (2,6)   {\lstinline{add_relation/2}};
     \node (AI) at (8,6)   {\lstinline{add_info/2}};
     \node (AD) at (1,3.9) {\lstinline{add_dependency/3}};
@@ -234,9 +234,9 @@ For efficient, exception-free use of the model generators, its functions should 
     \path [] (AI) edge (RI);
     \path [] (AI) edge (TI);
     \path [] (AR) edge (RQ);
-	\end{tikzpicture}
-	\caption{Function precedence, when using \ttt{mmods.erl}.}
-	\label{fig:mmodsPrec}
+  \end{tikzpicture}
+  \caption{Function precedence, when using \ttt{mmods.erl}.}
+  \label{fig:mmodsPrec}
 \end{figure}
 
 Figure~\ref{fig:mmodsPrec} displays the order that needs to be followed when using the mmods module. The reason for this requirement is the fact that a number of the API functions rely on information, given in earlier functions.

@@ -1,5 +1,24 @@
 \chapter{Appendix}
 
+\section{token}
+\begin{figure}[h]
+  \begin{lstlisting}
+token(String) ->
+  case String of
+    % atoms
+    "ship"    -> ship;
+    "service" -> service;
+    "company" -> company;
+    % functions
+    "fun psswd"   -> fun aux:psswd/1;
+    "fun user"    -> fun aux:user/1;
+    "fun trivial" -> fun aux:trivial/1;
+    _             -> error
+  end.
+  \end{lstlisting}
+  \caption{The \ttt{token/1}-function in the \ttt{aux}-file.}
+\end{figure}
+\newpage
 \section{ServiceSpecificationSchema}
 \input{figures/ServiceSpecificationSchema.tex}
 \section{E2 - NW-NM Service Specification}

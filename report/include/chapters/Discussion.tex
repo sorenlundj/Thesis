@@ -85,7 +85,7 @@ This principle is described by Figure~\ref{fig:scrumSmall}, where 'Behavioral Te
 
     \node [rectangle,
            draw=gray,
-           rounded corners=0.09 cm,
+           rounded corners,
            inner sep=0.3 cm,
            top color=white,
            bottom color=gray!50]
@@ -93,13 +93,13 @@ This principle is described by Figure~\ref{fig:scrumSmall}, where 'Behavioral Te
 
     \node [rectangle,
            draw=gray,
-           rounded corners=0.09 cm,
+           rounded corners,
            inner sep=0.3 cm,
            top color=white,
            bottom color=gray!50]
           (FT)  at (5,-3.5)  {Behavioral Testing};
 
-    \node (DevI) at (-1.1,3) {};
+    \node (DevI) at (-1.7,3) {};
     \node (StaO) at (-3.2,3) {};
 
     \node (DI)  at (3.5,1.3) {};
@@ -108,9 +108,9 @@ This principle is described by Figure~\ref{fig:scrumSmall}, where 'Behavioral Te
     \node (FTI) at (4.8,-3) {};
     \node (FTO) at (5.2,-3) {};
 
-    \path [->,line width=2 pt,gray!50,>=stealth] (StaO) edge (DevI);
-    \path [<-,line width=2 pt,gray!50,>=stealth,bend left] (DI) edge (FTO);
-    \path [<-,line width=2 pt,gray!50,>=stealth,bend right] (FTI) edge (DO);
+    \path [->,line width=2 pt,gray!50,>=stealth] (StaO) edge (DevI) 
+          [bend left]                            (DI)   edge (FTO)
+          [bend right]                           (FTI)  edge (DO);
   \end{tikzpicture}
   \caption{Scrum development cycle with automated model-based testing.}
   \label{fig:scrumSmall}

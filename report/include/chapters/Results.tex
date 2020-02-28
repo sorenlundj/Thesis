@@ -72,39 +72,63 @@ Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the res
 \end{figure}
 \newpage
 \noindent
-A visual representation of the points described is displayed in Figure~\ref{fig:protocolVisual}, where~\ref{subfig:protocolManualVisual} represents the manually created model, and~\ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both sub-figures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique ID, with the third representing the information held by the entity. All edges in the figures are oriented, symbolizing relations from one entity to another. Functions displayed beside a relation, represents a dependency, associated with that relation. If not evident in Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic}, Figure~\ref{fig:protocolVisual} clearly show how the collection of entities' states are uniform in relation to their counterparts'.
+A visual representation of the points described is displayed in Figure~\ref{fig:protocolVisual}, where~\ref{subfig:protocolManualVisual} represents the manually created model, and~\ref{subfig:protocolAutomaticVisual} represents the automatically created model. In both subfigures, nodes symbolize entities, containing three fields. The first line in each entity node represents its type, the second its unique ID, with the third representing the information held by the entity. All edges in the figures are oriented, symbolizing relations from one entity to another. Functions displayed beside a relation, represents a dependency, associated with that relation. If not evident in Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic}, Figure~\ref{fig:protocolVisual} clearly show how the collection of entities' states are uniform in relation to their counterparts'.
 
 \begin{figure}[h]
   \begin{subfigure}{.48\textwidth}
     \begin{tikzpicture}[->,>=stealth', node distance=2.8 cm, thick]
-      \tikzstyle{every state}=[draw=black,rectangle,rounded corners]
+    \tikzstyle{every state}=[rectangle,
+                       rounded corners,
+                       rectangle,
+                       top color=white,
+                       bottom color=gray!50,
+                       align=center]
+    
+    \tikzstyle{every path}=[->,
+                            gray!150,
+                            >=stealth,
+                            text=black,
+                            bend right,
+                            left]
+
+      \node[state] (A) []           {ship\\   $<0.78.0>$\\$["map"]$};
+      \node[state] (B) [below of=A] {service\\$<0.79.0>$\\ - };
+      \node[state] (C) [below of=B] {company\\$<0.80.0>$\\$["map"]$};
   
-      \node[state] (A) [align=center]            {ship\\   $<0.78.0>$\\$["map"]$};
-      \node[state] (B) [align=center,below of=A] {service\\$<0.79.0>$\\ - };
-      \node[state] (C) [align=center,below of=B] {company\\$<0.80.0>$\\$["map"]$};
-  
-      \path (A) edge[bend right,left] node[align=left]{fun aux:user/1\\
-                                                       fun aux:psswd/1} (B)
-            (B) edge[bend right,left] node{} (A)
-                edge[bend right,left] node{} (C) 
-            (C) edge[bend right,left] node{} (B);
+      \path (A) edge[] node[align=left]{fun aux:user/1\\
+                                        fun aux:psswd/1} (B)
+            (B) edge[] node{} (A)
+                edge[] node{} (C) 
+            (C) edge[] node{} (B);
     \end{tikzpicture}
     \caption{}
     \label{subfig:protocolManualVisual}
   \end{subfigure}
   \begin{subfigure}{.48\textwidth}
     \begin{tikzpicture}[->,>=stealth', node distance=2.8 cm, thick]
-      \tikzstyle{every state}=[draw=black,rectangle,rounded corners]
+    \tikzstyle{every state}=[rectangle,
+                       rounded corners,
+                       rectangle,
+                       top color=white,
+                       bottom color=gray!50,
+                       align=center]
+    
+    \tikzstyle{every path}=[->,
+                            gray!150,
+                            >=stealth,
+                            text=black,
+                            bend right,
+                            left]
 
-      \node[state] (A) [align=center]            {ship\\   $<0.85.0>$\\$["map"]$};
-      \node[state] (B) [align=center,below of=A] {service\\$<0.84.0>$\\ - };
-      \node[state] (C) [align=center,below of=B] {company\\$<0.83.0>$\\$["map"]$};
+      \node[state] (A) []           {ship\\   $<0.85.0>$\\$["map"]$};
+      \node[state] (B) [below of=A] {service\\$<0.84.0>$\\ - };
+      \node[state] (C) [below of=B] {company\\$<0.83.0>$\\$["map"]$};
   
-      \path (A) edge[bend right,left] node[align=left]{fun aux:user/1\\
-                                                       fun aux:psswd/1} (B)
-            (B) edge[bend right,left] node{} (A)
-                edge[bend right,left] node{} (C)
-            (C) edge[bend right,left] node{} (B);
+      \path (A) edge[] node[align=left]{fun aux:user/1\\
+                                        fun aux:psswd/1} (B)
+            (B) edge[] node{} (A)
+                edge[] node{} (C)
+            (C) edge[] node{} (B);
     \end{tikzpicture}
     \caption{}
     \label{subfig:protocolAutomaticVisual}

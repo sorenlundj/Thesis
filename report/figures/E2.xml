@@ -35,7 +35,6 @@
 		</requirement>
 	</requirements>
 
-
 	<serviceDataModel>
 		<definitionAsXSD>
 			<!-- Too extensive - included in the "NW-NM Service Specification" document, Appendix B -->

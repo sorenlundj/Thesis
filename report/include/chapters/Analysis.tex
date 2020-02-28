@@ -209,10 +209,10 @@ The main advantage that comes from model-based testing is the large variety in t
 \end{description}
 The scope of which features the above techniques will be able to test, will be deemed by the actual maritime service model, however, the expansive array of methods will cover maritime services extensively.
 \section{Use-Cases}
-In this section, I will present the utilization of the desired tool, that is implemented throughout Chapter~\ref{chp:Work/Design} using techniques described in Chapter~\ref{chp:Analysis}. This entails three examples, described in Figures~\ref{fig:useCaseVerifyFirst} through~\ref{fig:useCaseIncorrect}, and visualized in Figure~\ref{fig:useCaseDiagram}. Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} describe intended use of the implementation, while Figure~\ref{fig:useCaseIncorrect} describes unintended use of the implementation. Actor/system-interaction is described in Figure~\ref{fig:useCaseDiagram}.
+In this section, I will present the utilization of the desired tool, that is implemented throughout Chapter~\ref{chp:Work/Design} using techniques described in Chapter~\ref{chp:Analysis}. This entails three examples, described in Figures~\ref{fig:useCaseVerifyFirst} through~\ref{fig:useCasePF}, and visualized in Figure~\ref{fig:useCaseDiagram}. Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} describe intended use of the implementation, while Figure~\ref{fig:useCasePF} describes unintended use of the implementation. Actor/system-interaction is described in Figure~\ref{fig:useCaseDiagram}.
 \begin{figure}[h]
   \centering
-  \begin{tabular}{l|l} \toprule
+  \begin{tabular}{L{2cm}|L{10cm}} \toprule
     Use Case   & System verifies model, first iteration \\ \midrule
     Actors     & Service Instance Designer (SD) \\ \midrule
     Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
@@ -227,7 +227,7 @@ In this section, I will present the utilization of the desired tool, that is imp
 \end{figure}
 \begin{figure}[h]
   \centering
-  \begin{tabular}{l|l} \toprule
+  \begin{tabular}{L{2cm}|L{10cm}} \toprule
     Use Case   & System verifies model, second iteration \\ \midrule
     Actors     & Service Instance Designer (SD) \\ \midrule
     Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
@@ -245,10 +245,25 @@ In this section, I will present the utilization of the desired tool, that is imp
 The steps described in Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} are similar up until 4, where one example accepts, while the other example rejects the model. As the Service Instance Designer produces a valid model in Figure~\ref{fig:useCaseVerifyFirst}, the fact that the system is used correctly is trivial, and while the initial model is rejected, based on the desired behavior in Figure~\ref{fig:useCaseVerifySecond}, the final result is a valid model concept, and thus the software has been used as intended.
 \newpage
 \noindent
-In the case of Figure~\ref{fig:useCaseIncorrect} a model is created, using the system, similar to above, however, the result of the checked input is ignored by the user. This should still be possible, as the limitations of the system, should not be projected onto the created software, but in some instances, it could also lead to invalid model-concepts being iterated upon further.
+In Figure~\ref{fig:useCaseFP} the user wishes to surpass the model-testing system, and successfully avoids warnings by creating a dummy model and validates this against a set of loose tests. As the model-generating occurs before service instance development- and implementation, there is no way of knowing if the software that is developed is similar in any way to what is indicated by the maritime model.
+\begin{figure}[h!]
+  \begin{tabular}{L{2cm}|L{10cm}} \toprule
+    Use Case   & User creates dummy model \\ \midrule
+    Actors     & Service Instance Designer (SD) \\ \midrule
+    Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
+                              2. SD submits all information as per the old service\\
+                              \ \ \ \ specification syntax.\\
+                              3. SD submits information to generate simple dummy model. \\
+                              4. Model concept is tested and verified.\\
+                              5. SD submits the service instance specification.}  \\ \bottomrule
+  \end{tabular}
+  \caption{Example of incorrect use of the solution through false positive.}
+  \label{fig:useCaseFP}
+\end{figure}\ \\
+In the case of Figure~\ref{fig:useCasePF} a model is created, using the system, similar to above, however, the result of the checked input is ignored by the user. This should still be possible, as the limitations of the system, should not be projected onto the created software, but in some instances, it could also lead to invalid model-concepts being iterated upon further.
 \begin{figure}[h]
-  \centering
-  \begin{tabular}{l|l} \toprule
+  \fitToPage{
+  \begin{tabular}{L{2cm}|L{10cm}} \toprule
     Use Case   & User ignores model warnings \\ \midrule
     Actors     & Service Instance Designer (SD) \\ \midrule
     Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
@@ -257,17 +272,19 @@ In the case of Figure~\ref{fig:useCaseIncorrect} a model is created, using the s
                               3. SD submits all information to generate maritime model. \\
                               4. Model concept is tested and rejected.\\
                               5. SD submits the service instance specification.}  \\ \bottomrule
-  \end{tabular}
-  \caption{Incorrect use of the solution.}
-  \label{fig:useCaseIncorrect}
-\end{figure}
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\linewidth]{figures/UCD.jpg}
-  \caption{Use case diagram describing Figures~\ref{fig:useCaseVerifyFirst},~\ref{fig:useCaseVerifySecond}, and~\ref{fig:useCaseIncorrect}.}
-  \label{fig:useCaseDiagram}
+  \end{tabular}}
+  \caption{Example of incorrect use of the solution through ignored warnings.}
+  \label{fig:useCasePF}
 \end{figure}
 \newpage
+\noindent
+Figure~\ref{fig:useCaseDiagram} describes the use of the system, which can lead to the instances, seen in Figures~\ref{fig:useCaseVerifyFirst}, through~\ref{fig:useCasePF}. As denoted, the user has the ability to create from which feedback, and the model itself, can be continuously viewed. When the user is satisfied with the model it can be submitted. To allow for maximum flexibility in the system, as little constraints are placed on the user, when interacting with the model creator, which is what allows for incorrect use hereof, as seen in Figure~\ref{fig:useCasePF}. No precautions can be done, however, which will prevent incorrect use of the model, as seen in Figure~\ref{fig:useCaseFP}.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/UCD.jpg}
+  \caption{Use case diagram describing Figures~\ref{fig:useCaseVerifyFirst},~\ref{fig:useCaseVerifySecond},~\ref{fig:useCaseFP}, and~\ref{fig:useCasePF}.}
+  \label{fig:useCaseDiagram}
+\end{figure}
 \section{Summary: Advantages and Disadvantages} 
 Issues will inevitably present themselves with a project such as this, however the scope and nature of these issues will vary with each approach possible. As different approaches offer tailored advantages to circumvent correlating unique concerns, another set of unique concerns will necessarily present themselves. In this section I will sum up the approaches presented throughout Chapter~\ref{chp:Analysis}, along with their corresponding arising advantages and disadvantages.
 \subsection{Manual model-creation}

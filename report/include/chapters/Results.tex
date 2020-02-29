@@ -9,7 +9,7 @@ Testing of the implementation has been divided into two parts, one of which is d
 \subsection{Testing the Manual Model Creator}
 The manual model creator module contained in the file \ttt{mmods.erl}, exports 11 functions, of which 7 are model creation functions\footnote{\lstinline{start/1}, \lstinline{add_relation/2}, \lstinline{add_dependency/3}, \lstinline{add_info/2}, \lstinline{remove_info/2}, \lstinline{transfer_info/3}}, 4 are data-fetching functions\footnote{\lstinline{get_state/1}, \lstinline{get_type/1}, \lstinline{get_relations/1}, \lstinline{get_info/1}} and a single one is a simulation function\footnote{\lstinline{request_info/4}}.
 
-All testing of the mmods module has been contained in the \ttt{tests.erl} file, which includes multiple function-specific tests for each API function, exported from the mmods module. After compilation, all tests can be run in an Erlang shell, either as the normal zero-input functions they are, or as the \linebreak \lstinline{main_funcs/0} function, which encapsulates all created function-specific test cases. All tests are created to return the atom \ttt{true} if they succeed, or the corresponding error message, if they do not. All API-function-specific tests returned true, indicating their correctness. The getter functions were only tested with a single case, \lstinline{get_all/0}, due to their implementation being extremely simple.
+All testing of the mmods module has been contained in the \ttt{tests.erl} file, which includes multiple function-specific tests for each API function, exported from the mmods module. After compilation, all tests can be run in an Erlang shell, either as the regular zero-input functions they are, or as the \linebreak \lstinline{main_funcs/0} function, which encapsulates all created function-specific test cases. All tests are created to return the atom \ttt{ok} if they succeed, or the corresponding error message, if they do not. All API-function-specific tests returned true, indicating their correctness. The getter functions were only tested with a single case, \lstinline{get_all/0}, due to their implementation being extremely simple.
 
 The remaining part of the \ttt{tests.erl}-file includes the scenario-oriented tests. As the description entails, these tests describe the outcome of seven scenarios; one for every scenario-function test. The tests, contained in this section of the file are:
 
@@ -36,7 +36,7 @@ The scenario-oriented test cases are all included in the wrapper function \ttt{m
 
 The automatic model creation algorithm makes use of the mmods module, and as this has been tested for correctness in Section~\ref{ssec:Testing the Manual Model Creator}, it is fair to assume that this module will also function correctly in the context of the automatic model creator. 
 
-The two modules that distinguish the automatic model creator from its manual counterpart is the parser and the interpreter. As the parser is a standardized xml-to-Erlang, there is no need to check for edge-cases, correlating directly to the current implementation, as there are none. Therefore the parser is tested with the function \lstinline{parse_tests/0}, which includes all test cases. The cases tested for are correct handling of strings, integers, lists, multiple sub-tags in one tag, a tag occurring in another tag with the same name, and handling of spaces. The test is run with \lstinline{tests:parse_tests().} in an Erlang shell, which will reveal that all tests pass.
+The two modules that distinguish the automatic model creator from its manual counterpart is the parser and the interpreter. As the parser is a standardized xml-to-Erlang, there is no need to check for edge-cases, correlating directly to the current implementation, as none exist. Therefore the parser is tested with the function \lstinline{parse_tests/0}, which includes all parser-related test cases. The cases tested for are correct handling of strings, integers, lists, multiple sub-tags in one tag, a tag occurring in another tag with the same name, and handling of spaces. The test is run with \lstinline{tests:parse_tests().} in an Erlang shell, which will reveal that all tests pass.
 
 One test that does not pass, is \lstinline{test_interp_anonymous_function/0}. This is due to the fact that handling of anonymous functions is not implemented at the time of writing. Support hereof would need to be handled in the \linebreak \lstinline{aux:token/1}-function, as this is the mechanism that translates functions in the Erlang-term, resulting from \lstinline{fparse/1}.
 
@@ -55,7 +55,7 @@ Figures~\ref{fig:protocolManual} and~\ref{fig:protocolAutomatic} display the res
        <0.78.0>,
        ["map"]}]
   \end{lstlisting}
-  \caption{Maritime model, resulting of executing the commands, contained within the function \ttt{examples:protocol}}
+  \caption{Maritime model, resulting of executing the commands, contained within the function \ttt{examples:protocol()}}
   \label{fig:protocolManual}
 \end{figure}
 \ \\[0.25 cm]

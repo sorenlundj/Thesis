@@ -13,7 +13,7 @@ To provide a holistic description of a service instance, three documents are nec
   \item[E2 - NW-NM Service Specification]\ \\
     The purpose of this service specification document and its xml-defined counterpart is to provide a holistic overview of the MW-NM service and its building blocks in a technology-independent way, according to the guidelines given in the Service Description Guidelines.
 \end{description}
-Of the three documents, only the last, \ttt{Service Specification} is to be used to describe specifications of the service, and as such only this will be studied closer.
+Of the three documents, only the last, \ttt{Service Specification}, is to be used to describe specifications of the service, and as such only this will be studied closer at this time.
 \section{Service Specification grammar}
 The service specification document is constructed using a general xml-format. The majority of the parser grammar of the document can be seen in Figure~\ref{fig:sSpecFull} as well as in Figure~\ref{fig:sSpecRed}, while the latter is in a severely reduced and generalized form. A minority of the grammar has been cut from Figure~\ref{fig:sSpecFull} as it was deemed irrelevant, however the parser grammar in its entirety can be seen in appendices,~\ref{fig:sSpecFull1} and~\ref{fig:sSpecFull2}.
 
@@ -105,7 +105,7 @@ The core principle in the MCP is to restructure and streamline maritime software
   \item Present or verify behavior of maritime services.\\
     There are many obvious common behavioral traits of maritime services, such as adding ships and maritime stakeholders, as well as removing them, however other behavioral patterns will often vary to the point of lowered manageability. A model, describing the maritime service in question will provide a clear and undeniable description of the service's behavior.\newpage
   \item Visualize functionality of maritime services.\\
-    Just as well as behavioral traits, functionality will differ greatly from one maritime service to another, and therefore it is very useful for a model to visualize said functionality, as well as verifying that it works as intended.
+    Just as well as behavioral traits, functionality will differ greatly from one maritime service to another, and therefore it is very useful for a model to visualize said functionality, as well as verify that it works as intended.
   \item Present the structures of maritime services.\\
     This trait will be used to visualize the structural components of maritime services. Just as point one and two, this functionality will be useful for creating a quick and clear projection of how the maritime service behaves.
   \item Increase reliability and efficiency of maritime services.\\
@@ -115,7 +115,8 @@ The core principle in the MCP is to restructure and streamline maritime software
 As stated in Section~\ref{sec:Model-Based Testing} there are two main types of model-based testing techniques: serial and sequential model building-and testing, and as these two techniques both provide different advantages utilizing either one will be a trade-off.\newpage
 
 \section{Example Model Structure}
-Throughout this report, I will use a map-requesting service as an example. In this example the maritime service will act as an intermediate, broking between a ship and a company, where the map is being held. The ship will have to submit authentication information to the maritime service in order to get a the requested map. The model, which has been built upon the example protocol has been illustrated in Figure~\ref{fig:modelExProtocol}. The lines numbered 1-6 illustrate interaction between the three entities \ttt{Ship}, \ttt{Service}, and \ttt{Company}, where *1 and *2 respectively, illustrate a submitting of authentication information to the service, and the service accepts the information and sends a response. *3 and *4 illustrates the service's request of the requested map, and its subsequent receiving hereof. *5 illustrates the forwarding of requested information to the ship.
+Throughout this report, I will use a map-requesting service as an example. In this example the maritime service will act as an intermediate, broking between a ship and a company, where the map is being held. The ship will have to submit authentication information to the maritime service in order to get the requested map. The model, which has been built upon the example protocol has been illustrated in Figure~\ref{fig:modelExProtocol}. The lines numbered 1-6 illustrate interaction between the three entities \ttt{Ship}, \ttt{Service}, and \ttt{Company}, where *1 and *2 respectively, illustrate a submitting of authentication information to the service, and the service accepts the information and sends a response. *3 and *4 illustrates the service's request of the requested map, and its subsequent receiving hereof. *5 illustrates the forwarding of requested information to the ship.
+
 \begin{figure}[h!]
   \centering
   \begin{tikzpicture}[thick]
@@ -142,7 +143,8 @@ Throughout this report, I will use a map-requesting service as an example. In th
   \caption{Early draft of a model example, where a ship requests information from a service.}
   \label{fig:modelExProtocol}
 \end{figure}
-Figure~\ref{fig:fsmExShip} represents an FSM, illustrating the \ttt{ship} entity in Figure~\ref{fig:modelExProtocol}. The FSM starts in the \ttt{No map loaded} state, and has the three available actions, \ttt{trash map}, \ttt{request map}, and \ttt{await response}. Performing \ttt{trash map} or \ttt{await response} in the initial state will yield no results, as no map is available to be trashed and no response is on the way. If \ttt{request map} is performed, the state will be changed to the intermediate state \ttt{awaiting map}, where \ttt{await response} is the only action that will change the state, as no map can be trashed, and requesting another map will change the state to the same, but where a different map is being waited for. The third and final state \ttt{map loaded} will allow the actions \ttt{trash map}, which will change the state to \ttt{no map loaded} and \ttt{request map}, which will, respectively, trash the loaded map, and request a new one, changing the state to \ttt{awaiting map}.
+\noindent
+Figure~\ref{fig:fsmExShip} represents an FSM, illustrating the \ttt{ship} entity in Figure~\ref{fig:modelExProtocol}. The FSM starts in the \ttt{No map loaded} state, and has the three available actions, \ttt{trash map}, \ttt{request map}, and \ttt{await response}. Performing \ttt{trash map} or \ttt{await response} in the initial state will yield no results, as no map is available to be trashed and no response is on the way. If \ttt{request map} is performed, the state will be changed to the intermediate state \ttt{awaiting map}, where \ttt{await response} is the only action that will change the state, as no map can be trashed, and requesting another map will change the state to the same, but where a different map is being waited for. The third and final state \ttt{map loaded} will allow the actions \ttt{trash map}, which will change the state to \ttt{no map loaded} and \ttt{request map}, which will, trash the loaded map, and request a new one, changing the state to \ttt{awaiting map}.
 \newpage
 \noindent
 Figure~\ref{fig:fsmExService} represents an FSM, illustrating the \ttt{service} entity in Figure~\ref{fig:modelExProtocol}. The FSM has the two states, \ttt{idle} and \ttt{active}, the former being the initial state. Whenever the entity receives a valid response the state changes to the \ttt{active} state, and when the request has been properly handled, the state changes back to \ttt{idle}.
@@ -197,11 +199,11 @@ Figure~\ref{fig:fsmExService} represents an FSM, illustrating the \ttt{service} 
 The main advantage that comes from model-based testing is the large variety in testing algorithms it produces. If a model is to be machine readable the techniques, listed below can be implemented fully automatic, and if not, they can still be utilized manually. The following techniques can be applied to true and fair maritime service-models in the MCP: \newpage
 \begin{description}
   \item[Finite state machines]\ \\
-    As mentioned in Section~\ref{ssec:Finite State Machines (FSM)}, a FSM is made up of states, and the ability of a simulating program to change state through a collection of actions. Executable paths are determined, which can be used to create test cases, as well as illustrate the behavior of the system. Furthermore FSMs are closely related to the further techniques, that will be explained below.
+    As mentioned in Sections~\ref{ssec:Finite State Machines (FSM)}, and~\ref{sec:Example Model Structure} an FSM is made up of states, and the ability of a simulating program to change state through a collection of actions. Executable paths are determined, which can be used to create test cases, as well as illustrate the behavior of the system. Furthermore FSMs are closely related to the further techniques, that will be explained below.
   \item[Proving theorems]\ \\
     Automatic theorem proving is a technique originally produced for proving logical formulas, which is a concept that can be rewritten to suit model-based testing. In order to create test cases, system behavior is assigned to equivalence classes. Following this step, predicates can be formed from equivalence classes and logical consequences of the equivalence classes. 
   \item[Symbolic execution]\ \\
-    Much in the likes of an FSM, a symbolic execution of a program or system will generate executable paths, along with symbolic values, describing how they can be accessed. A symbolic execution engine will analyze possible variations of input in order to create a map of the software in question. Said map can subsequently be used to better understand, test, and develop the software in question.
+    Much in the likes of an FSM, symbolic execution of a program or system will generate executable paths, along with symbolic values, describing how they can be accessed. A symbolic execution engine will analyze possible variations of input in order to create a map of the software in question. Said map can subsequently be used to better understand, test, and develop the software in question.
   \item[Model checkers]\ \\
     Model checkers, also known as property checkers, are methods of determining if an FSM meets a specific set of requirements. The model checkers detect if requirements are met, either by determining examples or counterexamples. When a path, representing either an example or a counterexample is discovered it is logged as a \tit{witness}, which can be mutated upon when generating test cases.
   \item[Markov chains]\ \\
@@ -209,7 +211,8 @@ The main advantage that comes from model-based testing is the large variety in t
 \end{description}
 The scope of which features the above techniques will be able to test, will be deemed by the actual maritime service model, however, the expansive array of methods will cover maritime services extensively.
 \section{Use-Cases}
-In this section, I will present the utilization of the desired tool, that is implemented throughout Chapter~\ref{chp:Work/Design} using techniques described in Chapter~\ref{chp:Analysis}. This entails three examples, described in Figures~\ref{fig:useCaseVerifyFirst} through~\ref{fig:useCasePF}, and visualized in Figure~\ref{fig:useCaseDiagram}. Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} describe intended use of the implementation, while Figure~\ref{fig:useCasePF} describes unintended use of the implementation. Actor/system-interaction is described in Figure~\ref{fig:useCaseDiagram}.
+In this section, I will present utilization of the desired tool, that is implemented throughout Chapter~\ref{chp:Work/Design} using techniques described in Chapter~\ref{chp:Background}. This entails four examples, described in Figures~\ref{fig:useCaseVerifyFirst} through~\ref{fig:useCasePF}, and visualized in Figure~\ref{fig:useCaseDiagram}. Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} describe intended use of the implementation, while Figures~\ref{fig:useCasePF}, and~\ref{fig:useCaseFP} describe unintended use of the implementation. Actor/system-interaction is described in Figure~\ref{fig:useCaseDiagram}.
+
 \begin{figure}[h]
   \centering
   \begin{tabular}{L{2cm}|L{10cm}} \toprule
@@ -222,7 +225,7 @@ In this section, I will present the utilization of the desired tool, that is imp
                               4. Model concept is tested and accepted. \\
                               5. SD submits the service instance specification.}  \\ \bottomrule
   \end{tabular}
-  \caption{First example of correct use of the solution.}
+  \caption{Example of correct use of the solution through instant verification.}
   \label{fig:useCaseVerifyFirst}
 \end{figure}
 \begin{figure}[h]
@@ -239,30 +242,31 @@ In this section, I will present the utilization of the desired tool, that is imp
                               6. Model concept is tested and verified. \\
                               7. SD submits the service instance specification.}  \\ \bottomrule
   \end{tabular}
-  \caption{Second example of correct use of the solution.}
+  \caption{Example of correct use of the solution through non-instant verification.}
   \label{fig:useCaseVerifySecond}
 \end{figure}
-The steps described in Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} are similar up until 4, where one example accepts, while the other example rejects the model. As the Service Instance Designer produces a valid model in Figure~\ref{fig:useCaseVerifyFirst}, the fact that the system is used correctly is trivial, and while the initial model is rejected, based on the desired behavior in Figure~\ref{fig:useCaseVerifySecond}, the final result is a valid model concept, and thus the software has been used as intended.
+The steps described in Figures~\ref{fig:useCaseVerifyFirst} and~\ref{fig:useCaseVerifySecond} are similar up until 4, where one model is accepted, while the other example rejects the model. As the Service Instance Designer produces a valid model in Figure~\ref{fig:useCaseVerifyFirst}, the fact that the system is used correctly is trivial, and while the initial model is rejected, based on the desired behavior in Figure~\ref{fig:useCaseVerifySecond}, the final result is a valid model concept, and thus the software has been used as intended.
 \newpage
 \noindent
-In Figure~\ref{fig:useCaseFP} the user wishes to surpass the model-testing system, and successfully avoids warnings by creating a dummy model and validates this against a set of loose tests. As the model-generating occurs before service instance development- and implementation, there is no way of knowing if the software that is developed is similar in any way to what is indicated by the maritime model.
-\begin{figure}[h!]
+In Figure~\ref{fig:useCaseFP} the user wishes to surpass the model-testing system, and successfully avoids warnings by creating a dummy model and validates this against a set of loose test cases. As the model-generating occurs before service instance development- and implementation, there is no way of knowing if the software that is developed is similar in any way to what is indicated by the maritime model.
+
+\begin{figure}[h]
   \begin{tabular}{L{2cm}|L{10cm}} \toprule
     Use Case   & User creates dummy model \\ \midrule
     Actors     & Service Instance Designer (SD) \\ \midrule
     Basic Flow & \makecell[l]{1. SD will submit a service specification.\\
                               2. SD submits all information as per the old service\\
                               \ \ \ \ specification syntax.\\
-                              3. SD submits information to generate simple dummy model. \\
+                              3. SD submits all information to a simple dummy model. \\
                               4. Model concept is tested and verified.\\
                               5. SD submits the service instance specification.}  \\ \bottomrule
   \end{tabular}
-  \caption{Example of incorrect use of the solution through false positive.}
+  \caption{Example of incorrect use of the solution through intentional false positives.}
   \label{fig:useCaseFP}
-\end{figure}\ \\
+\end{figure}
+
 In the case of Figure~\ref{fig:useCasePF} a model is created, using the system, similar to above, however, the result of the checked input is ignored by the user. This should still be possible, as the limitations of the system, should not be projected onto the created software, but in some instances, it could also lead to invalid model-concepts being iterated upon further.
 \begin{figure}[h]
-  \fitToPage{
   \begin{tabular}{L{2cm}|L{10cm}} \toprule
     Use Case   & User ignores model warnings \\ \midrule
     Actors     & Service Instance Designer (SD) \\ \midrule
@@ -272,21 +276,21 @@ In the case of Figure~\ref{fig:useCasePF} a model is created, using the system, 
                               3. SD submits all information to generate maritime model. \\
                               4. Model concept is tested and rejected.\\
                               5. SD submits the service instance specification.}  \\ \bottomrule
-  \end{tabular}}
+  \end{tabular}
   \caption{Example of incorrect use of the solution through ignored warnings.}
   \label{fig:useCasePF}
 \end{figure}
 \newpage
 \noindent
-Figure~\ref{fig:useCaseDiagram} describes the use of the system, which can lead to the instances, seen in Figures~\ref{fig:useCaseVerifyFirst}, through~\ref{fig:useCasePF}. As denoted, the user has the ability to create from which feedback, and the model itself, can be continuously viewed. When the user is satisfied with the model it can be submitted. To allow for maximum flexibility in the system, as little constraints are placed on the user, when interacting with the model creator, which is what allows for incorrect use hereof, as seen in Figure~\ref{fig:useCasePF}. No precautions can be done, however, which will prevent incorrect use of the model, as seen in Figure~\ref{fig:useCaseFP}.
+Figure~\ref{fig:useCaseDiagram} describes the use of the system, which can lead to the instances, seen in Figures~\ref{fig:useCaseVerifyFirst}, through~\ref{fig:useCasePF}. As denoted, the user has the ability to create from which feedback, and the model itself, can be continuously viewed. When the user is satisfied with the model it can be submitted. To allow for maximum flexibility in the system, as little constraints are placed on the user, when interacting with the model creator, which is what allows for incorrect use hereof, as seen in Figure~\ref{fig:useCaseFP}. No precautions can be done, however, which will prevent incorrect use of the model, as seen in Figure~\ref{fig:useCasePF}.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.8\linewidth]{figures/UCD.jpg}
-  \caption{Use case diagram describing Figures~\ref{fig:useCaseVerifyFirst},~\ref{fig:useCaseVerifySecond},~\ref{fig:useCaseFP}, and~\ref{fig:useCasePF}.}
+  \caption{Use case diagram describing Figures~\ref{fig:useCaseVerifyFirst} through~\ref{fig:useCasePF}.}
   \label{fig:useCaseDiagram}
 \end{figure}
 \section{Summary: Advantages and Disadvantages} 
-Issues will inevitably present themselves with a project such as this, however the scope and nature of these issues will vary with each approach possible. As different approaches offer tailored advantages to circumvent correlating unique concerns, another set of unique concerns will necessarily present themselves. In this section I will sum up the approaches presented throughout Chapter~\ref{chp:Analysis}, along with their corresponding arising advantages and disadvantages.
+Issues will inevitably present themselves with a project such as this, however, the scope and nature of these issues will vary with each approach. As different approaches offer tailored advantages to circumvent correlating unique concerns, another set of unique concerns will necessarily present themselves. In this section I will sum up the approaches presented throughout Chapter~\ref{chp:Analysis}, along with their corresponding arising advantages and disadvantages.
 \subsection{Manual model-creation}
 \tbf{Advantages}
 \begin{itemize}
@@ -313,4 +317,4 @@ Issues will inevitably present themselves with a project such as this, however t
   \item Another inevitable downside of having automatically generated - however less specific - models is the fact that test suites can become less specific, and in extension hereof less exhaustive of the maritime service.
 \end{itemize}
 \indent
-To sum up, both methods will be advantageous, as they will each allow for extensive testing, with the former being more custom-tailored and so a lot more time consuming in the long run, and the latter being more generic, but much ultimately less time consuming in the long run.
+To sum up, both methods will be advantageous, as they will each allow for extensive testing, with the former being more custom-tailored and so a lot more time consuming in the long run, and the latter being more generic, but ultimately much less time consuming in the long run.

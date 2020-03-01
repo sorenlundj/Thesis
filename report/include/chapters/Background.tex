@@ -29,7 +29,7 @@ In solutions, utilizing parsers, an interpreter is often introduced to handle th
 
 \section{Property-Based Testing}
 
-Property-based testing, also known as Automation Testing, is the principle of testing properties of code, rather than instances, as is done in manual unit testing. Unit tests are fast and easy to set up and execute, however, in most instances they only provide coverage to a certain degree.
+Property-based testing~\cite{pbt}, also known as Automation Testing, is the principle of testing properties of code, rather than instances, as is done in manual unit testing. Unit tests are fast and easy to set up and execute, however, in most instances they only provide coverage to a certain degree.
 
 \begin{figure}[h]
   \centering
@@ -45,7 +45,7 @@ qsort (x:xs) = qsort lhs ++ [x] ++ qsort rhs
 
 prop_idempotent xs = qsort (qsort xs) == qsort xs
   \end{lstlisting}
-  \caption{Example of Property-Based Testing~\cite{realWorldHaskell11}}.
+  \caption{Example of Property-Based Testing~\cite{realWorldHaskell11}.}
   \label{fig:pbtEx}
 \end{figure}\ \\
 
@@ -56,7 +56,7 @@ An example of this can be seen in Listing~\ref{fig:pbtEx}, which describes a sni
 
 \section{Model-Based Testing}
 
-The principle of model-based testing is to check behavior of software against predictions made by a model. Behavior can be described in a variety of manners, including data flow, control flow, dependencies, decision trees/cycles, and state transition machines. Model-based testing is good at describing the behavior of a system, when it reacts to a specific action, which is determined by another specific model. Using this technique, the behavior of a system can easily be determined and validated. Currently there are two main types of model-based testing-techniques:
+The principle of model-based testing~\cite{mbt} is to check behavior of software against predictions made by a model. Behavior can be described in a variety of manners, including data flow, control flow, dependencies, decision trees/cycles, and state transition machines. Model-based testing is good at describing the behavior of a system, when it reacts to a specific action, which is determined by another specific model. Using this technique, the behavior of a system can easily be determined and validated. Currently there are two main types of model-based testing-techniques:
 
 \begin{description}
   \item[Serial model building- and testing,]
